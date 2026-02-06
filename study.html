@@ -6,77 +6,105 @@
     <title>EduGlobal - Study Room</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .header { text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 20px; margin-bottom: 30px; }
-        .section { margin-bottom: 25px; padding: 15px; border-left: 5px solid #3498db; background: #ebf5fb; border-radius: 5px; }
-        h2 { color: #2c3e50; margin-top: 0; }
-        .btn-back { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #34495e; color: white; text-decoration: none; border-radius: 5px; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
+        :root { --primary: #3498db; --secondary: #2c3e50; --success: #27ae60; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .header { text-align: center; margin-bottom: 40px; background: var(--secondary); color: white; padding: 30px; border-radius: 15px; }
+        .level-tag { font-size: 1.2rem; background: var(--success); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-top: 10px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .section { padding: 20px; border-radius: 12px; background: #fff; border: 1px solid #eee; transition: 0.3s; }
+        .section:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h2 { color: var(--primary); font-size: 1.4rem; margin-bottom: 15px; display: flex; align-items: center; }
+        
+        .vocab-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ddd; }
+        .reading-box { grid-column: span 2; background: #fef9e7; border-left: 5px solid #f1c40f; }
+        
+        .btn-nav { display: inline-block; margin-top: 30px; padding: 12px 25px; background: var(--secondary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; }
+        
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .reading-box { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1 id="level-title">Level: Loading...</h1>
-        <p>Sizin üçün fərdiləşdirilmiş tədris materialları</p>
+        <h1 id="level-title">Loading...</h1>
+        <div id="level-badge" class="level-tag">Your Level</div>
     </div>
 
-    <div class="section">
-        <h2>📚 Grammar (Qaydalar)</h2>
-        <div id="grammar-content">Yüklənir...</div>
+    <div class="grid">
+        <div class="section">
+            <h2>📘 Grammar</h2>
+            <p id="grammar-content"></p>
+        </div>
+
+        <div class="section">
+            <h2>📝 Vocabulary</h2>
+            <div id="vocab-list"></div>
+        </div>
+
+        <div class="section reading-box">
+            <h2>📖 Reading Practice</h2>
+            <p id="reading-text" style="line-height: 1.6; font-style: italic;"></p>
+        </div>
     </div>
 
-    <div class="section">
-        <h2>Vocabulary (Sözlər)</h2>
-        <ul id="vocab-list">Yüklənir...</ul>
+    <div style="text-align: center;">
+        <a href="index.html" class="btn-nav">Main Menu</a>
+        <a href="test.html" class="btn-nav" style="background: var(--success);">Retake Test</a>
     </div>
-
-    <div class="section">
-        <h2>Reading (Mətn)</h2>
-        <p id="reading-text">Yüklənir...</p>
-    </div>
-
-    <a href="index.html" class="btn-back">Ana Səhifəyə Qayıt</a>
 </div>
 
 <script>
-    // URL-dən hansı səviyyənin seçildiyini tuturuq
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('lvl') || 'A1';
 
-    // Səviyyələrə görə məlumat bazası
     const data = {
         'A1': {
-            title: 'A1 - Beginner',
-            grammar: 'Present Simple: I work, you work, he works...',
-            vocab: ['Apple - Alma', 'Book - Kitab', 'School - Məktəb'],
-            reading: 'Hello! My name is Ali. I am from Baku. I am a student.'
+            title: 'Beginner',
+            grammar: 'Focus on "To Be" (am, is, are) and Present Simple. Example: "I am a doctor. He lives in Baku."',
+            vocab: {'Apple': 'Alma', 'Water': 'Su', 'Family': 'Ailə', 'Friend': 'Dost'},
+            reading: 'Hi! My name is Alex. I am 20 years old. I have a small family. I like reading books and drinking coffee.'
+        },
+        'A2': {
+            title: 'Elementary',
+            grammar: 'Past Simple and Future Simple. Example: "I went to the park yesterday. I will call you later."',
+            vocab: {'Travel': 'Səyahət', 'Healthy': 'Sağlam', 'Kitchen': 'Mətbəx', 'Weather': 'Hava'},
+            reading: 'Last weekend, I visited my grandparents in the village. The weather was beautiful and we had a great dinner together.'
         },
         'B1': {
-            title: 'B1 - Intermediate',
-            grammar: 'Present Perfect: I have seen that movie already.',
-            vocab: ['Experience - Təcrübə', 'Improve - İnkişaf etdirmək', 'Challenge - Sınaq'],
-            reading: 'Technology is changing the world rapidly. Learning to code is a great skill.'
+            title: 'Intermediate',
+            grammar: 'Present Perfect and Modals. Example: "I have already finished my work. You should study harder."',
+            vocab: {'Opportunity': 'Imkan', 'Experience': 'Təcrübə', 'Decision': 'Qərar', 'Success': 'Uğur'},
+            reading: 'Learning a new language is a long journey. It requires patience and daily practice. Many people use apps to improve their skills.'
+        },
+        'B2': {
+            title: 'Upper-Intermediate',
+            grammar: 'Conditionals and Passive Voice. Example: "If I had more time, I would learn Java. The project was completed by the team."',
+            vocab: {'Challenge': 'Sınaq', 'Environment': 'Ətraf mühit', 'Influence': 'Təsir', 'Resource': 'Mənbə'},
+            reading: 'In today\'s globalized world, English is essential for business. It allows people from different cultures to communicate effectively.'
+        },
+        'C1': {
+            title: 'Advanced',
+            grammar: 'Inversion and Advanced Clauses. Example: "Not only did he arrive late, but he also forgot his notes."',
+            vocab: {'Inevitably': 'Qaçılmaz olaraq', 'Sophisticated': 'Mürəkkəb', 'Ambiguous': 'Müəmmalı', 'Persistent': 'Davamlı'},
+            reading: 'The socio-economic implications of artificial intelligence are being debated globally. While it offers efficiency, it also poses ethical dilemmas.'
         }
-        // Digər səviyyələri də bura əlavə edəcəyik...
     };
 
-    const currentData = data[level] || data['A1'];
+    const current = data[level] || data['A1'];
 
-    document.getElementById('level-title').innerText = currentData.title;
-    document.getElementById('grammar-content').innerText = currentData.grammar;
-    document.getElementById('reading-text').innerText = currentData.reading;
+    document.getElementById('level-title').innerText = 'Level: ' + current.title;
+    document.getElementById('level-badge').innerText = level;
+    document.getElementById('grammar-content').innerText = current.grammar;
+    document.getElementById('reading-text').innerText = current.reading;
     
-    const vocabList = document.getElementById('vocab-list');
-    vocabList.innerHTML = "";
-    currentData.vocab.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item;
-        vocabList.appendChild(li);
-    });
+    const vocabDiv = document.getElementById('vocab-list');
+    vocabDiv.innerHTML = "";
+    for (const [eng, aze] of Object.entries(current.vocab)) {
+        vocabDiv.innerHTML += `<div class="vocab-item"><strong>${eng}</strong> <span>${aze}</span></div>`;
+    }
 </script>
 
 </body>
