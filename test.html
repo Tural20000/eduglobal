@@ -6,14 +6,15 @@
     <title>EduGlobal - Level Test</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px; }
-        .test-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 600px; width: 100%; }
-        .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
-        .options { display: grid; gap: 10px; }
-        button { padding: 15px; border: 2px solid #3498db; background: none; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        button:hover { background: #3498db; color: white; }
-        #result-screen { display: none; text-align: center; }
-        .level-badge { font-size: 2rem; color: #27ae60; font-weight: bold; margin: 20px 0; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .test-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 90%; text-align: center; }
+        .question { font-size: 1.3rem; font-weight: 600; margin-bottom: 25px; color: #2c3e50; }
+        .options { display: grid; gap: 12px; }
+        button.opt-btn { padding: 15px; border: 2px solid #3498db; background: white; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 1rem; color: #3498db; font-weight: 600; }
+        button.opt-btn:hover { background: #3498db; color: white; }
+        #result-screen { display: none; }
+        .level-badge { font-size: 2.2rem; color: #27ae60; font-weight: bold; margin: 20px 0; border: 3px solid #27ae60; display: inline-block; padding: 10px 20px; border-radius: 10px; }
+        .btn-home { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #34495e; color: white; text-decoration: none; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -24,67 +25,78 @@
 </div>
 
 <div class="test-container" id="result-screen">
-    <h2>Test Bitdi!</h2>
+    <h2>Test Bitdi! 🎉</h2>
     <p>Sizin İngilis dili səviyyəniz:</p>
-    <div id="user-level" class="level-badge">Hesablanır...</div>
-    <p id="level-desc"></p>
-    <a href="index.html" style="text-decoration: none; color: #3498db; font-weight: bold;">Ana səhifəyə qayıt</a>
+    <div id="user-level" class="level-badge">---</div>
+    <p id="level-desc" style="margin-bottom: 20px; color: #7f8c8d;"></p>
+    <a href="index.html" class="btn-home">Ana Səhifəyə Qayıt</a>
 </div>
+
 <script>
-const questions = [
-    { q: "I ___ a student.", a: ["am", "is", "are"], c: "am" },
-    { q: "She ___ to school every day.", a: ["go", "goes", "going"], c: "goes" },
-    { q: "Where ___ you yesterday?", a: ["was", "were", "did"], c: "were" },
-    { q: "I have ___ to London twice.", a: ["be", "been", "was"], c: "been" },
-    { q: "If I ___ you, I would study more.", a: ["was", "am", "were"], c: "were" }
-];
+    // Suallar bazası
+    const questions = [
+        { q: "I ___ from Azerbaijan.", a: ["am", "is", "are"], c: "am" },
+        { q: "She ___ English every day.", a: ["study", "studies", "studying"], c: "studies" },
+        { q: "Where ___ you go last summer?", a: ["do", "did", "was"], c: "did" },
+        { q: "I have never ___ sushi before.", a: ["eat", "ate", "eaten"], c: "eaten" },
+        { q: "If it rains, I ___ at home.", a: ["stay", "will stay", "would stay"], c: "will stay" }
+    ];
 
-let currentQ = 0;
-let score = 0;
+    let currentQ = 0;
+    let score = 0;
 
-function showQuestion() {
-    const qData = questions[currentQ];
-    document.getElementById("question-text").innerText = `${currentQ + 1}. ${qData.q}`;
-    const optionsBox = document.getElementById("options-box");
-    optionsBox.innerHTML = "";
-    
-    qData.a.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.innerText = opt;
-        btn.onclick = () => nextQuestion(opt);
-        optionsBox.appendChild(btn);
-    });
-}
-
-function nextQuestion(answer) {
-    if(answer === questions[currentQ].c) score++;
-    currentQ++;
-    
-    if(currentQ < questions.length) {
-        showQuestion();
-    } else {
-        showResult();
+    // Sualı ekrana çıxaran funksiya
+    function showQuestion() {
+        const qData = questions[currentQ];
+        document.getElementById("question-text").innerText = (currentQ + 1) + ". " + qData.q;
+        
+        const optionsBox = document.getElementById("options-box");
+        optionsBox.innerHTML = "";
+        
+        qData.a.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.innerText = opt;
+            btn.className = "opt-btn";
+            btn.onclick = () => nextQuestion(opt);
+            optionsBox.appendChild(btn);
+        });
     }
-}
 
-function showResult() {
-    document.getElementById("quiz-box").style.display = "none";
-    document.getElementById("result-screen").style.display = "block";
-    
-    let level = "";
-    let desc = "";
-    
-    if(score <= 1) { level = "A1 - Beginner"; desc = "You are at the start of your journey!"; }
-    else if(score == 2) { level = "A2 - Elementary"; desc = "You understand basic phrases."; }
-    else if(score == 3) { level = "B1 - Intermediate"; desc = "You are getting better!"; }
-    else { level = "B2+ - Advanced"; desc = "Excellent performance!"; }
-    
-    document.getElementById("user-level").innerText = level;
-    document.getElementById("level-desc").innerText = desc;
-}
+    // Növbəti suala keçid
+    function nextQuestion(answer) {
+        if(answer === questions[currentQ].c) {
+            score++;
+        }
+        currentQ++;
+        
+        if(currentQ < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
 
-// Səhifə yüklənən kimi testi başlat
-window.onload = showQuestion;
+    // Nəticəni göstər
+    function showResult() {
+        document.getElementById("quiz-box").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        
+        let level = "";
+        let desc = "";
+        
+        if(score <= 1) { level = "A1"; desc = "Beginner - Başlanğıc səviyyə."; }
+        else if(score == 2) { level = "A2"; desc = "Elementary - Təməl səviyyə."; }
+        else if(score == 3) { level = "B1"; desc = "Intermediate - Orta səviyyə."; }
+        else if(score == 4) { level = "B2"; desc = "Upper-Intermediate - Ortadan yuxarı."; }
+        else { level = "C1"; desc = "Advanced - Yüksək səviyyə."; }
+        
+        document.getElementById("user-level").innerText = level;
+        document.getElementById("level-desc").innerText = desc;
+    }
+
+    // Səhifə tam yüklənəndə testi başlat
+    document.addEventListener("DOMContentLoaded", showQuestion);
 </script>
+
 </body>
 </html>
