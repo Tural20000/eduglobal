@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Learn English Online Free</title>
+    <title>EduGlobal - Learn English with Tural</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; --card-bg: #ffffff; --text: #333; }
         .dark-mode { --primary: #5dade2; --dark: #ecf0f1; --light: #1a1a1a; --card-bg: #2d2d2d; --text: #f4f4f4; }
@@ -20,18 +21,23 @@
 
         .hero { padding: 80px 20px; text-align: center; background: var(--card-bg); border-bottom: 1px solid #eee; }
         .hero h2 { font-size: 2.5rem; margin-bottom: 15px; }
-        .btn-test { display: inline-block; background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; }
+        .btn-test { display: inline-block; background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); }
 
         .levels-section { padding: 60px 5%; max-width: 1100px; margin: auto; }
         .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .level-card { background: var(--card-bg); padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; border-bottom: 4px solid var(--primary); }
+        .level-card:hover { transform: translateY(-5px); }
         
-        /* SEO Content Section */
         .seo-content { padding: 40px 5%; max-width: 800px; margin: auto; text-align: justify; }
-        .seo-content h3 { color: var(--primary); margin-bottom: 15px; }
 
-        footer { background: #1a1a1a; color: white; padding: 40px 5%; text-align: center; margin-top: 60px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: left; max-width: 1100px; margin: auto; }
+        /* Professional Footer */
+        footer { background: #1a1a1a; color: white; padding: 60px 5% 30px; margin-top: 60px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1100px; margin: auto; text-align: left; }
+        .footer-section h4 { color: var(--primary); margin-bottom: 20px; font-size: 1.2rem; }
+        .footer-section p { font-size: 0.9rem; color: #bdc3c7; margin-bottom: 10px; }
+        .social-links a { color: white; font-size: 1.5rem; margin-right: 20px; transition: 0.3s; }
+        .social-links a:hover { color: var(--primary); }
+        .footer-bottom { border-top: 1px solid #333; margin-top: 40px; padding-top: 20px; text-align: center; font-size: 0.8rem; color: #7f8c8d; }
     </style>
 </head>
 <body>
@@ -60,26 +66,33 @@
 </div>
 
 <article class="seo-content">
-    <h3>Why Learn English with EduGlobal?</h3>
-    <p>English is the global language of business, technology, and science. At EduGlobal, we provide a structured way to improve your vocabulary, grammar, and reading skills. Whether you are a beginner at <b>A1 level</b> or an advanced learner at <b>C1 level</b>, our interactive tools and level-based tests help you track your progress effectively. Learning English opens doors to new career opportunities in the tech world, especially for <b>Backend Developers</b> and Java students.</p>
+    <h3>Expert English Learning</h3>
+    <p>English is the global language of business and technology. EduGlobal helps you master <b>vocabulary</b> and <b>grammar</b> through level-based exercises. Developed for students who want to excel in their professional careers.</p>
 </article>
 
 <footer>
     <div class="footer-grid">
-        <div>
+        <div class="footer-section">
             <h4>EduGlobal</h4>
-            <p>Free English resources for a better future.</p>
+            <p>Your journey to fluency starts here. High-quality resources for every English level.</p>
         </div>
-        <div>
-            <h4>Contact</h4>
-            <p>Email: support@eduglobal.com</p>
+        <div class="footer-section">
+            <h4>Contact Developer</h4>
+            <p><i class="fas fa-envelope"></i> abdullayevtural2004@gmail.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> Baku, Azerbaijan</p>
         </div>
-        <div>
-            <h4>Legal</h4>
-            <p>Privacy Policy | Terms</p>
+        <div class="footer-section">
+            <h4>Follow Me</h4>
+            <div class="social-links">
+                <a href="https://instagram.com/t_abdullayev0" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:abdullayevtural2004@gmail.com"><i class="fas fa-at"></i></a>
+            </div>
         </div>
     </div>
-    <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 EduGlobal. All rights reserved.</p>
+    <div class="footer-bottom">
+        &copy; 2026 EduGlobal. Developed by <b>Tural Abdullayev</b>. All rights reserved.
+    </div>
 </footer>
 
 <script>
@@ -89,12 +102,9 @@
         localStorage.setItem('dark-mode', isDark);
         updateIcon(isDark);
     }
-
     function updateIcon(isDark) {
         document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
     }
-
-    // Yaddaşdakı rejimi tətbiq et
     const savedMode = localStorage.getItem('dark-mode') === 'true';
     if(savedMode) {
         document.body.classList.add('dark-mode');
