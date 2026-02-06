@@ -3,87 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Match & Win</title>
+    <title>Word Scramble - EduGlobal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; text-align: center; padding: 20px; }
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; max-width: 900px; margin: 20px auto; }
-        .word-card { background: white; padding: 15px; border: 2px solid #3498db; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 0.9rem; }
-        .word-card.selected { background: #3498db; color: white; }
-        .word-card.matched { background: #27ae60; color: white; border-color: #27ae60; visibility: hidden; }
-        #status { margin: 20px; font-size: 1.2rem; font-weight: 600; color: #2c3e50; }
-        .btn-cert { display: none; background: #9b59b6; color: white; padding: 15px 30px; text-decoration: none; border-radius: 50px; font-weight: bold; margin-top: 20px; }
+        :root { --primary: #f1c40f; --dark: #2c3e50; --bg: #f4f7f6; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-top: 80px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* SABİT MENYU */
+        .fixed-nav {
+            position: fixed; top: 0; left: 0; width: 100%; background: #fff;
+            padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center; z-index: 9999; box-sizing: border-box;
+        }
+        .back-home { text-decoration: none; color: #3498db; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+        .game-container { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; max-width: 500px; width: 90%; margin-top: 50px; }
+        .scrambled-word { font-size: 2.5rem; font-weight: 700; letter-spacing: 10px; color: var(--dark); text-transform: uppercase; margin-bottom: 20px; background: #eee; padding: 10px; border-radius: 10px; }
+        .hint { color: #7f8c8d; font-style: italic; margin-bottom: 25px; }
+        input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-size: 1.2rem; text-align: center; margin-bottom: 20px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
+        .btn-check { background: var(--primary); color: #333; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; font-size: 1.1rem; }
+        .score { margin-top: 20px; font-weight: 600; font-size: 1.2rem; color: #27ae60; }
     </style>
 </head>
 <body>
 
-    <h1>Match 30 Words to Unlock Certificate 🎓</h1>
-    <p id="status">Matches: <span id="match-count">0</span> / 30</p>
+<div class="fixed-nav">
+    <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Ana Menyuya Qayıt</a>
+    <div style="font-weight: 700; color: var(--dark);">Word Scramble Game 🎮</div>
+</div>
 
-    <div class="game-grid" id="game-board"></div>
+<div class="game-container">
+    <h2>Sözü Tap!</h2>
+    <div class="scrambled-word" id="scrambled-word">-----</div>
+    <div class="hint" id="hint">İpucu buradadır</div>
+    
+    <input type="text" id="user-input" placeholder="Düzgün sözü yazın..." autocomplete="off">
+    
+    <button class="btn-check" onclick="checkWord()">Yoxla ✅</button>
+    <div class="score">Xal: <span id="score-val">0</span></div>
+</div>
 
-    <a href="certificate.html?pass=true" id="cert-link" class="btn-cert">Congratulations! Claim Your Certificate Now</a>
+<script>
+    const words = [
+        { word: "APPLE", hint: "A red or green fruit" },
+        { word: "SCHOOL", hint: "Place where you learn" },
+        { word: "STUDENT", hint: "A person who studies" },
+        { word: "TEACHER", hint: "A person who helps you learn" },
+        { word: "ENGLISH", hint: "The language you are learning now" },
+        { word: "COMPUTER", hint: "Electronic device for work or games" },
+        { word: "GARDEN", hint: "A place with flowers and grass" }
+    ];
 
-    <script>
-        const wordBank = [
-            {en: "Success", az: "uğur"}, {en: "Improve", az: "inkişaf"}, {en: "Knowledge", az: "bilik"},
-            {en: "Experience", az: "təcrübə"}, {en: "Education", az: "təhsil"}, {en: "Global", az: "qlobal"},
-            {en: "Challenge", az: "sınaq"}, {en: "Resource", az: "mənbə"}, {en: "Justice", az: "ədalət"},
-            {en: "Environment", az: "ətraf mühit"}, {en: "Health", az: "sağlamlıq"}, {en: "Travel", az: "səyahət"},
-            {en: "Believe", az: "inanmaq"}, {en: "Opportunity", az: "imkan"}, {en: "Patient", az: "səbirli"},
-            {en: "Support", az: "dəstək"}, {en: "Decision", az: "qərar"}, {en: "Future", az: "gələcək"},
-            {en: "Science", az: "elm"}, {en: "Technology", az: "texnologiya"}, {en: "Business", az: "biznes"},
-            {en: "Culture", az: "mədəniyyət"}, {en: "Language", az: "dil"}, {en: "Skill", az: "bacarıq"},
-            {en: "Mastery", az: "ustalıq"}, {en: "Progress", az: "tərəqqi"}, {en: "Understand", az: "anlamaq"},
-            {en: "Creative", az: "yaradıcı"}, {en: "Solution", az: "həll"}, {en: "Confidence", az: "inam"}
-        ];
+    let currentObj;
+    let score = 0;
 
-        let selectedCards = [];
-        let matches = 0;
-
-        // Kartları qarışdır və ekrana düz
-        function initGame() {
-            let cards = [];
-            wordBank.forEach(pair => {
-                cards.push({text: pair.en, type: 'en', match: pair.az});
-                cards.push({text: pair.az, type: 'az', match: pair.en});
-            });
-            cards.sort(() => Math.random() - 0.5);
-
-            const board = document.getElementById('game-board');
-            cards.forEach(card => {
-                const div = document.createElement('div');
-                div.className = 'word-card';
-                div.innerText = card.text;
-                div.onclick = () => handleSelect(div, card);
-                board.appendChild(div);
-            });
+    function initGame() {
+        currentObj = words[Math.floor(Math.random() * words.length)];
+        let wordArray = currentObj.word.split("");
+        
+        // Hərfləri qarışdırırıq
+        for (let i = wordArray.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [wordArray[i], wordArray[j]] = [wordArray[j], wordArray[i]];
         }
+        
+        document.getElementById("scrambled-word").innerText = wordArray.join("");
+        document.getElementById("hint").innerText = "İpucu: " + currentObj.hint;
+        document.getElementById("user-input").value = "";
+    }
 
-        function handleSelect(div, card) {
-            if (div.classList.contains('matched') || selectedCards.includes(div)) return;
-            
-            div.classList.add('selected');
-            selectedCards.push({div, card});
-
-            if (selectedCards.length === 2) {
-                if (selectedCards[0].card.match === selectedCards[1].card.text) {
-                    selectedCards.forEach(item => item.div.classList.add('matched'));
-                    matches++;
-                    document.getElementById('match-count').innerText = matches;
-                    if (matches === 30) {
-                        document.getElementById('cert-link').style.display = 'inline-block';
-                        document.getElementById('status').innerText = "All matches found! Certificate Unlocked!";
-                    }
-                } else {
-                    const temp = [...selectedCards];
-                    setTimeout(() => temp.forEach(item => item.div.classList.remove('selected')), 500);
-                }
-                selectedCards = [];
-            }
+    function checkWord() {
+        let userWord = document.getElementById("user-input").value.toUpperCase();
+        if(userWord === currentObj.word) {
+            alert("Afərin! Doğrudur! 🎉");
+            score += 10;
+            document.getElementById("score-val").innerText = score;
+            initGame();
+        } else {
+            alert("Səhvdir, bir daha yoxla! ❌");
         }
+    }
 
-        initGame();
-    </script>
+    initGame();
+</script>
+
 </body>
 </html>
