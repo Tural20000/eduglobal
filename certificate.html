@@ -2,66 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EduGlobal - Certificate</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <title>EduGlobal - Rəsmi Sertifikat</title>
     <style>
-        body { font-family: 'Poppins', sans-serif; text-align: center; background: #f4f7f6; }
-        #lock-screen { padding: 100px; display: none; }
-        #certificate-form { display: none; }
-        /* Sertifikat dizaynı eynidir, yalnız çap üçün gizlətmə əlavə olunub */
-        #certificate {
-            width: 800px; height: 600px; background: white; margin: 40px auto; position: relative;
-            border: 15px solid #2c3e50; padding: 40px; box-sizing: border-box; display: none;
-            background-image: radial-gradient(circle, #f9f9f9 20%, transparent 20%); background-size: 10px 10px;
+        body { font-family: 'Georgia', serif; background: #555; display: flex; flex-direction: column; align-items: center; padding: 50px; }
+        .cert-container { 
+            width: 800px; height: 600px; background: white; padding: 50px; 
+            border: 15px solid #3498db; position: relative; text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
-        .user-name { font-family: 'Dancing Script', cursive; font-size: 4rem; color: #3498db; margin: 20px 0; }
-        @media print { .no-print { display: none; } #certificate { display: block !important; border: 15px solid #2c3e50; } }
+        .cert-container::after { 
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid #3498db; pointer-events: none;
+        }
+        h1 { font-size: 50px; color: #2c3e50; margin-bottom: 0; }
+        .sub { font-size: 20px; color: #7f8c8d; }
+        .name { font-size: 40px; color: #e67e22; margin: 40px 0; border-bottom: 2px solid #eee; display: inline-block; padding: 0 30px; }
+        .text { font-size: 18px; line-height: 1.6; padding: 0 50px; }
+        .footer { margin-top: 50px; display: flex; justify-content: space-around; }
+        .btn-print { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 1rem; margin-top: 20px; }
+        @media print { .btn-print { display: none; } body { background: white; padding: 0; } }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen">
-        <h2>🔒 Certificate Locked!</h2>
-        <p>Sertifikat almaq üçün əvvəlcə oyunda 30 sözü düzgün cütləşdirməlisiniz.</p>
-        <a href="game.html" style="color:#3498db; font-weight:bold;">Go to Game</a>
-    </div>
+    <div class="cert-container" id="cert">
+        <h2 style="color:#3498db">EduGlobal PRO</h2>
+        <h1>SERTİFİKAT</h1>
+        <p class="sub">İngilis dili kursunu uğurla bitirdiyinə görə</p>
+        
+        <div class="name" id="userName">Tələbə Adı</div>
+        
+        <p class="text">
+            Bu sertifikat təsdiq edir ki, yuxarıda adı qeyd olunan şəxs EduGlobal platformasında 
+            keçirilən 30 sözlük "Match the Words" imtahanından <b>100%</b> nəticə göstərmişdir.
+        </p>
 
-    <div id="certificate-form" class="no-print">
-        <h2>Enter Your Name for the Certificate</h2>
-        <input type="text" id="userName" placeholder="Full Name" style="padding:10px;">
-        <button onclick="generate()" style="padding:10px 20px; background:#27ae60; color:white; border:none; cursor:pointer;">Generate</button>
-    </div>
-
-    <div id="certificate">
-        <h1 style="font-size:3rem; color:#2c3e50;">Certificate of Achievement</h1>
-        <p>This is to certify that</p>
-        <div class="user-name" id="display-name"></div>
-        <p>has mastered 30 essential English words and completed the EduGlobal Challenge.</p>
-        <div style="margin-top:50px; display:flex; justify-content:space-between; padding:0 100px;">
-            <div style="border-top:2px solid #333;">Tural Abdullayev<br>Founder, EduGlobal</div>
-            <div style="border-top:2px solid #333;">Date<br>06.02.2026</div>
+        <div class="footer">
+            <div>
+                <hr>
+                <p>Tural Abdullayev<br>Təlimçi</p>
+            </div>
+            <div>
+                <hr>
+                <p>Tarix<br><span id="date"></span></p>
+            </div>
         </div>
     </div>
 
-    <button id="printBtn" class="no-print" style="display:none; margin:20px; padding:15px; background:#3498db; color:white; border:none; cursor:pointer;" onclick="window.print()">Download Certificate (PDF)</button>
+    <button class="btn-print" onclick="window.print()">Sertifikatı Çap Et / Yüklə (PDF)</button>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const hasPassed = urlParams.get('pass');
-
-        if (hasPassed === 'true') {
-            document.getElementById('certificate-form').style.display = 'block';
-        } else {
-            document.getElementById('lock-screen').style.display = 'block';
-        }
-
-        function generate() {
-            const name = document.getElementById('userName').value;
-            if(!name) return alert("Enter name!");
-            document.getElementById('display-name').innerText = name;
-            document.getElementById('certificate').style.display = 'block';
-            document.getElementById('printBtn').style.display = 'inline-block';
-        }
+        const name = prompt("Sertifikatda görünəcək adınızı daxil edin:");
+        document.getElementById('userName').innerText = name ? name : "Dəyərli Tələbə";
+        document.getElementById('date').innerText = new Date().toLocaleDateString();
     </script>
+
 </body>
 </html>
