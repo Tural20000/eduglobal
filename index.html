@@ -3,94 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Master English with Tural</title>
+    <title>EduGlobal - English with Tural</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; --card-bg: #ffffff; --text: #333; }
-        .dark-mode { --primary: #5dade2; --dark: #ecf0f1; --light: #1a1a1a; --card-bg: #2d2d2d; --text: #f4f4f4; }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s; }
+        :root { 
+            --primary: #3498db; 
+            --dark: #2c3e50; 
+            --light: #f8f9fa; 
+            --card-bg: #ffffff; 
+            --text: #333; 
+            --accent: #e67e22;
+        }
+        .dark-mode { 
+            --primary: #5dade2; 
+            --dark: #ecf0f1; 
+            --light: #1a1a1a; 
+            --card-bg: #2d2d2d; 
+            --text: #f4f4f4; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s; scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: var(--text); line-height: 1.6; }
+
+        /* FIXED NAVBAR - HƏR ZAMAN ÜSTDƏ */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 2000;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { font-size: 1.6rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        .container { margin-top: 100px; padding: 20px 5%; }
+
+        /* HERO SECTION */
+        .hero { 
+            text-align: center; 
+            padding: 60px 20px; 
+            background: var(--card-bg); 
+            border-radius: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; }
+        .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
         
-        nav { background: var(--card-bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        
-        .hero { padding: 80px 20px; text-align: center; background: var(--card-bg); }
-        .hero h2 { font-size: 2.5rem; margin-bottom: 15px; }
-        
-        .btn-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px; }
-        .btn { padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; cursor: pointer; border: none; }
+        .btn { 
+            padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; 
+            display: flex; align-items: center; gap: 8px; border: none; cursor: pointer;
+        }
         .btn-test { background: var(--primary); color: white; }
-        .btn-game { background: #f1c40f; color: #333; }
-        .btn-cert { background: #9b59b6; color: white; }
-        
-        .levels-section { padding: 50px 5%; max-width: 1100px; margin: auto; }
-        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .level-card { background: var(--card-bg); padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; border-bottom: 4px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .btn-source { background: var(--accent); color: white; }
+
+        /* GRAMMAR LEVELS */
+        .section-title { text-align: center; margin: 40px 0 30px; font-size: 2rem; }
+        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .level-card { 
+            background: var(--card-bg); padding: 40px; border-radius: 20px; text-align: center; 
+            cursor: pointer; border-bottom: 5px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
         .level-card:hover { transform: translateY(-10px); }
-        
-        footer { background: #1a1a1a; color: white; padding: 60px 5% 30px; margin-top: 60px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1100px; margin: auto; }
-        .social-links a { color: white; font-size: 1.5rem; margin-right: 20px; }
+        .level-card i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
+
+        /* YOUTUBE SOURCES SECTION */
+        .sources-section { margin-top: 80px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .video-card { 
+            background: var(--card-bg); padding: 20px; border-radius: 20px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center;
+        }
+        .video-card h4 { margin-bottom: 15px; color: var(--dark); font-size: 1.1rem; }
+        .video-card p { font-size: 0.85rem; color: #777; margin-bottom: 15px; height: 45px; }
+        .yt-link { 
+            display: inline-block; padding: 10px 20px; background: #ff0000; color: white; 
+            text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+        }
+        .yt-link i { margin-right: 8px; }
+
+        footer { background: #1a1a1a; color: white; padding: 40px 5%; margin-top: 80px; text-align: center; }
+        .theme-toggle { background: none; border: none; cursor: pointer; font-size: 1.4rem; color: var(--text); }
     </style>
 </head>
 <body>
 
-<nav>
-    <a href="index.html" class="logo">EduGlobal</a>
-    <div class="nav-links">
-        <button onclick="toggleDarkMode()" id="theme-icon" style="background:none; border:none; cursor:pointer; font-size:1.3rem;">🌙</button>
-    </div>
-</nav>
+<header>
+    <a href="index.html" class="logo">Edu<span>Global</span></a>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="test.html">Placement Test</a>
+        <a href="#xarici-menbe">Sources</a>
+        <button onclick="toggleDarkMode()" class="theme-toggle" id="theme-icon">🌙</button>
+    </nav>
+</header>
 
-<section class="hero">
-    <h2>Your Journey to English Mastery 🚀</h2>
-    <p>Practice with interactive tools, play games, and get your certificate.</p>
-    <div class="btn-group">
-        <a href="test.html" class="btn btn-test">Start Level Test</a>
-        <a href="game.html" class="btn btn-game">Play Word Game 🎮</a>
-        <a href="certificate.html" class="btn btn-cert">Get Certificate 🎓</a>
-    </div>
-</section>
+<div class="container">
+    <section class="hero">
+        <h1>Welcome to EduGlobal 🚀</h1>
+        <p>Your ultimate destination to master English grammar and vocabulary with Tural.</p>
+        <div class="btn-group">
+            <a href="test.html" class="btn btn-test"><i class="fas fa-edit"></i> Start Level Test</a>
+            <a href="#xarici-menbe" class="btn btn-source"><i class="fab fa-youtube"></i> Xarici Mənbələr</a>
+        </div>
+    </section>
 
-<div class="levels-section">
+    <h2 class="section-title">Grammar Levels</h2>
     <div class="levels-grid">
         <div class="level-card" onclick="window.location.href='grammar_A1.html'">
+            <i class="fas fa-baby"></i>
             <h3>A1</h3>
-            <p>Beginner</p>
+            <p>Beginner - Basics of English</p>
         </div>
         <div class="level-card" onclick="window.location.href='grammar_B1.html'">
+            <i class="fas fa-user-graduate"></i>
             <h3>B1</h3>
-            <p>Intermediate</p>
+            <p>Intermediate - Fluent Speaking</p>
         </div>
         <div class="level-card" onclick="window.location.href='grammar_C1.html'">
+            <i class="fas fa-medal"></i>
             <h3>C1</h3>
-            <p>Advanced</p>
+            <p>Advanced - Professional Level</p>
         </div>
     </div>
+
+    <section class="sources-section" id="xarici-menbe">
+        <h2 class="section-title">Xarici Mənbələr</h2>
+        <div class="video-grid">
+            
+            <div class="video-card">
+                <h4>BBC Learning English</h4>
+                <p>Əlavə dərslər, qrammatika, sözlər və dinləmə üçün mükəmməl mənbə.</p>
+                <a href="https://www.youtube.com/@bbclearningenglish" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+            </div>
+
+            <div class="video-card">
+                <h4>English with Lucy</h4>
+                <p>Britaniya aksenti, tələffüz və gündəlik danışıq dərsləri.</p>
+                <a href="https://www.youtube.com/@EnglishwithLucy" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+            </div>
+
+            <div class="video-card">
+                <h4>EnglishClass101</h4>
+                <p>Söz bazası, qrammatika və müxtəlif səviyyələr üzrə video dərslər.</p>
+                <a href="https://www.youtube.com/@EnglishClass101" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+            </div>
+
+            <div class="video-card">
+                <h4>Shaw English Online</h4>
+                <p>Gündəlik danışıq və praktik ingilis dili öyrənmək üçün ideal kanal.</p>
+                <a href="https://www.youtube.com/@ShawEnglishOnline" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+            </div>
+
+            <div class="video-card">
+                <h4>VOA Learning English</h4>
+                <p>Aşağı sürətli xəbərlərlə dinləmə və anlama qabiliyyətinizi inkişaf etdirin.</p>
+                <a href="https://www.youtube.com/@VOALearningEnglish" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+            </div>
+
+        </div>
+    </section>
 </div>
 
 <footer>
-    <div class="footer-grid">
-        <div>
-            <h4>EduGlobal</h4>
-            <p>Developing future leaders through language skills.</p>
-        </div>
-        <div>
-            <h4>Contact Developer</h4>
-            <p><i class="fas fa-envelope"></i> abdullayevtural2004@gmail.com</p>
-            <p><i class="fab fa-instagram"></i> @t_abdullayev0</p>
-        </div>
-        <div>
-            <h4>Professional Links</h4>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://instagram.com/t_abdullayev0" target="_blank"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
+    <p>Developed by Tural Abdullayev &copy; 2026</p>
+    <div style="margin-top: 15px;">
+        <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" style="color:white; margin:0 10px; font-size:1.2rem;"><i class="fab fa-linkedin"></i></a>
+        <a href="https://instagram.com/t_abdullayev0" style="color:white; margin:0 10px; font-size:1.2rem;"><i class="fab fa-instagram"></i></a>
     </div>
-    <p style="text-align:center; margin-top:40px; font-size:0.8rem; opacity:0.5;">Developed by Tural Abdullayev &copy; 2026</p>
 </footer>
 
 <script>
@@ -101,7 +192,6 @@
         document.getElementById('theme-icon').innerHTML = isDark ? '☀️' : '🌙';
     }
     
-    // Yüklənəndə dark mode yoxla
     if(localStorage.getItem('dark-mode') === 'true') {
         document.body.classList.add('dark-mode');
         document.getElementById('theme-icon').innerHTML = '☀️';
