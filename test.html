@@ -8,90 +8,75 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .test-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 90%; text-align: center; }
-        .question { font-size: 1.3rem; font-weight: 600; margin-bottom: 25px; color: #2c3e50; }
+        .progress-bar { height: 10px; background: #eee; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+        .progress { height: 100%; background: #3498db; width: 0%; transition: 0.3s; }
+        .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; color: #2c3e50; }
         .options { display: grid; gap: 12px; }
         button.opt-btn { padding: 15px; border: 2px solid #3498db; background: white; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 1rem; color: #3498db; font-weight: 600; }
         button.opt-btn:hover { background: #3498db; color: white; }
         #result-screen { display: none; }
         .level-badge { font-size: 2.2rem; color: #27ae60; font-weight: bold; margin: 20px 0; border: 3px solid #27ae60; display: inline-block; padding: 10px 20px; border-radius: 10px; }
-        .btn-action { display: inline-block; margin-top: 15px; padding: 12px 25px; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; }
-        .btn-go { background: #27ae60; margin-right: 10px; }
-        .btn-home { background: #34495e; }
+        .btn-action { display: inline-block; margin-top: 15px; padding: 12px 25px; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; }
     </style>
 </head>
 <body>
 
 <div class="test-container" id="quiz-box">
+    <div class="progress-bar"><div id="progress" class="progress"></div></div>
     <div id="question-text" class="question">Sual yüklənir...</div>
     <div id="options-box" class="options"></div>
 </div>
 
 <div class="test-container" id="result-screen">
-    <h2>Test Bitdi! 🎉</h2>
-    <p>Sizin İngilis dili səviyyəniz:</p>
+    <h2>Your Result 🎉</h2>
     <div id="user-level" class="level-badge">---</div>
     <p id="level-desc" style="margin-bottom: 20px; color: #7f8c8d;"></p>
-    
-    <button onclick="goToStudy()" class="btn-action btn-go">Dərslərə Başla</button>
-    <br>
-    <a href="index.html" class="btn-action btn-home">Ana Səhifəyə Qayıt</a>
+    <button onclick="window.location.href='study.html?lvl='+finalLvl" style="background:#27ae60" class="btn-action">Start Lessons</button>
 </div>
 
 <script>
     const questions = [
-        { q: "I ___ a student.", a: ["am", "is", "are"], c: "am" },
-        { q: "She ___ to school every day.", a: ["go", "goes", "going"], c: "goes" },
-        { q: "Where ___ you yesterday?", a: ["was", "were", "did"], c: "were" },
-        { q: "I have ___ to London twice.", a: ["be", "been", "was"], c: "been" },
-        { q: "If I ___ you, I would study more.", a: ["was", "am", "were"], c: "were" }
+        { q: "I ___ a doctor.", a: ["am", "is", "are"], c: "am" },
+        { q: "She ___ breakfast every morning.", a: ["eat", "eats", "eating"], c: "eats" },
+        { q: "Where ___ you go last night?", a: ["do", "did", "were"], c: "did" },
+        { q: "I haven't seen him ___ 2010.", a: ["for", "since", "during"], c: "since" },
+        { q: "If I ___ money, I would buy a car.", a: ["have", "had", "will have"], c: "had" },
+        { q: "This cake ___ by my mother yesterday.", a: ["was made", "is made", "made"], c: "was made" },
+        { q: "I am looking forward to ___ you.", a: ["see", "seeing", "saw"], c: "seeing" },
+        { q: "By next year, I ___ my degree.", a: ["will finish", "will have finished", "finished"], c: "will have finished" },
+        { q: "He works ___ than his brother.", a: ["hard", "harder", "hardest"], c: "harder" },
+        { q: "___ of the students passed the exam.", a: ["None", "No", "Any"], c: "None" },
+        { q: "I wish I ___ play the piano.", a: ["can", "could", "will"], c: "could" },
+        { q: "___ you mind closing the door?", a: ["Would", "Do", "Should"], c: "Would" },
+        { q: "Despite ___ tired, he continued working.", a: ["be", "being", "he was"], c: "being" },
+        { q: "Hardly ___ I started when it rained.", a: ["did", "had", "have"], c: "had" },
+        { q: "It's time you ___ home.", a: ["go", "went", "gone"], c: "went" }
     ];
 
-    let currentQ = 0;
-    let score = 0;
-    let finalLvl = "A1";
+    let currentQ = 0; let score = 0; let finalLvl = "A1";
 
     function showQuestion() {
+        document.getElementById("progress").style.width = (currentQ / questions.length * 100) + "%";
         const qData = questions[currentQ];
         document.getElementById("question-text").innerText = (currentQ + 1) + ". " + qData.q;
-        const optionsBox = document.getElementById("options-box");
-        optionsBox.innerHTML = "";
+        const ob = document.getElementById("options-box"); ob.innerHTML = "";
         qData.a.forEach(opt => {
-            const btn = document.createElement("button");
-            btn.innerText = opt;
-            btn.className = "opt-btn";
-            btn.onclick = () => nextQuestion(opt);
-            optionsBox.appendChild(btn);
+            const btn = document.createElement("button"); btn.innerText = opt; btn.className = "opt-btn";
+            btn.onclick = () => { if(opt === qData.c) score++; currentQ++; 
+            if(currentQ < questions.length) showQuestion(); else showResult(); };
+            ob.appendChild(btn);
         });
-    }
-
-    function nextQuestion(answer) {
-        if(answer === questions[currentQ].c) score++;
-        currentQ++;
-        if(currentQ < questions.length) showQuestion();
-        else showResult();
     }
 
     function showResult() {
         document.getElementById("quiz-box").style.display = "none";
         document.getElementById("result-screen").style.display = "block";
-        
-        let desc = "";
-        if(score <= 1) { finalLvl = "A1"; desc = "Beginner - Başlanğıc"; }
-        else if(score == 2) { finalLvl = "A2"; desc = "Elementary - Təməl"; }
-        else if(score == 3) { finalLvl = "B1"; desc = "Intermediate - Orta"; }
-        else if(score == 4) { finalLvl = "B2"; desc = "Upper-Intermediate"; }
-        else { finalLvl = "C1"; desc = "Advanced - Yüksək"; }
-        
+        if(score <= 3) finalLvl = "A1"; else if(score <= 6) finalLvl = "A2";
+        else if(score <= 9) finalLvl = "B1"; else if(score <= 12) finalLvl = "B2"; else finalLvl = "C1";
         document.getElementById("user-level").innerText = finalLvl;
-        document.getElementById("level-desc").innerText = desc;
+        document.getElementById("level-desc").innerText = "You answered " + score + " questions correctly.";
     }
-
-    function goToStudy() {
-        window.location.href = "study.html?lvl=" + finalLvl;
-    }
-
-    document.addEventListener("DOMContentLoaded", showQuestion);
+    showQuestion();
 </script>
-
 </body>
 </html>
