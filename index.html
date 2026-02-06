@@ -1,42 +1,75 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
+<meta name="description" content="EduGlobal - Learn English for free with interactive quizzes and games.">
+<meta name="keywords" content="English, Learning, Quiz, EduGlobal, Free English Test">
     <meta charset="UTF-8">
-    <title>English Learning Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGlobal - Master English</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 50px; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
-        button { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 18px; }
-        button:hover { background-color: #218838; }
-        .question { margin-bottom: 20px; font-weight: bold; }
+        :root { --primary: #4a90e2; --secondary: #2c3e50; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .quiz-container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
+        h1 { color: var(--secondary); text-align: center; }
+        .question { font-size: 1.2rem; margin-bottom: 1.5rem; color: #333; }
+        .options { display: grid; gap: 10px; }
+        button { padding: 12px; border: 2px solid var(--primary); background: transparent; color: var(--primary); border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: var(--primary); color: white; }
+        #score-area { display: none; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Welcome to English Hub! 🇬🇧</h1>
-    <p>Dünyanın hər yerindən ingilis dilini bizimlə öyrənin.</p>
-    <hr>
-    <div id="quiz-area">
-        <p class="question">Sual 1: "I ___ to the school every day." boşluğa nə gəlməlidir?</p>
-        <button onclick="checkAnswer('go')">go</button>
-        <button onclick="checkAnswer('goes')">goes</button>
-        <button onclick="checkAnswer('gone')">gone</button>
+<div class="quiz-container">
+    <div id="quiz">
+        <h1>EduGlobal Quiz 🚀</h1>
+        <div id="question" class="question">Sual yüklənir...</div>
+        <div id="options" class="options"></div>
     </div>
-    <p id="result"></p>
+    <div id="score-area">
+        <h2>Təbriklər! 🎉</h2>
+        <p id="final-score"></p>
+        <button onclick="location.reload()">Yenidən Başla</button>
+    </div>
 </div>
 
 <script>
-    function checkAnswer(answer) {
-        if(answer === 'go') {
-            document.getElementById('result').innerHTML = "✅ Doğrudur! Siz hazırsınız.";
-            document.getElementById('result').style.color = "green";
-        } else {
-            document.getElementById('result').innerHTML = "❌ Səhvdir. Yenidən yoxlayın.";
-            document.getElementById('result').style.color = "red";
-        }
-    }
-</script>
+    const quizData = [
+        { q: "Which one is a fruit?", a: ["Carrot", "Apple", "Potato"], correct: "Apple" },
+        { q: "I ___ working on my project now.", a: ["am", "is", "are"], correct: "am" },
+        { q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], correct: "goes" }
+    ];
 
+    let currentIdx = 0;
+    let score = 0;
+
+    function loadQuiz() {
+        const q = quizData[currentIdx];
+        document.getElementById("question").innerText = q.q;
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+        q.a.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(ans) {
+        if(ans === quizData[currentIdx].correct) score++;
+        currentIdx++;
+        if(currentIdx < quizData.length) loadQuiz();
+        else showScore();
+    }
+
+    function showScore() {
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("score-area").style.display = "block";
+        document.getElementById("final-score").innerText = `Sizin nəticəniz: ${score} / ${quizData.length}`;
+    }
+
+    loadQuiz();
+</script>
 </body>
 </html>
