@@ -10,16 +10,42 @@
         :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; --card-bg: #ffffff; --text: #333; }
         body { font-family: 'Poppins', sans-serif; background: var(--light); color: var(--text); padding-top: 80px; margin: 0; }
         
-        header { position: fixed; top: 0; width: 100%; background: var(--card-bg); shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        /* HƏMİŞƏ YUXARIDA QALAN MENYU */
+        header { 
+            position: fixed; top: 0; width: 100%; background: var(--card-bg); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 2000; 
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; 
+        }
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
         nav a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 20px; }
 
-        .hero { text-align: center; padding: 60px 5%; background: var(--card-bg); margin: 20px 5%; border-radius: 20px; }
-        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 20px 5%; }
-        .level-card { background: white; padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; border-bottom: 5px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .container { padding: 20px 5%; }
 
-        .about-section { background: var(--dark); color: white; padding: 50px 5%; text-align: center; margin-top: 50px; }
-        .social-links a { color: white; font-size: 2rem; margin: 0 15px; transition: 0.3s; }
+        /* SEÇİM KARTLARI */
+        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
+        .level-card { 
+            background: white; border-radius: 20px; padding: 25px; text-align: center; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 5px solid var(--primary);
+        }
+        .level-card h3 { margin-bottom: 15px; font-size: 1.5rem; color: var(--dark); }
+
+        /* KARTIN İÇİNDƏKİ İKİ SEÇİM DÜYMƏSİ */
+        .choice-btns { display: flex; flex-direction: column; gap: 10px; }
+        .btn-choice { 
+            padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; 
+            display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+        }
+        .btn-grammar { background: var(--primary); color: white; }
+        .btn-vocab { background: #2ecc71; color: white; }
+        .btn-choice:hover { opacity: 0.8; transform: scale(1.02); }
+
+        /* HAQQIMDA HİSSƏSİ */
+        .about-section { 
+            background: var(--dark); color: white; padding: 60px 5%; 
+            text-align: center; border-radius: 30px; margin-top: 50px; 
+        }
+        .social-links { margin-top: 25px; }
+        .social-links a { color: white; font-size: 2rem; margin: 0 20px; transition: 0.3s; text-decoration: none; }
         .social-links a:hover { color: var(--primary); }
     </style>
 </head>
@@ -28,33 +54,50 @@
 <header>
     <a href="index.html" class="logo">EduGlobal</a>
     <nav>
-        <a href="test.html">Level Test</a>
-        <a href="game.html">Söz Oyunu 🎮</a>
+        <a href="game.html"><i class="fas fa-gamepad"></i> Söz Oyunu</a>
+        <a href="test.html"><i class="fas fa-tasks"></i> Səviyyə Testi</a>
     </nav>
 </header>
 
-<section class="hero">
-    <h1>İngilis Dilini Tural Abdullayev ilə Öyrən 🚀</h1>
-    <p>Səviyyəni seç və dərslərə başla.</p>
-    <div style="margin-top:20px;">
-        <a href="game.html" style="padding:15px 30px; background:#f1c40f; color:#333; text-decoration:none; border-radius:50px; font-weight:700;">Oyuna Başla & Sertifikat Qazan</a>
-    </div>
-</section>
+<div class="container">
+    <h2 style="text-align: center;">Səviyyənizə Uyğun Bölməni Seçin</h2>
+    
+    <div class="levels-grid">
+        <div class="level-card">
+            <h3>A1 Level (Beginner)</h3>
+            <div class="choice-btns">
+                <a href="grammar_A1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika Dərsləri</a>
+                <a href="vocab_A1.html" class="btn-choice btn-vocab"><i class="fas fa-list"></i> 150 Söz (Səsli)</a>
+            </div>
+        </div>
 
-<div class="levels-grid">
-    <div class="level-card" onclick="window.location.href='grammar_A1.html'"><h3>A1 Level</h3><p>Beginner</p></div>
-    <div class="level-card" onclick="window.location.href='grammar_B1.html'"><h3>B1 Level</h3><p>Intermediate</p></div>
-    <div class="level-card" onclick="window.location.href='grammar_C1.html'"><h3>C1 Level</h3><p>Advanced</p></div>
+        <div class="level-card">
+            <h3>B1 Level (Intermediate)</h3>
+            <div class="choice-btns">
+                <a href="grammar_B1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika Dərsləri</a>
+                <a href="vocab_B1.html" class="btn-choice btn-vocab"><i class="fas fa-list"></i> 150 Söz (Səsli)</a>
+            </div>
+        </div>
+
+        <div class="level-card">
+            <h3>C1 Level (Advanced)</h3>
+            <div class="choice-btns">
+                <a href="grammar_C1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika Dərsləri</a>
+                <a href="vocab_C1.html" class="btn-choice btn-vocab"><i class="fas fa-list"></i> 150 Söz (Səsli)</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="about-section">
+        <h2>About Tural Abdullayev</h2>
+        <p>İngilis dili öyrənmə yolunda sənin rəqəmsal bələdçin. Effektli dərslər və interaktiv materiallar.</p>
+        <div class="social-links">
+            <a href="https://instagram.com/t_abdullayev0" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 EduGlobal Pro. Developed by Tural Abdullayev.</p>
+    </section>
 </div>
-
-<section class="about-section">
-    <h2>Mənim Haqqımda</h2>
-    <p>Tural Abdullayev - Professional İngilis dili təlimçisi və proqram təminatçısı.</p>
-    <div class="social-links">
-        <a href="https://instagram.com/t_abdullayev0" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank"><i class="fab fa-linkedin"></i></a>
-    </div>
-</section>
 
 </body>
 </html>
