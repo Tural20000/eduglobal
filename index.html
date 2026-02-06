@@ -7,181 +7,118 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { 
-            --primary: #3498db; 
-            --dark: #2c3e50; 
-            --light: #f8f9fa; 
-            --card-bg: #ffffff; 
-            --text: #333; 
-            --accent: #e67e22;
-        }
-        .dark-mode { 
-            --primary: #5dade2; 
-            --dark: #ecf0f1; 
-            --light: #1a1a1a; 
-            --card-bg: #2d2d2d; 
-            --text: #f4f4f4; 
-        }
-
+        :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; --card-bg: #ffffff; --text: #333; --accent: #e67e22; }
+        .dark-mode { --primary: #5dade2; --dark: #ecf0f1; --light: #1a1a1a; --card-bg: #2d2d2d; --text: #f4f4f4; }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s; scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: var(--text); line-height: 1.6; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: var(--text); line-height: 1.6; padding-top: 70px; }
 
-        /* FIXED NAVBAR - HƏR ZAMAN ÜSTDƏ */
+        /* 1. HƏMİŞƏ GÖRÜNƏN MENYU */
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--card-bg);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 2000;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: fixed; top: 0; width: 100%; background: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 2000;
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
         }
-
         .logo { font-size: 1.6rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.9rem; }
 
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
-
-        .container { margin-top: 100px; padding: 20px 5%; }
+        .container { padding: 20px 5%; }
 
         /* HERO SECTION */
         .hero { 
-            text-align: center; 
-            padding: 60px 20px; 
-            background: var(--card-bg); 
-            border-radius: 30px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
+            text-align: center; padding: 50px 20px; background: var(--card-bg); 
+            border-radius: 30px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .hero h1 { font-size: 2.8rem; margin-bottom: 15px; }
         .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
-        
-        .btn { 
-            padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; 
-            display: flex; align-items: center; gap: 8px; border: none; cursor: pointer;
-        }
+        .btn { padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
         .btn-test { background: var(--primary); color: white; }
-        .btn-source { background: var(--accent); color: white; }
+        .btn-game { background: #f1c40f; color: #333; }
+        .btn-about { background: #9b59b6; color: white; }
 
-        /* GRAMMAR LEVELS */
-        .section-title { text-align: center; margin: 40px 0 30px; font-size: 2rem; }
-        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .level-card { 
-            background: var(--card-bg); padding: 40px; border-radius: 20px; text-align: center; 
-            cursor: pointer; border-bottom: 5px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
+        /* LEVELS GRID */
+        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .level-card { background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center; cursor: pointer; border-bottom: 5px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .level-card:hover { transform: translateY(-10px); }
-        .level-card i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
 
-        /* YOUTUBE SOURCES SECTION */
-        .sources-section { margin-top: 80px; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-        .video-card { 
-            background: var(--card-bg); padding: 20px; border-radius: 20px; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center;
-        }
-        .video-card h4 { margin-bottom: 15px; color: var(--dark); font-size: 1.1rem; }
-        .video-card p { font-size: 0.85rem; color: #777; margin-bottom: 15px; height: 45px; }
-        .yt-link { 
-            display: inline-block; padding: 10px 20px; background: #ff0000; color: white; 
-            text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
-        }
-        .yt-link i { margin-right: 8px; }
+        /* HAQQIMDA BÖLMƏSİ */
+        .about-section { margin-top: 60px; padding: 40px; background: var(--card-bg); border-radius: 20px; text-align: center; }
+        .profile-img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--primary); margin-bottom: 15px; }
 
-        footer { background: #1a1a1a; color: white; padding: 40px 5%; margin-top: 80px; text-align: center; }
+        /* YOUTUBE SOURCES */
+        .sources-section { margin-top: 60px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .video-card { background: var(--card-bg); padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; }
+        .yt-link { display: inline-block; padding: 10px 20px; background: #ff0000; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 10px; }
+
+        footer { background: #1a1a1a; color: white; padding: 40px; margin-top: 60px; text-align: center; }
         .theme-toggle { background: none; border: none; cursor: pointer; font-size: 1.4rem; color: var(--text); }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="index.html" class="logo">Edu<span>Global</span></a>
+    <a href="index.html" class="logo">EduGlobal</a>
     <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="test.html">Placement Test</a>
+        <a href="#levels">Levels</a>
         <a href="#xarici-menbe">Sources</a>
+        <a href="#about">About Me</a>
         <button onclick="toggleDarkMode()" class="theme-toggle" id="theme-icon">🌙</button>
     </nav>
 </header>
 
 <div class="container">
     <section class="hero">
-        <h1>Welcome to EduGlobal 🚀</h1>
-        <p>Your ultimate destination to master English grammar and vocabulary with Tural.</p>
+        <h1>Unlock Your English Potential 🚀</h1>
+        <p>Expert English lessons by Tural Abdullayev.</p>
         <div class="btn-group">
-            <a href="test.html" class="btn btn-test"><i class="fas fa-edit"></i> Start Level Test</a>
-            <a href="#xarici-menbe" class="btn btn-source"><i class="fab fa-youtube"></i> Xarici Mənbələr</a>
+            <a href="test.html" class="btn btn-test"><i class="fas fa-edit"></i> Start Test</a>
+            <a href="game.html" class="btn btn-game"><i class="fas fa-gamepad"></i> Play Game 🎮</a>
+            <a href="#about" class="btn btn-about"><i class="fas fa-user"></i> About Me</a>
         </div>
     </section>
 
-    <h2 class="section-title">Grammar Levels</h2>
-    <div class="levels-grid">
-        <div class="level-card" onclick="window.location.href='grammar_A1.html'">
-            <i class="fas fa-baby"></i>
-            <h3>A1</h3>
-            <p>Beginner - Basics of English</p>
-        </div>
-        <div class="level-card" onclick="window.location.href='grammar_B1.html'">
-            <i class="fas fa-user-graduate"></i>
-            <h3>B1</h3>
-            <p>Intermediate - Fluent Speaking</p>
-        </div>
-        <div class="level-card" onclick="window.location.href='grammar_C1.html'">
-            <i class="fas fa-medal"></i>
-            <h3>C1</h3>
-            <p>Advanced - Professional Level</p>
+    <div id="levels">
+        <h2 style="text-align: center; margin-bottom: 30px;">Grammar Courses</h2>
+        <div class="levels-grid">
+            <div class="level-card" onclick="window.location.href='grammar_A1.html'"><h3>A1</h3><p>Beginner</p></div>
+            <div class="level-card" onclick="window.location.href='grammar_B1.html'"><h3>B1</h3><p>Intermediate</p></div>
+            <div class="level-card" onclick="window.location.href='grammar_C1.html'"><h3>C1</h3><p>Advanced</p></div>
         </div>
     </div>
 
-    <section class="sources-section" id="xarici-menbe">
-        <h2 class="section-title">Xarici Mənbələr</h2>
+    <section id="about" class="about-section">
+        <h2>About Tural Abdullayev</h2>
+        <p style="margin-top: 15px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Mən Tural Abdullayev, EduGlobal platformasının yaradıcısıyam. Məqsədim ingilis dili öyrənənlər üçün ən effektiv və interaktiv dərsləri bir araya toplamaqdır.
+        </p>
+        <div style="margin-top: 20px;">
+            <a href="https://instagram.com/t_abdullayev0" target="_blank" style="font-size: 1.5rem; color: var(--primary); margin: 0 10px;"><i class="fab fa-instagram"></i></a>
+            <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank" style="font-size: 1.5rem; color: var(--primary); margin: 0 10px;"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </section>
+
+    <section id="xarici-menbe" class="sources-section">
+        <h2 style="text-align: center; margin-bottom: 30px;">External Learning Sources</h2>
         <div class="video-grid">
-            
             <div class="video-card">
                 <h4>BBC Learning English</h4>
-                <p>Əlavə dərslər, qrammatika, sözlər və dinləmə üçün mükəmməl mənbə.</p>
-                <a href="https://www.youtube.com/@bbclearningenglish" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+                <a href="https://www.youtube.com/@bbclearningenglish" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Visit Channel</a>
             </div>
-
             <div class="video-card">
                 <h4>English with Lucy</h4>
-                <p>Britaniya aksenti, tələffüz və gündəlik danışıq dərsləri.</p>
-                <a href="https://www.youtube.com/@EnglishwithLucy" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+                <a href="https://www.youtube.com/@EnglishwithLucy" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Visit Channel</a>
             </div>
-
-            <div class="video-card">
-                <h4>EnglishClass101</h4>
-                <p>Söz bazası, qrammatika və müxtəlif səviyyələr üzrə video dərslər.</p>
-                <a href="https://www.youtube.com/@EnglishClass101" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
-            </div>
-
-            <div class="video-card">
-                <h4>Shaw English Online</h4>
-                <p>Gündəlik danışıq və praktik ingilis dili öyrənmək üçün ideal kanal.</p>
-                <a href="https://www.youtube.com/@ShawEnglishOnline" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
-            </div>
-
             <div class="video-card">
                 <h4>VOA Learning English</h4>
-                <p>Aşağı sürətli xəbərlərlə dinləmə və anlama qabiliyyətinizi inkişaf etdirin.</p>
-                <a href="https://www.youtube.com/@VOALearningEnglish" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Kanala Get</a>
+                <a href="https://www.youtube.com/@VOALearningEnglish" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> Visit Channel</a>
             </div>
-
         </div>
     </section>
 </div>
 
 <footer>
     <p>Developed by Tural Abdullayev &copy; 2026</p>
-    <div style="margin-top: 15px;">
-        <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" style="color:white; margin:0 10px; font-size:1.2rem;"><i class="fab fa-linkedin"></i></a>
-        <a href="https://instagram.com/t_abdullayev0" style="color:white; margin:0 10px; font-size:1.2rem;"><i class="fab fa-instagram"></i></a>
-    </div>
 </footer>
 
 <script>
@@ -191,7 +128,6 @@
         localStorage.setItem('dark-mode', isDark);
         document.getElementById('theme-icon').innerHTML = isDark ? '☀️' : '🌙';
     }
-    
     if(localStorage.getItem('dark-mode') === 'true') {
         document.body.classList.add('dark-mode');
         document.getElementById('theme-icon').innerHTML = '☀️';
