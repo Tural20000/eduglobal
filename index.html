@@ -10,43 +10,55 @@
         :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; --card-bg: #ffffff; --text: #333; }
         body { font-family: 'Poppins', sans-serif; background: var(--light); color: var(--text); padding-top: 80px; margin: 0; }
         
-        /* HƏMİŞƏ YUXARIDA QALAN MENYU */
+        /* SABİT NAVİQASİYA */
         header { 
             position: fixed; top: 0; width: 100%; background: var(--card-bg); 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 2000; 
             padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; 
         }
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        nav a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 20px; }
+        nav a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 20px; transition: 0.3s; }
+        nav a:hover { color: var(--primary); }
 
         .container { padding: 20px 5%; }
 
-        /* SEÇİM KARTLARI */
-        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
+        /* SƏVİYYƏ KARTLARI */
+        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-top: 30px; }
         .level-card { 
-            background: white; border-radius: 20px; padding: 25px; text-align: center; 
+            background: white; border-radius: 20px; padding: 30px; text-align: center; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 5px solid var(--primary);
+            transition: transform 0.3s;
         }
-        .level-card h3 { margin-bottom: 15px; font-size: 1.5rem; color: var(--dark); }
+        .level-card:hover { transform: translateY(-5px); }
+        .level-card h3 { margin-bottom: 20px; font-size: 1.6rem; color: var(--dark); }
 
-        /* KARTIN İÇİNDƏKİ İKİ SEÇİM DÜYMƏSİ */
-        .choice-btns { display: flex; flex-direction: column; gap: 10px; }
+        /* KART DAXİLİNDƏKİ 3 ƏSAS DÜYMƏ */
+        .choice-btns { display: flex; flex-direction: column; gap: 12px; }
         .btn-choice { 
-            padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; 
-            display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+            padding: 14px; border-radius: 12px; text-decoration: none; font-weight: 600; 
+            display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; color: white;
         }
-        .btn-grammar { background: var(--primary); color: white; }
-        .btn-vocab { background: #2ecc71; color: white; }
-        .btn-choice:hover { opacity: 0.8; transform: scale(1.02); }
+        .btn-grammar { background: #3498db; } /* Göy */
+        .btn-vocab { background: #2ecc71; }   /* Yaşıl */
+        .btn-reading { background: #e67e22; } /* Narıncı */
+        
+        .btn-choice:hover { opacity: 0.85; transform: scale(1.02); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* HAQQIMDA HİSSƏSİ */
+        /* HAQQIMDA VƏ SOSİAL BÖLMƏ */
         .about-section { 
             background: var(--dark); color: white; padding: 60px 5%; 
-            text-align: center; border-radius: 30px; margin-top: 50px; 
+            text-align: center; border-radius: 30px; margin-top: 60px; 
         }
-        .social-links { margin-top: 25px; }
-        .social-links a { color: white; font-size: 2rem; margin: 0 20px; transition: 0.3s; text-decoration: none; }
-        .social-links a:hover { color: var(--primary); }
+        .social-links { margin: 25px 0; }
+        .social-links a { color: white; font-size: 2.2rem; margin: 0 20px; transition: 0.3s; text-decoration: none; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); display: inline-block; }
+        
+        .footer-text { margin-top: 30px; font-size: 0.9rem; opacity: 0.7; letter-spacing: 1px; }
+
+        @media (max-width: 600px) {
+            .levels-grid { grid-template-columns: 1fr; }
+            header { padding: 15px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -60,14 +72,16 @@
 </header>
 
 <div class="container">
-    <h2 style="text-align: center;">Səviyyənizə Uyğun Bölməni Seçin</h2>
+    <h2 style="text-align: center; margin-bottom: 10px;">Xoş Gəlmisiniz!</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 40px;">Öyrənmək istədiyiniz bölməni seçərək başlayın.</p>
     
     <div class="levels-grid">
         <div class="level-card">
             <h3>A1 Level (Beginner)</h3>
             <div class="choice-btns">
                 <a href="grammar_A1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika Dərsləri</a>
-                <a href="vocab_A1.html" class="btn-choice btn-vocab"><i class="fas fa-list"></i> 150 Söz (Səsli)</a>
+                <a href="vocab_A1.html" class="btn-choice btn-vocab"><i class="fas fa-list-ul"></i> 150 Əsas Söz (Səsli)</a>
+                <a href="reading_A1.html" class="btn-choice btn-reading"><i class="fas fa-book-open"></i> Reading Practice</a>
             </div>
         </div>
 
@@ -75,7 +89,8 @@
             <h3>B1 Level (Intermediate)</h3>
             <div class="choice-btns">
                 <a href="grammar_B1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika Dərsləri</a>
-                <a href="vocab_B1.html" class="btn-choice btn-vocab"><i class="fas fa-list"></i> 150 Söz (Səsli)</a>
+                <a href="vocab_B1.html" class="btn-choice btn-vocab"><i class="fas fa-list-ul"></i> 150 Orta Söz (Səsli)</a>
+                <a href="reading_B1.html" class="btn-choice btn-reading"><i class="fas fa-book-open"></i> Reading Practice</a>
             </div>
         </div>
 
@@ -83,19 +98,20 @@
             <h3>C1 Level (Advanced)</h3>
             <div class="choice-btns">
                 <a href="grammar_C1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika Dərsləri</a>
-                <a href="vocab_C1.html" class="btn-choice btn-vocab"><i class="fas fa-list"></i> 150 Söz (Səsli)</a>
+                <a href="vocab_C1.html" class="btn-choice btn-vocab"><i class="fas fa-list-ul"></i> 150 Çətin Söz (Səsli)</a>
+                <a href="reading_C1.html" class="btn-choice btn-reading"><i class="fas fa-book-open"></i> Reading Practice</a>
             </div>
         </div>
     </div>
 
     <section class="about-section">
         <h2>About Tural Abdullayev</h2>
-        <p>İngilis dili öyrənmə yolunda sənin rəqəmsal bələdçin. Effektli dərslər və interaktiv materiallar.</p>
+        <p>İngilis dili öyrənmə prosesini interaktiv və maraqlı edən rəqəmsal platforma.</p>
         <div class="social-links">
             <a href="https://instagram.com/t_abdullayev0" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
         </div>
-        <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 EduGlobal Pro. Developed by Tural Abdullayev.</p>
+        <p class="footer-text">&copy; 2026 EduGlobal Pro. Developed by Tural Abdullayev.</p>
     </section>
 </div>
 
