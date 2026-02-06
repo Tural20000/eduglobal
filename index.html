@@ -7,165 +7,198 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #3498db; --dark: #2c3e50; --glass: rgba(255, 255, 255, 0.85); --text: #333; }
+        :root { 
+            --primary: #3498db; --dark: #2c3e50; --glass: rgba(255, 255, 255, 0.85); 
+            --text: #333; --bg: #e0e5ec; --card-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+        }
         
-        /* 3D ILLÜZİYA ARXA FON */
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            color: var(--text); 
-            margin: 0; 
-            padding-top: 80px;
-            background: #e0e5ec;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(52, 152, 219, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(155, 89, 182, 0.15) 0%, transparent 40%);
-            min-height: 100vh;
-            overflow-x: hidden;
+        /* DARK MODE */
+        body.dark-mode { 
+            --bg: #1a1a2e; --text: #f4f4f4; --glass: rgba(30, 30, 50, 0.9); --dark: #0f0f1b;
+            --card-shadow: 10px 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* HƏRƏKƏTLİ 3D ELEMENTLƏR */
-        .bg-shape {
-            position: fixed; z-index: -1; border-radius: 50%; filter: blur(60px); opacity: 0.6; animation: move 20s infinite alternate;
+        body { 
+            font-family: 'Poppins', sans-serif; color: var(--text); margin: 0; padding-top: 80px;
+            background: var(--bg); transition: 0.5s; min-height: 100vh; overflow-x: hidden;
         }
+
+        /* 3D FON ELEMENTLƏRİ */
+        .bg-shape { position: fixed; z-index: -1; border-radius: 50%; filter: blur(60px); opacity: 0.4; animation: move 20s infinite alternate; }
         .shape-1 { width: 400px; height: 400px; background: #3498db; top: -100px; left: -100px; }
         .shape-2 { width: 300px; height: 300px; background: #9b59b6; bottom: -50px; right: -50px; animation-delay: -5s; }
-
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
 
-        /* HEADER */
         header { 
-            position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.9); 
-            backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(0,0,0,0.1); 
-            z-index: 2000; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; 
+            position: fixed; top: 0; width: 100%; background: var(--glass); backdrop-filter: blur(10px);
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 2000; box-sizing: border-box;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
         }
+
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        nav a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 20px; transition: 0.3s; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
 
         .container { padding: 20px 5%; position: relative; z-index: 1; }
 
-        /* GLASSMORPHISM KARTLAR (3D Effekt üçün) */
-        .level-card { 
-            background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 25px; padding: 30px; text-align: center; 
-            box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff; /* Neumorphism/3D shadow */
-            transition: 0.4s;
+        /* GÜNÜN SÖZÜ */
+        .daily-box {
+            background: var(--glass); border-radius: 20px; padding: 20px; margin-bottom: 30px;
+            text-align: center; border: 1px solid rgba(255,255,255,0.3); box-shadow: var(--card-shadow);
         }
-        .level-card:hover { transform: translateY(-10px) rotateX(5deg); }
 
-        .choice-btns { display: flex; flex-direction: column; gap: 12px; }
-        .btn-choice { padding: 14px; border-radius: 12px; text-decoration: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; color: white; border: none; }
-        .btn-grammar { background: #3498db; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); }
-        .btn-vocab { background: #2ecc71; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); }
-        .btn-reading { background: #e67e22; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); }
+        /* 3D GLASS KARTLAR */
+        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .level-card { 
+            background: var(--glass); backdrop-filter: blur(10px); border-radius: 25px; padding: 30px; 
+            box-shadow: var(--card-shadow); transition: 0.4s; border: 1px solid rgba(255,255,255,0.4);
+        }
+        .level-card:hover { transform: translateY(-10px) rotateX(2deg); }
 
-        /* RƏY BÖLMƏSİ */
-        .feedback-section { background: var(--glass); border-radius: 25px; padding: 40px; margin-top: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .feedback-form textarea { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; font-family: inherit; }
-        .feedback-list { margin-top: 30px; text-align: left; max-height: 300px; overflow-y: auto; }
-        .review-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--primary); }
+        .btn-choice { 
+            padding: 14px; border-radius: 12px; text-decoration: none; font-weight: 600; 
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; color: white;
+            transition: 0.3s;
+        }
+        .btn-grammar { background: #3498db; }
+        .btn-vocab { background: #2ecc71; }
+        .btn-reading { background: #e67e22; }
+        .btn-choice:hover { filter: brightness(1.1); transform: scale(1.02); }
 
-        /* FOOTER */
-        .about-section { background: var(--dark); color: white; padding: 60px 5%; text-align: center; border-radius: 30px; margin-top: 60px; }
-        .social-links a { color: white; font-size: 2.2rem; margin: 0 20px; transition: 0.3s; }
+        /* RƏY SİSTEMİ */
+        .feedback-section { background: var(--glass); border-radius: 25px; padding: 30px; margin-top: 50px; box-shadow: var(--card-shadow); }
+        .review-item { background: rgba(255,255,255,0.4); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 5px solid var(--primary); color: var(--text); }
+
+        .theme-toggle { cursor: pointer; font-size: 1.5rem; color: var(--primary); transition: 0.3s; }
+
+        .about-section { background: var(--dark); color: white; padding: 50px; border-radius: 30px; margin-top: 50px; text-align: center; }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
 <div class="bg-shape shape-1"></div>
 <div class="bg-shape shape-2"></div>
 
 <header>
     <a href="index.html" class="logo">EduGlobal</a>
-    <nav>
-        <a href="#reviews"><i class="fas fa-comment-dots"></i> Rəylər</a>
-        <a href="game.html"><i class="fas fa-gamepad"></i> Oyun</a>
-        <a href="test.html"><i class="fas fa-tasks"></i> Test</a>
-    </nav>
+    <div class="nav-right">
+        <a href="game.html" style="text-decoration:none; color:inherit; font-weight:600;"><i class="fas fa-gamepad"></i> Oyun</a>
+        <a href="test.html" style="text-decoration:none; color:inherit; font-weight:600;"><i class="fas fa-tasks"></i> Test</a>
+        <i class="fas fa-moon theme-toggle" onclick="toggleTheme()" id="themeIcon"></i>
+    </div>
 </header>
 
 <div class="container">
-    <div class="levels-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+    
+    <div class="daily-box">
+        <h4 style="margin:0; color:var(--primary);"><i class="fas fa-star"></i> Günün Sözü</h4>
+        <p id="dailyWord" style="font-size: 1.3rem; font-weight: 600; margin: 10px 0;">Resilient</p>
+        <small id="dailyMeaning" style="font-style: italic; opacity: 0.8;">Çətinliklərə qarşı dözümlü, sınmayan.</small>
+    </div>
+
+    <div class="levels-grid">
         <div class="level-card">
-            <h3>A1 Level</h3>
+            <h3>A1 Level (Beginner)</h3>
             <div class="choice-btns">
-                <a href="grammar_A1.html" class="btn-choice btn-grammar">Qrammatika</a>
-                <a href="vocab_A1.html" class="btn-choice btn-vocab">150 Söz</a>
-                <a href="reading_A1.html" class="btn-choice btn-reading">Reading</a>
+                <a href="grammar_A1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika</a>
+                <a href="vocab_A1.html" class="btn-choice btn-vocab"><i class="fas fa-spell-check"></i> 150 Söz</a>
+                <a href="reading_A1.html" class="btn-choice btn-reading"><i class="fas fa-book-reader"></i> Reading Practice</a>
             </div>
         </div>
         <div class="level-card">
-            <h3>B1 Level</h3>
+            <h3>B1 Level (Intermediate)</h3>
             <div class="choice-btns">
-                <a href="grammar_B1.html" class="btn-choice btn-grammar">Qrammatika</a>
-                <a href="vocab_B1.html" class="btn-choice btn-vocab">150 Söz</a>
-                <a href="reading_B1.html" class="btn-choice btn-reading">Reading</a>
+                <a href="grammar_B1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika</a>
+                <a href="vocab_B1.html" class="btn-choice btn-vocab"><i class="fas fa-spell-check"></i> 150 Söz</a>
+                <a href="reading_B1.html" class="btn-choice btn-reading"><i class="fas fa-book-reader"></i> Reading Practice</a>
             </div>
         </div>
         <div class="level-card">
-            <h3>C1 Level</h3>
+            <h3>C1 Level (Advanced)</h3>
             <div class="choice-btns">
-                <a href="grammar_C1.html" class="btn-choice btn-grammar">Qrammatika</a>
-                <a href="vocab_C1.html" class="btn-choice btn-vocab">150 Söz</a>
-                <a href="reading_C1.html" class="btn-choice btn-reading">Reading</a>
+                <a href="grammar_C1.html" class="btn-choice btn-grammar"><i class="fas fa-book"></i> Qrammatika</a>
+                <a href="vocab_C1.html" class="btn-choice btn-vocab"><i class="fas fa-spell-check"></i> 150 Söz</a>
+                <a href="reading_C1.html" class="btn-choice btn-reading"><i class="fas fa-book-reader"></i> Reading Practice</a>
             </div>
         </div>
     </div>
 
-    <section class="feedback-section" id="reviews">
-        <h2>İstifadəçi Rəyləri</h2>
-        <div class="feedback-form">
-            <input type="text" id="reviewerName" placeholder="Adınız" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd;">
-            <textarea id="reviewText" rows="4" placeholder="Fikirlərinizi bizimlə bölüşün..."></textarea>
-            <button onclick="addReview()" class="btn-choice btn-grammar" style="cursor:pointer; width: 200px;">Rəy Göndər</button>
-        </div>
-        <div class="feedback-list" id="feedbackList">
-            <div class="review-item"><strong>Tural:</strong> Sayta xoş gəlmisiniz! Uğurlar arzulayıram.</div>
-        </div>
+    <section class="feedback-section">
+        <h3><i class="fas fa-comments"></i> İstifadəçi Rəyləri</h3>
+        <input type="text" id="revName" placeholder="Adınız" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd; outline:none;">
+        <textarea id="revText" placeholder="Fikirləriniz..." style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; outline:none; height:80px;"></textarea>
+        <button onclick="saveReview()" class="btn-choice btn-grammar" style="width:100%; border:none; margin-top:10px; cursor:pointer;">Rəyi Paylaş</button>
+        <div id="revList" style="margin-top:20px; max-height: 250px; overflow-y: auto;"></div>
     </section>
 
-    <section class="about-section">
-        <h2>About Tural Abdullayev</h2>
-        <div class="social-links">
-            <a href="https://instagram.com/t_abdullayev0" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <div class="about-section">
+        <h3>Tural Abdullayev</h3>
+        <p>EduGlobal platforması ilə dili asan və interaktiv öyrənin.</p>
+        <div style="font-size: 2.2rem; margin-top: 20px;">
+            <a href="https://instagram.com/t_abdullayev0" target="_blank" style="color:white; margin:0 15px;"><i class="fab fa-instagram"></i></a>
+            <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank" style="color:white; margin:0 15px;"><i class="fab fa-linkedin"></i></a>
         </div>
-    </section>
+        <p style="margin-top:30px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 EduGlobal Pro. All Rights Reserved.</p>
+    </div>
 </div>
 
 <script>
-    function addReview() {
-        const name = document.getElementById('reviewerName').value;
-        const text = document.getElementById('reviewText').value;
-        if(name && text) {
-            const list = document.getElementById('feedbackList');
-            const newItem = document.createElement('div');
-            newItem.className = 'review-item';
-            newItem.innerHTML = `<strong>${name}:</strong> ${text}`;
-            list.prepend(newItem);
-            document.getElementById('reviewerName').value = '';
-            document.getElementById('reviewText').value = '';
-            
-            // Local Storage-da saxla (Səhifə yenilənəndə itməməsi üçün)
-            let reviews = JSON.parse(localStorage.getItem('eduReviews') || '[]');
-            reviews.push({name, text});
-            localStorage.setItem('eduReviews', JSON.stringify(reviews));
+    // 1. GÜNÜN SÖZÜ LOGİKASI
+    const words = [
+        {w: "Resilient", m: "Çətinliklərə qarşı dözümlü, elastik."},
+        {w: "Eloquent", m: "Gözəl və təsirli danışan, natiq."},
+        {w: "Plausible", m: "Ağlabatan, inandırıcı görünən."},
+        {w: "Tenacious", m: "İnadkar, məqsədinə sadiq."},
+        {w: "Vivid", m: "Canlı, parlaq, aydın."}
+    ];
+    const todayIndex = new Date().getDay() % words.length;
+    document.getElementById('dailyWord').innerText = words[todayIndex].w;
+    document.getElementById('dailyMeaning').innerText = words[todayIndex].m;
+
+    // 2. DARK MODE LOGİKASI
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('themeIcon');
+        body.classList.toggle('dark-mode');
+        
+        if(body.classList.contains('dark-mode')) {
+            icon.classList.replace('fa-moon', 'fa-sun');
+            localStorage.setItem('theme', 'dark');
         } else {
-            alert("Lütfən adınızı və rəyinizi yazın!");
+            icon.classList.replace('fa-sun', 'fa-moon');
+            localStorage.setItem('theme', 'light');
         }
     }
 
-    // Yaddaşdakı rəyləri yüklə
-    window.onload = function() {
+    // 3. RƏY SİSTEMİ (LocalStorage ilə)
+    function saveReview() {
+        const name = document.getElementById('revName').value;
+        const text = document.getElementById('revText').value;
+        if(name && text) {
+            let reviews = JSON.parse(localStorage.getItem('eduReviews') || '[]');
+            reviews.push({name, text, date: new Date().toLocaleDateString()});
+            localStorage.setItem('eduReviews', JSON.stringify(reviews));
+            showReviews();
+            document.getElementById('revName').value = '';
+            document.getElementById('revText').value = '';
+        }
+    }
+
+    function showReviews() {
+        const list = document.getElementById('revList');
         let reviews = JSON.parse(localStorage.getItem('eduReviews') || '[]');
-        const list = document.getElementById('feedbackList');
-        reviews.reverse().forEach(r => {
-            const item = document.createElement('div');
-            item.className = 'review-item';
-            item.innerHTML = `<strong>${r.name}:</strong> ${r.text}`;
-            list.appendChild(item);
-        });
+        list.innerHTML = reviews.reverse().map(r => `
+            <div class="review-item">
+                <small style="color:var(--primary); font-weight:600;">${r.name}</small>
+                <p style="margin:5px 0 0 0;">${r.text}</p>
+            </div>
+        `).join('');
+    }
+
+    // YÜKLƏNƏNDƏ TEMANI VƏ RƏYLƏRİ YOXLA
+    window.onload = function() {
+        showReviews();
+        if(localStorage.getItem('theme') === 'dark') toggleTheme();
     }
 </script>
-
 </body>
 </html>
