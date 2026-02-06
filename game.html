@@ -2,94 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Word Match Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Match Game - EduGlobal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; text-align: center; padding-top: 80px; }
-        .nav-fixed { position: fixed; top: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 100; }
-        .game-container { display: flex; justify-content: center; gap: 50px; margin-top: 30px; flex-wrap: wrap; padding: 20px; }
-        .column { display: flex; flex-direction: column; gap: 10px; }
-        .word { padding: 12px 25px; background: white; border: 2px solid #3498db; border-radius: 8px; cursor: pointer; min-width: 150px; transition: 0.3s; }
-        .word.selected { background: #3498db; color: white; }
-        .word.matched { background: #2ecc71; color: white; border-color: #2ecc71; opacity: 0.6; cursor: default; }
-        #cert-area { margin-top: 40px; display: none; }
-        .cert-btn { padding: 20px 40px; background: #9b59b6; color: white; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 1.2rem; display: inline-block; }
+        :root { --primary: #3498db; --success: #2ecc71; --error: #e74c3c; --dark: #2c3e50; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding-top: 80px; text-align: center; }
+        
+        header { position: fixed; top: 0; width: 100%; background: white; padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-sizing: border-box; }
+        .back-home { text-decoration: none; color: var(--primary); font-weight: 600; }
+
+        .game-container { max-width: 800px; margin: auto; display: flex; justify-content: space-around; padding: 20px; }
+        .column { display: flex; flex-direction: column; gap: 10px; width: 45%; }
+        
+        .word-card { 
+            background: white; padding: 15px; border: 2px solid #ddd; border-radius: 10px; 
+            cursor: pointer; transition: 0.3s; font-weight: 600; user-select: none;
+        }
+        .word-card:hover { border-color: var(--primary); transform: scale(1.02); }
+        .word-card.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .word-card.matched { background: var(--success); color: white; border-color: var(--success); cursor: default; opacity: 0.7; }
+        .word-card.wrong { background: var(--error); color: white; border-color: var(--error); }
+
+        #score-board { font-size: 1.5rem; font-weight: 700; margin: 20px; color: var(--dark); }
+
+        /* Sertifikat Düyməsi */
+        #cert-modal { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 40px; border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.3); z-index: 2000;
+        }
+        .btn-cert { background: #9b59b6; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; display: inline-block; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="nav-fixed"><a href="index.html" style="text-decoration:none; color:#3498db; font-weight:700;">🏠 Ana Menyuya Qayıt</a></div>
+<header>
+    <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Geri</a>
+    <div style="font-weight: 700;">30 Sözü Birləşdir</div>
+</header>
 
-<h2>Sözləri Uyğunlaşdır (30/30)</h2>
-<p>Düzgün tapılan: <span id="score">0</span></p>
+<div id="score-board">Xal: <span id="score">0</span> / 30</div>
 
 <div class="game-container">
-    <div class="column" id="en-col"></div>
-    <div class="column" id="az-col"></div>
+    <div class="column" id="en-column"></div>
+    <div class="column" id="az-column"></div>
 </div>
 
-<div id="cert-area">
-    <h2 style="color:#2ecc71;">Təbriklər! Hamısını Tapdınız! 🎉</h2>
-    <a href="certificate.html" class="cert-btn">Sertifikatını Yüklə 🎓</a>
+<div id="cert-modal">
+    <i class="fas fa-trophy" style="font-size: 4rem; color: #f1c40f;"></i>
+    <h2>Möhtəşəm!</h2>
+    <p>Bütün sözləri düzgün tapdınız.</p>
+    <a href="certificate.html" class="btn-cert">Sertifikatı Al 🎓</a>
 </div>
 
 <script>
-    const pairs = [
-        {en: "Always", az: "Həmişə"}, {en: "Beautiful", az: "Gözəl"}, {en: "Country", az: "Ölkə"},
-        {en: "Danger", az: "Təhlükə"}, {en: "Example", az: "Nümunə"}, {en: "Family", az: "Ailə"},
-        {en: "Garden", az: "Bağça"}, {en: "Health", az: "Sağlamlıq"}, {en: "Island", az: "Ada"},
-        {en: "Journey", az: "Səyahət"}, {en: "Kitchen", az: "Mətbəx"}, {en: "Library", az: "Kitabxana"},
-        {en: "Mountain", az: "Dağ"}, {en: "Nature", az: "Təbiət"}, {en: "Ocean", az: "Okean"},
-        {en: "People", az: "İnsanlar"}, {en: "Question", az: "Sual"}, {en: "River", az: "Çay"},
-        {en: "Science", az: "Elm"}, {en: "Table", az: "Masa"}, {en: "Universe", az: "Kainat"},
-        {en: "Village", az: "Kənd"}, {en: "Weather", az: "Hava"}, {en: "Yesterday", az: "Dünən"},
-        {en: "Zero", az: "Sıfır"}, {en: "Success", az: "Uğur"}, {en: "Power", az: "Güc"},
-        {en: "Freedom", az: "Azadlıq"}, {en: "Memory", az: "Yaddaş"}, {en: "Future", az: "Gələcək"}
+    const wordPairs = [
+        {en: "Abstain", az: "Çəkinmək"}, {en: "Accurate", az: "Dəqiq"}, {en: "Ancient", az: "Qədim"},
+        {en: "Believe", az: "İnanmaq"}, {en: "Challenge", az: "Sınaq"}, {en: "Danger", az: "Təhlükə"},
+        {en: "Education", az: "Təhsil"}, {en: "Focus", az: "Fokus"}, {en: "Future", az: "Gələcək"},
+        {en: "Garden", az: "Bağça"}, {en: "Habit", az: "Vərdiş"}, {en: "Identity", az: "Kimlik"},
+        {en: "Journey", az: "Səyahət"}, {en: "Knowledge", az: "Bilik"}, {en: "Language", az: "Dil"},
+        {en: "Memory", az: "Yaddaş"}, {en: "Nature", az: "Təbiət"}, {en: "Opportunity", az: "Fürsət"},
+        {en: "Practice", az: "Təcrübə"}, {en: "Quality", az: "Keyfiyyət"}, {en: "Respect", az: "Hörmət"},
+        {en: "Success", az: "Uğur"}, {en: "Trust", az: "Etibar"}, {en: "Understand", az: "Anlamaq"},
+        {en: "Vision", az: "Vizyon"}, {en: "Wisdom", az: "Hikmət"}, {en: "Always", az: "Həmişə"},
+        {en: "Freedom", az: "Azadlıq"}, {en: "Improve", az: "Təkmilləşdirmək"}, {en: "Value", az: "Dəyər"}
     ];
 
     let selectedEn = null;
     let score = 0;
 
-    function render() {
-        const enCol = document.getElementById('en-col');
-        const azCol = document.getElementById('az-col');
-        
-        // Qarışdırılmış ingilis və azərbaycan sütunları
-        const shuffledEn = [...pairs].sort(() => Math.random() - 0.5);
-        const shuffledAz = [...pairs].sort(() => Math.random() - 0.5);
+    function initGame() {
+        const enCol = document.getElementById('en-column');
+        const azCol = document.getElementById('az-column');
 
-        shuffledEn.forEach(p => {
+        // İngilis sözlərini qarışdır və əlavə et
+        [...wordPairs].sort(() => Math.random() - 0.5).forEach(pair => {
             const div = document.createElement('div');
-            div.className = 'word';
-            div.innerText = p.en;
-            div.id = 'en-' + p.en;
-            div.onclick = () => {
-                if(div.classList.contains('matched')) return;
-                document.querySelectorAll('#en-col .word').forEach(w => w.classList.remove('selected'));
-                div.classList.add('selected');
-                selectedEn = p;
-            };
+            div.className = 'word-card';
+            div.innerText = pair.en;
+            div.onclick = () => selectEn(div, pair);
             enCol.appendChild(div);
         });
 
-        shuffledAz.forEach(p => {
+        // Azərbaycan sözlərini qarışdır və əlavə et
+        [...wordPairs].sort(() => Math.random() - 0.5).forEach(pair => {
             const div = document.createElement('div');
-            div.className = 'word';
-            div.innerText = p.az;
-            div.onclick = () => {
-                if(selectedEn && selectedEn.az === p.az) {
-                    div.classList.add('matched');
-                    document.getElementById('en-' + selectedEn.en).classList.add('matched');
-                    score++;
-                    document.getElementById('score').innerText = score;
-                    selectedEn = null;
-                    if(score === 30) document.getElementById('cert-area').style.display = 'block';
-                }
-            };
+            div.className = 'word-card';
+            div.innerText = pair.az;
+            div.onclick = () => selectAz(div, pair);
             azCol.appendChild(div);
         });
     }
-    render();
+
+    function selectEn(element, pair) {
+        if (element.classList.contains('matched')) return;
+        document.querySelectorAll('#en-column .word-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedEn = { element, pair };
+    }
+
+    function selectAz(element, pair) {
+        if (!selectedEn || element.classList.contains('matched')) return;
+
+        if (selectedEn.pair.en === pair.en) {
+            // DÜZDÜRSƏ
+            element.classList.add('matched');
+            selectedEn.element.classList.add('matched');
+            score++;
+            document.getElementById('score').innerText = score;
+            selectedEn = null;
+            if (score === 30) document.getElementById('cert-modal').style.display = 'block';
+        } else {
+            // SƏHVDİRSƏ
+            element.classList.add('wrong');
+            setTimeout(() => element.classList.remove('wrong'), 500);
+        }
+    }
+
+    initGame();
 </script>
 </body>
 </html>
