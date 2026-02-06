@@ -1,75 +1,64 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="description" content="EduGlobal - Learn English for free with interactive quizzes and games.">
-<meta name="keywords" content="English, Learning, Quiz, EduGlobal, Free English Test">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Master English</title>
+    <title>EduGlobal - Level Up Your English</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #4a90e2; --secondary: #2c3e50; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .quiz-container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
-        h1 { color: var(--secondary); text-align: center; }
-        .question { font-size: 1.2rem; margin-bottom: 1.5rem; color: #333; }
-        .options { display: grid; gap: 10px; }
-        button { padding: 12px; border: 2px solid var(--primary); background: transparent; color: var(--primary); border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button:hover { background: var(--primary); color: white; }
-        #score-area { display: none; text-align: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; color: #333; }
+        
+        header { background: #2c3e50; color: white; padding: 20px; text-align: center; }
+        .hero { padding: 50px 20px; text-align: center; background: white; border-bottom: 2px solid #eee; }
+        
+        .levels-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; padding: 40px; max-width: 1000px; margin: auto; }
+        
+        .level-card { 
+            background: white; padding: 30px; border-radius: 10px; text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s;
+            border-top: 5px solid #3498db;
+        }
+        .level-card:hover { transform: translateY(-10px); box-shadow: 0 10px 15px rgba(0,0,0,0.15); }
+        .level-card h3 { font-size: 24px; color: #2c3e50; }
+        
+        .btn-test { 
+            display: inline-block; background: #27ae60; color: white; padding: 15px 30px; 
+            border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <div id="quiz">
-        <h1>EduGlobal Quiz 🚀</h1>
-        <div id="question" class="question">Sual yüklənir...</div>
-        <div id="options" class="options"></div>
+<header>
+    <h1>EduGlobal</h1>
+</header>
+
+<section class="hero">
+    <h2>Start Your English Journey</h2>
+    <p>Dünya miqyasında ingilis dili öyrənmək üçün doğru yerdəsiniz.</p>
+    <a href="#" class="btn-test">Start Level Test</a>
+</section>
+
+<div class="levels-container">
+    <div class="level-card" onclick="alert('A1 materialları tezliklə!')">
+        <h3>A1</h3>
+        <p>Beginner</p>
     </div>
-    <div id="score-area">
-        <h2>Təbriklər! 🎉</h2>
-        <p id="final-score"></p>
-        <button onclick="location.reload()">Yenidən Başla</button>
+    <div class="level-card" onclick="alert('A2 materialları tezliklə!')">
+        <h3>A2</h3>
+        <p>Elementary</p>
+    </div>
+    <div class="level-card" onclick="alert('B1 materialları tezliklə!')">
+        <h3>B1</h3>
+        <p>Intermediate</p>
+    </div>
+    <div class="level-card" onclick="alert('B2 materialları tezliklə!')">
+        <h3>B2</h3>
+        <p>Upper-Intermediate</p>
     </div>
 </div>
 
-<script>
-    const quizData = [
-        { q: "Which one is a fruit?", a: ["Carrot", "Apple", "Potato"], correct: "Apple" },
-        { q: "I ___ working on my project now.", a: ["am", "is", "are"], correct: "am" },
-        { q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], correct: "goes" }
-    ];
-
-    let currentIdx = 0;
-    let score = 0;
-
-    function loadQuiz() {
-        const q = quizData[currentIdx];
-        document.getElementById("question").innerText = q.q;
-        const optionsDiv = document.getElementById("options");
-        optionsDiv.innerHTML = "";
-        q.a.forEach(opt => {
-            const btn = document.createElement("button");
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(opt);
-            optionsDiv.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(ans) {
-        if(ans === quizData[currentIdx].correct) score++;
-        currentIdx++;
-        if(currentIdx < quizData.length) loadQuiz();
-        else showScore();
-    }
-
-    function showScore() {
-        document.getElementById("quiz").style.display = "none";
-        document.getElementById("score-area").style.display = "block";
-        document.getElementById("final-score").innerText = `Sizin nəticəniz: ${score} / ${quizData.length}`;
-    }
-
-    loadQuiz();
-</script>
 </body>
 </html>
