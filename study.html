@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGlobal - Study Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .header { text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 20px; margin-bottom: 30px; }
+        .section { margin-bottom: 25px; padding: 15px; border-left: 5px solid #3498db; background: #ebf5fb; border-radius: 5px; }
+        h2 { color: #2c3e50; margin-top: 0; }
+        .btn-back { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #34495e; color: white; text-decoration: none; border-radius: 5px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1 id="level-title">Level: Loading...</h1>
+        <p>Sizin üçün fərdiləşdirilmiş tədris materialları</p>
+    </div>
+
+    <div class="section">
+        <h2>📚 Grammar (Qaydalar)</h2>
+        <div id="grammar-content">Yüklənir...</div>
+    </div>
+
+    <div class="section">
+        <h2>Vocabulary (Sözlər)</h2>
+        <ul id="vocab-list">Yüklənir...</ul>
+    </div>
+
+    <div class="section">
+        <h2>Reading (Mətn)</h2>
+        <p id="reading-text">Yüklənir...</p>
+    </div>
+
+    <a href="index.html" class="btn-back">Ana Səhifəyə Qayıt</a>
+</div>
+
+<script>
+    // URL-dən hansı səviyyənin seçildiyini tuturuq
+    const urlParams = new URLSearchParams(window.location.search);
+    const level = urlParams.get('lvl') || 'A1';
+
+    // Səviyyələrə görə məlumat bazası
+    const data = {
+        'A1': {
+            title: 'A1 - Beginner',
+            grammar: 'Present Simple: I work, you work, he works...',
+            vocab: ['Apple - Alma', 'Book - Kitab', 'School - Məktəb'],
+            reading: 'Hello! My name is Ali. I am from Baku. I am a student.'
+        },
+        'B1': {
+            title: 'B1 - Intermediate',
+            grammar: 'Present Perfect: I have seen that movie already.',
+            vocab: ['Experience - Təcrübə', 'Improve - İnkişaf etdirmək', 'Challenge - Sınaq'],
+            reading: 'Technology is changing the world rapidly. Learning to code is a great skill.'
+        }
+        // Digər səviyyələri də bura əlavə edəcəyik...
+    };
+
+    const currentData = data[level] || data['A1'];
+
+    document.getElementById('level-title').innerText = currentData.title;
+    document.getElementById('grammar-content').innerText = currentData.grammar;
+    document.getElementById('reading-text').innerText = currentData.reading;
+    
+    const vocabList = document.getElementById('vocab-list');
+    vocabList.innerHTML = "";
+    currentData.vocab.forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = item;
+        vocabList.appendChild(li);
+    });
+</script>
+
+</body>
+</html>
