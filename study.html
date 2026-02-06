@@ -3,54 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Vocabulary Master</title>
+    <title>EduGlobal - Vocabulary Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #3498db; --secondary: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-top: 80px; }
+        
+        /* Sticky Navigation */
+        .top-nav { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-sizing: border-box; }
+        .btn-home { text-decoration: none; color: white; background: var(--primary); padding: 8px 20px; border-radius: 25px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .btn-home:hover { background: var(--secondary); }
+
+        .container { max-width: 1100px; margin: 20px auto; background: white; padding: 30px; border-radius: 20px; }
         .header { text-align: center; margin-bottom: 30px; background: var(--secondary); color: white; padding: 30px; border-radius: 15px; }
-        .search-box { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1rem; margin-bottom: 25px; outline: none; }
+        
+        .search-box { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1rem; margin-bottom: 25px; outline: none; box-sizing: border-box; }
+        .search-box:focus { border-color: var(--primary); }
+
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-        .vocab-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
-        .word-info b { color: var(--secondary); font-size: 1.1rem; }
-        .audio-btn { background: var(--primary); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-        .audio-btn:active { transform: scale(0.9); background: #2980b9; }
+        .vocab-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .word-info b { color: var(--secondary); font-size: 1.1rem; text-transform: capitalize; }
+        .word-info span { color: #7f8c8d; margin-left: 8px; }
+        
+        .audio-btn { background: var(--primary); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s; }
+        .audio-btn:hover { background: #2980b9; transform: scale(1.1); }
     </style>
 </head>
 <body>
 
+<nav class="top-nav">
+    <div style="font-weight: bold; color: var(--secondary);">EduGlobal Lab</div>
+    <a href="index.html" class="btn-home"><i class="fas fa-home"></i> Ana Menyu</a>
+</nav>
+
 <div class="container">
     <div class="header">
         <h1 id="lvl-display">Loading...</h1>
-        <p>Listen: First slow, then normal 🔊</p>
+        <p>Listen: 1st Slow, 2nd Normal 🔊</p>
     </div>
 
-    <input type="text" class="search-box" id="searchInput" placeholder="Search word or translation..." onkeyup="filterWords()">
+    <input type="text" class="search-box" id="searchInput" placeholder="Söz və ya tərcümə axtar..." onkeyup="filterWords()">
 
     <div class="vocab-grid" id="vocab-container"></div>
-
-    <div style="text-align: center; margin-top: 30px;">
-        <a href="index.html" style="text-decoration:none; color:var(--primary); font-weight:600;">← Back to Menu</a>
-    </div>
 </div>
 
 <script>
-    // QEYD: Əvvəlki mesajdakı allWords massivini bura daxil edin. 
-    // Mətn limitinə görə qısaldılmış nümunə göstərirəm:
-    const allWords = {
-        'A1': ["Apple-Alma", "Ant-Qarışqa", "Ball-Top", "Book-Kitab", "Bed-Yataq", "Boy-Oğlan", "Cat-Pişik", "Car-Maşın", "Cup-Fincan", "Chair-Stul", "Dog-İt", "Door-Qapı", "Desk-Masa", "Drink-İçmək", "Eat-Yemək", "Egg-Yumurta", "Eye-Göz", "Ear-Qulaq", "Fish-Balıq", "Fan-Ventilyator"],
-        'A2': ["Always-Həmişə", "About-Haqqında", "Address-Ünvan", "Afternoon-Günorta", "Again-Yenidən", "Airport-Hava limanı"],
-        'B1': ["Abuse-Sui-istifadə", "Accept-Qəbul etmək", "Accompany-Müşayiət etmək", "According-Görə"],
-        'B2': ["Abandon-Tərk etmək", "Ability-Qabiliyyət", "Absolute-Mütləq", "Absorb-Sormaq"],
-        'C1': ["Abstain-Çəkinmək", "Acumen-Zəka", "Adhere-Sadiq qalmaq", "Admonish-Nəsihət vermək"]
-        // ... (Digər 150-lik siyahıları əvvəlki koddan bura köçür)
-    };
-
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('lvl') || 'A1';
-    document.getElementById('lvl-display').innerText = level + " Mastery";
+    document.getElementById('lvl-display').innerText = level + " Vocabulary Master";
+
+    const allWords = {
+        'A1': ["Apple-Alma", "Ant-Qarışqa", "Ball-Top", "Book-Kitab", "Bed-Yataq", "Boy-Oğlan", "Cat-Pişik", "Car-Maşın", "Cup-Fincan", "Chair-Stul", "Dog-İt", "Door-Qapı", "Desk-Masa", "Drink-İçmək", "Eat-Yemək", "Egg-Yumurta", "Eye-Göz", "Ear-Qulaq", "Fish-Balıq", "Fan-Ventilyator", "Girl-Qız", "Go-Getmək", "Good-Yaxşı", "Game-Oyun", "Hat-Papaq", "Hot-İsti", "Hand-Əl", "Ice-Buz", "Ink-Mürəkkəb", "Jar-Banka", "Jump-Tullanmaq", "Key-Açar", "King-Kral", "Kite-Çərpələng", "Lamp-Lampa", "Leg-Ayaq", "Lion-Şir", "Man-Kişi", "Map-Xəritə", "Milk-Süd", "Moon-Ay", "Nose-Burun", "Net-Tor", "Night-Gecə", "Old-Köhnə", "Orange-Portağal", "Pen-Qələm", "Pig-Donuz", "Queen-Kraliça", "Rain-Yağış", "Red-Qırmızı", "Sun-Günəş", "Star-Ulduz", "Ship-Gəmi", "Tree-Ağac", "Table-Masa", "Tea-Çay", "Under-Altında", "Up-Yuxarı", "Van-Furqon", "Water-Su", "Window-Pəncərə", "Yellow-Sarı", "Zoo-Zoopark", "Run-Qaçmaq", "Smile-Gülmək", "Happy-Xoşbəxt", "Sad-Kədərli", "Big-Böyük", "Small-Kiçik", "Fast-Sürətli", "Slow-Yavaş", "Day-Gün", "Blue-Mavi", "Green-Yaşıl", "White-Ağ", "Black-Qara", "Bird-Quş", "Fruit-Meyvə", "Bread-Çörək", "Mother-Ana", "Father-Ata", "Sister-Bacı", "Brother-Qardaş", "Family-Ailə", "House-Ev", "Room-Otaq", "Kitchen-Mətbəx", "School-Məktəb", "Teacher-Müəllim", "Student-Tələbə", "Paper-Kağız", "Pencil-Qələm", "Phone-Telefon", "Time-Vaxt", "Year-İl", "Week-Həftə", "City-Şəhər", "Country-Ölkə", "Name-Ad", "Word-Söz", "Sound-Səs", "Work-İş", "Play-Oynamaq", "Read-Oxumaq", "Write-Yazmaq", "New-Yeni", "Long-Uzun", "Short-Qısa", "Hot-İsti", "Cold-Soyuq", "Open-Açıq", "Close-Bağlı", "Love-Sevmək", "Help-Kömək", "Think-Düşünmək", "Say-Demək", "Look-Baxmaq", "Take-Götürmək", "Give-Vermək", "Find-Tapmaq", "Tell-Söyləmək", "Ask-Soruşmaq", "Light-İşıq", "Dark-Qaranlıq", "Street-Küçə", "Park-Park", "Food-Yemək", "Money-Pul", "Gold-Qızıl", "Silver-Gümüş", "Box-Qutu", "Baby-Körpə", "Tree-Ağac", "Flower-Gül", "Cloud-Bulud", "Wind-Külək", "River-Çay", "Mountain-Dağ", "Sea-Dəniz", "Farm-Ferma", "Horse-At", "Cow-İnək", "Grass-Ot", "Small-Kiçik", "Air-Hava", "Land-Torpaq", "High-Hündür", "Low-Aşağ", "Near-Yaxın", "Far-Uzaq", "Rich-Zəngin", "Poor-Kasıb", "Hard-Çətin", "Easy-Asan", "Full-Dolu", "Empty-Boş", "Clean-Təmiz", "Dirty-Çirkli"],
+        'A2': ["Always-Həmişə", "About-Haqqında", "Address-Ünvan", "Afternoon-Günorta", "Again-Yenidən", "Airport-Hava limanı", "All-Hamısı", "Angry-Əsəbi", "Animal-Heyvan", "Answer-Cavab", "Apple-Alma", "April-Aprel", "Area-Sahə", "Arm-Qol", "Around-Ətrafda", "Arrive-Çatmaq", "August-Avqust", "Aunt-Xala/Bibi", "Autumn-Payız", "Away-Uzaqda", "Bad-Pis", "Bag-Çanta", "Ball-Top", "Banana-Banan", "Bank-Bank", "Bath-Vanna", "Beach-Çimərlik", "Beautiful-Gözəl", "Bed-Yataq", "Bedroom-Yataq otağı", "Beer-Pivə", "Before-Əvvəl", "Begin-Başlamaq", "Behind-Arxada", "Believe-İnanmaq", "Below-Aşağıda", "Best-Ən yaxşı", "Better-Daha yaxşı", "Between-Arasında", "Bicycle-Velosiped", "Big-Böyük", "Bill-Faktura", "Bird-Quş", "Birthday-Ad günü", "Biscuit-Pecenye", "Black-Qara", "Blonde-Sarışın", "Blue-Mavi", "Boat-Qayıq", "Body-Bədən", "Book-Kitab", "Boot-Çəkmə", "Bored-Darıxmış", "Born-Doğulmuş", "Bottle-Butulka", "Bottom-Aşağı", "Box-Qutu", "Boy-Oğlan", "Bread-Çörək", "Break-Fasilə", "Breakfast-Səhər yeməyi", "Bring-Gətirmək", "Brother-Qardaş", "Brown-Qəhvəyi", "Bus-Avtobus", "Business-Biznes", "Busy-Məşğul", "But-Amma", "Butter-Yağ", "Buy-Almaql", "Cake-Tort", "Camera-Kamera", "Can-Bacarmaq", "Car-Maşın", "Card-Kart", "Careful-Ehtiyatlı", "Carrot-Kök", "Carry-Daşımaq", "Cat-Pişik", "Catch-Tutmaq", "Centre-Mərkəz", "Chair-Stul", "Change-Dəyişmək", "Cheap-Ucuz", "Cheese-Pendir", "Child-Uşaq", "Chocolate-Şokolad", "Choose-Seçmək", "Cinema-Kino", "City-Şəhər", "Class-Sinif", "Clean-Təmiz", "Clever-Ağıllı", "Clock-Saat", "Close-Bağlamaq", "Closed-Bağlı", "Cloud-Bulud", "Coat-Palto", "Coffee-Qəhvə", "Cold-Soyuq", "College-Kollec", "Colour-Rəng", "Come-Gəlmək", "Company-Şirkət", "Computer-Kompüter", "Cook-Bişirmək", "Cooking-Yemək bişirmə", "Cool-Sərin", "Corner-Künc", "Cost-Qiymət", "Country-Ölkə", "Course-Kurs", "Cousin-Əmioğlu/Xalaoğlu", "Cow-İnək", "Cream-Krem", "Cry-Ağlamaq", "Cup-Fincan", "Cut-Kəsmək", "Dad-Ata", "Dance-Rəqs", "Danger-Təhlükə", "Dangerous-Təhlükəli", "Dark-Qaranlıq", "Date-Tarix", "Daughter-Qız övladı", "Day-Gün", "Dear-Əziz", "December-Dekabr", "Decide-Qərar vermək", "Deep-Dərin", "Dentist-Stomatoloq", "Desk-Masa", "Dictionary-Lüğət", "Die-Ölmək", "Difference-Fərq", "Different-Fərqli", "Difficult-Çətin", "Dinner-Nahar", "Dirty-Çirkli", "Doctor-Həkim", "Dog-İt", "Doll-Gəlincik", "Door-Qapı", "Double-İkiqat", "Down-Aşağı", "Draw-Şəkil çəkmək", "Dream-Yuxu", "Dress-Don", "Drink-İçki", "Drive-Sürmək", "Driver-Sürücü", "Dry-Quru", "During-Ərzində", "Early-Tez", "East-Şərq", "Easy-Asan", "Eat-Yemək", "Egg-Yumurta", "Eight-Səkkiz", "Elephant-Fil", "Eleven-On bir", "Else-Başqa", "Email-E-poçt", "End-Son", "Enjoy-Zövq almaq", "Enough-Kifayət", "Every-Hər", "Example-Nümunə", "Excellent-Mükəmməl", "Excited-Həyəcanlı", "Excuse-Üzr", "Exercise-Məşq", "Expensive-Bahalı", "Explain-İzah etmək", "Eye-Göz"],
+        'B1': ["Abuse-Sui-istifadə", "Accept-Qəbul etmək", "Accompany-Müşayiət etmək", "According-Görə", "Account-Hesab", "Achieve-Nail olmaq", "Activity-Fəaliyyət", "Actual-Həqiqi", "Addition-Əlavə", "Address-Müraciət etmək", "Admit-Etiraf etmək", "Adult-Yetkin", "Advance-İnkişaf", "Advantage-Üstünlük", "Advice-Məsləhət", "Affect-Təsir etmək", "Afford-İmkanı olmaq", "Afraid-Qorxmuş", "Against-Qarşı", "Agency-Agentlik", "Agreement-Razılaşma", "Ahead-İrəlidə", "Allow-İcazə vermək", "Almost-Demək olar ki", "Alone-Tək", "Along-Boyunca", "Already-Artıq", "Alternative-Alternativ", "Although-Buna baxmayaraq", "Amount-Məbləğ", "Analysis-Analiz", "Ancient-Qədim", "Another-Başqa", "Anxiety-Narahatlıq", "Anyway-Hər halda", "Apart-Ayrı", "Apparent-Aydın", "Appearance-Görünüş", "Apply-Müraciət etmək", "Appointment-Görüş", "Approach-Yanaşma", "Appropriate-Uyğun", "Approval-Təsdiq", "Argue-Mübahisə etmək", "Arrange-Təşkil etmək", "Article-Məqalə", "Aspect-Aspekt", "Assessment-Qiymətləndirmə", "Assume-Fərz etmək", "Attempt-Cəhd", "Attend-İştirak etmək", "Attention-Diqqət", "Attitude-Münasibət", "Attractive-Cəlbedici", "Audience-Auditoriya", "Average-Orta", "Avoid-Qaçınmaq", "Aware-Xəbərdar", "Background-Arxa plan", "Balance-Balans", "Barrier-Sədd", "Basic-Əsas", "Basis-Əsas", "Battle-Döyüş", "Beat-Vurmaq", "Beauty-Gözəllik", "Become-Olmaq", "Beforehand-Əvvəl", "Begin-Başlamaq", "Behaviour-Davranış", "Behind-Arxada", "Believe-İnanmaq", "Below-Aşağıda", "Benefit-Fayda", "Besides-Bundan başqa", "Between-Arasında", "Beyond-Kənarda", "Bill-Vərəq", "Birth-Doğum", "Block-Blok", "Blood-Qan", "Board-Lövhə", "Body-Bədən", "Bone-Sümük", "Border-Sərhəd", "Bother-Narahat etmək", "Bottle-Butulka", "Bottom-Aşağı", "Boundary-Sərhəd", "Branch-Filial", "Brand-Brend", "Bread-Çörək", "Break-Sındırmaq", "Breath-Nəfəs", "Brief-Qısa", "Bright-Parlaq", "Broad-Geniş", "Budget-Büdcə", "Build-Tikmək", "Building-Bina", "Burn-Yandırmaq", "Business-Biznes", "Button-Düymə", "Buyer-Alıcı", "Cabinet-Kabinet", "Calculate-Hesablamaq", "Call-Zəng", "Campaign-Kampaniya", "Candidate-Namizəd", "Capital-Paytaxt", "Capture-Tutmaq", "Care-Qayğı", "Career-Karyera", "Careful-Ehtiyatlı", "Case-Hal", "Cash-Nağd", "Cast-Atmaq", "Catch-Tutmaq", "Category-Kateqoriya", "Cause-Səbəb", "Celebrate-Qeyd etmək", "Cell-Hüceyrə", "Centre-Mərkəz", "Century-Əsr", "Certain-Müəyyən", "Challenge-Sınaq", "Champion-Çempion", "Chance-Şans", "Change-Dəyişmək", "Channel-Kanal", "Chapter-Fəsil", "Character-Xarakter", "Charge-Yük", "Charity-Xeyriyyə", "Chart-Diaqram", "Check-Yoxlamaq", "Chemical-Kimyəvi", "Chief-Rəis", "Choice-Seçim", "Choose-Seçmək", "Church-Kilsə", "Circle-Dairə", "Citizen-Vətəndaş", "City-Şəhər", "Civil-Mülki", "Claim-İddia", "Class-Sinif", "Classic-Klassik", "Clean-Təmiz", "Clear-Aydın", "Client-Müştəri", "Climate-İqlim", "Close-Yaxın", "Closed-Bağlı", "Cloth-Parça", "Clothes-Paltar", "Cloud-Bulud", "Club-Klub", "Coach-Məşqçi", "Coast-Sahil", "Code-Kod", "Coffee-Qəhvə", "Cold-Soyuq", "Collect-Toplamaq", "College-Kollec", "Colour-Rəng", "Column-Sütun", "Combination-Kombinasiya", "Combine-Birləşdirmək", "Come-Gəlmək", "Comfort-Rahatlıq", "Command-Əmr", "Comment-Şərh", "Commercial-Kommersiya", "Commit-Öhdəsinə götürmək"],
+        'B2': ["Abandon-Tərk etmək", "Ability-Qabiliyyət", "Absolute-Mütləq", "Absorb-Sormaq", "Abstract-Mücərrəd", "Academic-Akademik", "Accent-Ləhcə", "Acceptance-Qəbul", "Access-Giriş", "Accomplish-Yerinə yetirmək", "Accountant-Mühasib", "Accurate-Dəqiq", "Accuse-Ittiham etmək", "Acid-Turşu", "Acknowledge-Etiraf etmək", "Acquire-Əldə etmək", "Adapt-Uyğunlaşmaq", "Adequate-Adekvat", "Adjust-Tənzimləmək", "Administration-Administrasiya", "Adopt-Övladlığa götürmək", "Advocate-Müdafiə etmək", "Aesthetic-Estetik", "Affair-İş", "Affordable-Münasib qiymət", "Aggressive-Təcavüzkar", "Agriculture-Kənd təsərrüfatı", "Alert-Xəbərdarlıq", "Alien-Yad", "Alignment-Düzləndirmə", "Allocate-Ayırmaq", "Allowance-Müavinət", "Alter-Dəyişdirmək", "Ambiguous-Müəmmalı", "Ambitious-İddialı", "Amend-Düzəliş etmək", "Amusing-Gülməli", "Analogy-Analogiya", "Analyze-Təhlil etmək", "Ancestor-Əcdad", "Anniversary-İldönümü", "Annual-İllik", "Anticipate-Gözləmək", "Apologize-Üzr istəmək", "Apparatus-Aparat", "Appeal-Müraciət", "Appetite-İştah", "Applaud-Alqışlamaq", "Application-Ərizə", "Appoint-Təyin etmək", "Appreciate-Qiymətləndirmək", "Approach-Yanaşma", "Appropriate-Müvafiq", "Approval-Razılıq", "Approximate-Təxmini", "Architect-Memar", "Arise-Yaranmaq", "Armed-Silahlı", "Array-Silsilə", "Articulate-Aydın ifadə etmək", "Artificial-Süni", "Ashamed-Utanmış", "Aspect-Aspekt", "Assemble-Yığmaq", "Assert-Təsdiq etmək", "Assess-Qiymətləndirmək", "Asset-Aktiv", "Assign-Təyin etmək", "Assist-Kömək etmək", "Associate-Əlaqələndirmək", "Assume-Güman etmək", "Assure-Əmin etmək", "Astonishing-Heyrətamiz", "Attachment-Qoşma", "Attain-Nail olmaq", "Attempt-Cəhd", "Attribute-Xüsusiyyət", "Auction-Hərrac", "Auditor-Auditor", "Authentic-Orijinal", "Authority-Səlahiyyət", "Automatic-Avtomatik", "Available-Mövcud", "Awkward-Beceriksiz", "Backbone-Onurğa", "Backward-Geri", "Bacterial-Bakterial", "Badly-Pis", "Baggage-Bağaj", "Balanced-Balanslı", "Barely-Güclə", "Bargain-Sövdələşmə", "Basement-Zirzəmi", "Basic-Əsas", "Batter-Döymək", "Beam-Şüa", "Behalf-Adından", "Behave-Davranmaq", "Belief-Inanc", "Belong-Məxsus olmaq", "Beneficial-Faydalı", "Betray-Xəyanət etmək", "Beyond-Kənarda", "Bias-Qərəz", "Bid-Təklif", "Biological-Bioloji", "Bitter-Acı", "Bizarre-Qəribə", "Blade-Bıçaq", "Blank-Boş", "Blast-Partlayış", "Bleed-Qanamaq", "Blend-Qarışdırmaq", "Bless-Xeyir-dua vermək", "Blind-Kor", "Block-Blok", "Boast-Öyünmək", "Bold-Cəsur", "Bomb-Bomba", "Bond-Bağ", "Boost-Artırmaq", "Border-Sərhəd", "Bounce-Sıçramaq", "Bound-Bağlı", "Boundary-Hüdud", "Brilliant-Parlaq", "Broad-Geniş", "Browse-Baxmaq", "Brutal-Qəddar", "Bubble-Qabarcıq", "Bucket-Vedrə", "Bulk-Kütlə", "Bullet-Güllə", "Bunch-Dəstə", "Burden-Yük", "Bureau-Büro", "Burial-Dəfn", "Burst-Partlamaq", "Bury-Basdırmaq", "Bush-Kol", "Business-Biznes", "Cabinet-Kabinet", "Calculate-Hesablamaq", "Calendar-Təqvim", "Campaign-Kampaniya", "Cancel-Ləğv etmək", "Cancer-Xərçəng", "Candidate-Namizəd", "Capable-Bacarıqlı", "Capacity-Tutum", "Capital-Paytaxt", "Capture-Ələ keçirmək", "Carbon-Karbon", "Career-Karyera", "Cargo-Yük", "Carrier-Daşıyıcı", "Casual-Gündəlik", "Catalog-Kataloq", "Category-Kateqoriya", "Caution-Ehtiyat", "Cave-Mağara", "Cease-Dayandırmaq", "Celebrity-Məşhur", "Cell-Hüceyrə", "Cemetery-Qəbiristanlıq", "Census-Siyahıyaalma", "Central-Mərkəzi", "Century-Əsr", "Ceremony-Mərasim", "Certain-Müəyyən", "Certificate-Sertifikat", "Chain-Zəncir", "Chairman-Sədr", "Challenge-Sınaq", "Chamber-Palata", "Champion-Çempion", "Channel-Kanal", "Chaos-Xaos", "Chapter-Fəsil", "Character-Xarakter", "Charge-İttiham"],
+        'C1': ["Abstain-Çəkinmək", "Acumen-Zəka", "Adhere-Sadiq qalmaq", "Admonish-Nəsihət vermək", "Adverse-Mənfi", "Affluence-Zənginlik", "Agility-Cəldlik", "Alleviate-Yüngülləşdirmək", "Ambiguous-Müəmmalı", "Ameliorate-Yaxşılaşdırmaq", "Anachronism-Anaxronizm", "Antagonism-Ədavət", "Apathy-Biganəlik", "Archaic-Arxaik", "Articulate-Aydın danışmaq", "Ascertain-Müəyyənləşdirmək", "Assiduous-Çalışqan", "Astute-Fərasətli", "Atrophy-Atrofiya", "Audacious-Cəsarətli", "Augment-Artırmaq", "Auspicious-Uğurlu", "Austere-Sərt", "Autonomous-Muxtar", "Aversion-Nifrət", "Banal-Banal", "Belligerent-Döyüşkən", "Benevolent-Xeyirxah", "Berate-Məzəmmət etmək", "Bewilder-Heyrətləndirmək", "Boisterous-Səs-küylü", "Brazen-Həyasız", "Brevity-Qısalıq", "Cajole-Dilə tutmaq", "Callous-Daşürəkli", "Candor-Səmimiyyət", "Capricious-Inadkar", "Castigate-Cəzalandırmaq", "Caustic-Yandırıcı", "Chicanery-Fırıldaqçılıq", "Circumspect-Ehtiyatlı", "Coerce-Məcbur etmək", "Cognizant-Məlumatlı", "Coherent-Ardıcıl", "Collaborate-Əməkdaşlıq etmək", "Complacent-Arxayın", "Conciliatory-Barışdırıcı", "Condone-Bağışlamaq", "Connoisseur-Mütəxəssis", "Conspicuous-Gözəçarpan", "Contrived-Uydurma", "Conundrum-Tapmaca", "Convivial-Şən", "Copious-Bol", "Corroborate-Təsdiqləmək", "Credulity-Tezinanma", "Cryptic-Gizli", "Culminate-Zirvəyə çatmaq", "Culpable-Təqsirli", "Cursory-Səthi", "Dearth-Qıtlıq", "Debilitate-Zəiflətmək", "Decorum-Nəzakət", "Deference-Hörmət", "Deleterious-Zərərli", "Delineate-Təsvir etmək", "Demure-Həyalı", "Depict-Təsvir etmək", "Deride-Məsxərəyə qoymaq", "Desiccated-Qurumuş", "Despot-Despot", "Destitute-Möhtac", "Diatribe-Kəskin tənqid", "Didactic-Öyrədici", "Diffident-Utancaq", "Dilatory-Ləng", "Diligence-Çalışqanlıq", "Disparate-Müxtəlif", "Disseminate-Yaymaq", "Dissonance-Uyğunsuzluq", "Docile-Mütic", "Dogmatic-Dogmatik", "Duplicity-İkiüzlülük", "Ebullient-Coşqun", "Eclectic-Eklektik", "Efficacy-Effektivlik", "Egregious-Biabırçı", "Eloquent-Natiq", "Elucidate-Aydınlaşdırmaq", "Elusive-Anlaşılmaz", "Embellish-Bəzəmək", "Emulate-Təqlid etmək", "Enervate-Zəiflətmək", "Engender-Yaratmaq", "Enigma-Müəmma", "Ephemeral-Müvəqqəti", "Equanimity-Təmkin", "Equivocal-Şübhəli", "Erudite-Savadlı", "Esoteric-Ezoterik", "Euphemism-Evfemizm", "Exacerbate-Kəskinləşdirmək", "Exculpate-Bəraət qazandırmaq", "Exigent-Təcili", "Exonerate-Bəraət vermək", "Extol-Tərifləmək", "Extraneous-Kənar", "Fabricate-Uydurmaq", "Facetious-Zarafatyana", "Fallacious-Səhv", "Fastidious-Tələbkar", "Fervent-Atəşin", "Flabbergasted-Məəttəl qalmış", "Flagrant-Aşkar", "Fortuitous-Təsadüfi", "Frivolous-Yüngül", "Frugal-Qənaətcil", "Furtive-Gizli", "Garrulous-Çoxdanışan", "Gregarious-Ünsiyyətcil", "Guile-Hiylə", "Gullible-Sadəlövħ", "Haphazard-Təsadüfi", "Haughty-Təkəbbürlü", "Heinous-İyrənc", "Hierarchy-İyerarxiya", "Homage-Ehtiram", "Hypocrisy-İkiüzlülük", "Iconoclast-İkonoklast", "Idiosyncrasy-Xüsusiyyət", "Imminent-Qaçılmaz", "Immutable-Dəyişməz", "Impassive-Hissiz", "Impeccable-Qüsursuz", "Impetuous-Düşünülməmiş", "Implacable-Barışmaz", "Implicit-Dolayı", "Impudence-Həyasızlıq", "Inadvertent-Səhvən", "Inchoate-Başlanğıc", "Incongruous-Uyğunsuz", "Incredulous-Şübhəçi", "Indifferent-Biganə", "Indigenous-Yerli", "Indigent-Kasıb", "Indolent-Tənbəl", "Ineffable-Sözlə ifadə olunmaz", "Inevitable-Qaçılmaz", "Inexorable-Amansız", "Ingenuous-Səmimi", "Inherent-Anadangəlmə", "Innocuous-Zərərsiz", "Inscrutable-Anlaşılmaz", "Insipid-Dadız", "Insolent-Təkəbbürlü", "Intransigent-Güzəştsiz", "Intrepid-Qorxmaz", "Inundate-Basmaq", "Irascible-Tezəsəbləşən", "Itinerant-Səyyah", "Judicious-Ağıllı", "Juxtapose-Yan-yana qoymaq", "Laconic-Lakonic", "Lethargic-Ləng", "Loquacious-Çoxdanışan", "Lucid-Aydın", "Magnanimous-Səxavətli", "Malevolent-Bədxah", "Malleable-Döyülə bilən", "Meticulous-Həddən artıq diqqətli", "Misanthrope-İnsanlardan qaçan", "Mitigate-Yüngülləşdirmək", "Mollify-Sakitləşdirmək", "Morose-Tutqun", "Mundane-Dünyəvi", "Nefarious-Mənfur", "Obdurate-İnadkar", "Obsequious-Yaltaq", "Obstinate-İnadçı", "Obviate-Qarşısını almaq", "Ominous-Məşum", "Opaque-Qeyri-şəffaf", "Ostentatious-Gözəgirən", "Palliate-Yüngülləşdirmək", "Paradigm-Paradigma", "Paucity-Qıtlıq", "Pedantic-Pedantik", "Pejorative-Mənfi", "Penchant-Meyl", "Penury-Yoxsulluq", "Perfidious-Xain", "Perfunctory-Səthi"]
+    };
 
     const container = document.getElementById('vocab-container');
     const wordsRaw = allWords[level] || allWords['A1'];
@@ -63,8 +72,13 @@
                 const div = document.createElement('div');
                 div.className = 'vocab-item';
                 div.innerHTML = `
-                    <div class="word-info"><b>${en}</b><br><small>${az}</small></div>
-                    <button class="audio-btn" onclick="speak('${en}')"><i class="fas fa-volume-up"></i></button>
+                    <div class="word-info">
+                        <b>${en}</b><br>
+                        <span>${az}</span>
+                    </div>
+                    <button class="audio-btn" onclick="speak('${en}')">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
                 `;
                 container.appendChild(div);
             }
@@ -72,9 +86,7 @@
     }
 
     function speak(text) {
-        // Bütün cari səsləri dayandır ki, üst-üstə düşməsin
         window.speechSynthesis.cancel();
-
         const slow = new SpeechSynthesisUtterance(text);
         slow.lang = 'en-US';
         slow.rate = 0.5; 
@@ -85,7 +97,7 @@
 
         window.speechSynthesis.speak(slow);
         slow.onend = () => {
-            setTimeout(() => { window.speechSynthesis.speak(normal); }, 400);
+            setTimeout(() => { window.speechSynthesis.speak(normal); }, 500);
         };
     }
 
@@ -95,5 +107,6 @@
 
     renderWords();
 </script>
+
 </body>
 </html>
