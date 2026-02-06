@@ -11,19 +11,24 @@
         .dark-mode { --primary: #5dade2; --dark: #ecf0f1; --light: #1a1a1a; --card-bg: #2d2d2d; --text: #f4f4f4; }
         * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: var(--text); line-height: 1.6; }
+        
         nav { background: var(--card-bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        
         .hero { padding: 80px 20px; text-align: center; background: var(--card-bg); }
         .hero h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        
         .btn-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px; }
-        .btn { padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; cursor: pointer; border:none; }
+        .btn { padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; cursor: pointer; border: none; }
         .btn-test { background: var(--primary); color: white; }
         .btn-game { background: #f1c40f; color: #333; }
         .btn-cert { background: #9b59b6; color: white; }
+        
         .levels-section { padding: 50px 5%; max-width: 1100px; margin: auto; }
         .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .level-card { background: var(--card-bg); padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; border-bottom: 4px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .level-card:hover { transform: translateY(-10px); }
+        
         footer { background: #1a1a1a; color: white; padding: 60px 5% 30px; margin-top: 60px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1100px; margin: auto; }
         .social-links a { color: white; font-size: 1.5rem; margin-right: 20px; }
@@ -33,7 +38,7 @@
 
 <nav>
     <a href="index.html" class="logo">EduGlobal</a>
-    <div class="nav-links">
+    <div class="nav-links" style="display: flex; align-items: center;">
         <button onclick="toggleDarkMode()" id="theme-icon" style="background:none; border:none; cursor:pointer; font-size:1.3rem;">🌙</button>
     </div>
 </nav>
@@ -42,7 +47,7 @@
     <h2>Your Journey to English Mastery 🚀</h2>
     <p>Practice with interactive tools, play games, and get your certificate.</p>
     <div class="btn-group">
-        <a href="grammar_a1.html" class="btn btn-test">Start Level Test</a>
+        <a href="grammar_A1.html" class="btn btn-test">Start Level Test</a>
         <a href="game.html" class="btn btn-game">Play Word Game 🎮</a>
         <a href="certificate.html" class="btn btn-cert">Get Certificate 🎓</a>
     </div>
@@ -50,9 +55,18 @@
 
 <div class="levels-section">
     <div class="levels-grid">
-        <div class="level-card" onclick="window.location.href='grammar_a1.html'"><h3>A1</h3><p>Beginner</p></div>
-        <div class="level-card" onclick="window.location.href='grammar_b1.html'"><h3>B1</h3><p>Intermediate</p></div>
-        <div class="level-card" onclick="window.location.href='grammar_c1.html'"><h3>C1</h3><p>Advanced</p></div>
+        <div class="level-card" onclick="window.location.href='grammar_A1.html'">
+            <h3>A1</h3>
+            <p>Beginner</p>
+        </div>
+        <div class="level-card" onclick="window.location.href='grammar_B1.html'">
+            <h3>B1</h3>
+            <p>Intermediate</p>
+        </div>
+        <div class="level-card" onclick="window.location.href='grammar_C1.html'">
+            <h3>C1</h3>
+            <p>Advanced</p>
+        </div>
     </div>
 </div>
 
@@ -85,6 +99,8 @@
         localStorage.setItem('dark-mode', isDark);
         document.getElementById('theme-icon').innerHTML = isDark ? '☀️' : '🌙';
     }
+    
+    // Səhifə yüklənəndə dark mode yoxlanışı
     if(localStorage.getItem('dark-mode') === 'true') {
         document.body.classList.add('dark-mode');
         document.getElementById('theme-icon').innerHTML = '☀️';
