@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C1 Advanced Reading - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #9b59b6; --success: #2ecc71; --error: #e74c3c; --dark: #2c3e50; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding-top: 80px; padding-bottom: 50px; }
+        
+        header { 
+            position: fixed; top: 0; left: 0; width: 100%; background: white; 
+            padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-sizing: border-box;
+        }
+        .back-home { text-decoration: none; color: var(--primary); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+
+        .reading-container { max-width: 1000px; margin: auto; background: white; padding: 50px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        .story-header { border-left: 6px solid var(--primary); padding-left: 20px; margin-bottom: 30px; }
+        .text-box { 
+            background: #fdfdfd; padding: 35px; border-radius: 15px; line-height: 2; 
+            font-size: 1.1rem; color: #2c3e50; margin-bottom: 40px; text-align: justify;
+            border: 1px solid #f0f0f0;
+        }
+
+        .question-card { background: #fff; border: 1px solid #eee; padding: 25px; border-radius: 12px; margin-bottom: 20px; transition: 0.3s; }
+        .question-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .options { display: grid; gap: 12px; margin-top: 20px; }
+        .option-btn { 
+            padding: 14px 22px; border: 2px solid #f0f0f0; border-radius: 10px; 
+            cursor: pointer; text-align: left; background: white; font-family: inherit; transition: 0.2s; font-size: 0.95rem;
+        }
+        .option-btn:hover { border-color: var(--primary); background: #fbf8ff; }
+        .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .option-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .option-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); }
+
+        .action-area { display: flex; justify-content: space-between; align-items: center; margin-top: 50px; border-top: 2px solid #f4f4f4; padding-top: 30px; }
+        .btn { padding: 15px 40px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; font-size: 1.1rem; transition: 0.3s; }
+        .btn-check { background: var(--success); color: white; }
+        .btn-next { background: var(--primary); color: white; }
+        .btn:disabled { background: #ddd; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="back-home"><i class="fas fa-home"></i> Dashboard</a>
+    <div style="font-weight: 600;">Advanced C1: Analytical Reading</div>
+</header>
+
+<div class="reading-container">
+    <div class="story-header">
+        <h2 id="story-title">Yüklənir...</h2>
+        <p style="color: #666;">Reading Comprehension & Critical Thinking</p>
+    </div>
+
+    <div class="text-box" id="story-text"></div>
+
+    <div id="questions-area"></div>
+
+    <div class="action-area">
+        <button class="btn btn-check" id="check-btn" onclick="checkAnswers()">Verify Answers</button>
+        <button class="btn btn-next" id="next-btn" onclick="nextStory()" style="display:none;">Next Text <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<script>
+    const stories = [
+        {
+            title: "The Paradox of Choice in the Modern Era",
+            text: "In the contemporary world, the sheer abundance of options is often perceived as a hallmark of freedom and personal autonomy. From the myriad of products on supermarket shelves to the endless stream of content on digital platforms, we are led to believe that more choice inevitably leads to greater satisfaction. However, psychological research suggests a counterintuitive phenomenon known as the 'paradox of choice'. When faced with an overwhelming array of alternatives, individuals often experience cognitive paralysis rather than liberation. The mental effort required to evaluate every possibility leads to decision fatigue and, frequently, a nagging sense of regret after the choice is made. We find ourselves constantly wondering if another option would have been superior, leading to a decrease in overall well-being. Furthermore, the pressure to make the 'perfect' choice in an era of infinite information places an immense psychological burden on the individual. To navigate this, society must shift its focus from maximizing choice to enhancing the quality of the decision-making process itself.",
+            questions: [
+                { q: "What is the primary argument of the text?", a: ["Freedom is defined by the number of choices we have.", "An excess of options can negatively affect mental well-being.", "Supermarkets should reduce the number of products they sell."], correct: 1 },
+                { q: "What does 'cognitive paralysis' refer to in this context?", a: ["A physical inability to move.", "Difficulty in making a decision due to too much information.", "A loss of memory caused by stress."], correct: 1 },
+                { q: "According to the text, why does regret occur after a decision?", a: ["Because the product was actually bad.", "Because people fear they missed a better alternative.", "Because the decision was made too quickly."], correct: 1 },
+                { q: "The word 'counterintuitive' most nearly means:", a: ["Something that makes perfect sense.", "Something that goes against common expectations.", "Something that is easy to understand."], correct: 1 },
+                { q: "What is 'decision fatigue'?", a: ["Feeling tired after physical exercise.", "The exhaustion caused by constant evaluation of choices.", "The boredom of having no options."], correct: 1 },
+                { q: "How does the author view the 'hallmark of freedom' mentioned?", a: ["With total agreement.", "With skepticism regarding its actual benefits.", "As a dangerous political ideology."], correct: 1 },
+                { q: "What is the psychological burden mentioned in the text?", a: ["The need to be wealthy.", "The pressure to make a perfect decision.", "The difficulty of using digital platforms."], correct: 1 },
+                { q: "What should society focus on instead of maximizing choice?", a: ["Limiting all choices by law.", "The quality of the decision-making process.", "Ignoring technology altogether."], correct: 1 },
+                { q: "Which stream of content is mentioned as an example of choice?", a: ["Radio broadcasts.", "Supermarket shelves.", "Digital platforms."], correct: 2 },
+                { q: "The tone of the author can be described as:", a: ["Overly optimistic.", "Analytical and critical.", "Angry and aggressive."], correct: 1 }
+            ]
+        },
+        {
+            title: "Urbanization and the Loss of Biodiversity",
+            text: "As the global population increasingly migrates to urban centers, the expansion of concrete jungles continues to encroach upon natural habitats at an unprecedented rate. Urbanization is not merely a shift in human geography; it is a profound ecological transformation that often results in the fragmentation of ecosystems. When a forest is bisected by a highway or replaced by a residential complex, the indigenous flora and fauna are forced into smaller, isolated pockets of land. This isolation restricts gene flow among species, making them more vulnerable to disease and environmental shifts. While some 'generalist' species, such as pigeons and rats, thrive in urban environments, 'specialist' species that require specific conditions often face local extinction. However, the rise of 'green urbanism' offers a glimmer of hope. By integrating vertical gardens, wildlife corridors, and urban parks into city planning, we can mitigate some of the damage. The goal is to transform cities from ecological deserts into hybrid environments where biodiversity can coexist with human infrastructure. Success in this endeavor requires a radical reimagining of what a city should be—not a fortress against nature, but a part of it.",
+            questions: [
+                { q: "What is a major consequence of ecosystem fragmentation?", a: ["Faster gene flow.", "Increased vulnerability to disease.", "Rapid evolution of new species."], correct: 1 },
+                { q: "What is the difference between 'generalist' and 'specialist' species?", a: ["Generalists are larger than specialists.", "Generalists adapt easily to cities; specialists do not.", "Specialists are more common in urban areas."], correct: 1 },
+                { q: "What does 'green urbanism' propose?", a: ["Moving people back to the countryside.", "Integrating nature into city design.", "Painting all buildings green."], correct: 1 },
+                { q: "The word 'encroach' in the text implies:", a: ["To protect carefully.", "To gradually intrude on territory.", "To move away from."], correct: 1 },
+                { q: "What is meant by 'ecological deserts'?", a: ["Actual deserts with sand.", "Urban areas with very little biodiversity.", "National parks."], correct: 1 },
+                { q: "How does the author feel about the future of cities?", a: ["Completely hopeless.", "Cautiously optimistic if we change our approach.", "Unconcerned because rats are thriving."], correct: 1 },
+                { q: "What is a 'wildlife corridor' likely intended to do?", a: ["To trap animals in cities.", "To allow animals to move between habitat fragments.", "To provide a place for tourists to see nature."], correct: 1 },
+                { q: "The term 'fragmentation' refers to:", a: ["The growth of trees.", "The breaking up of habitats into smaller pieces.", "The increase in human population."], correct: 1 },
+                { q: "What is the radical reimagining mentioned in the conclusion?", a: ["Destroying all cities.", "Seeing cities as part of nature, not separate.", "Building higher skyscrapers."], correct: 1 },
+                { q: "What is the main purpose of this article?", a: ["To list common urban animals.", "To discuss the impact of cities on nature and potential solutions.", "To encourage more people to move to cities."], correct: 1 }
+            ]
+        }
+    ];
+
+    let currentStoryIdx = 0;
+    let selectedAnswers = new Array(10).fill(null);
+
+    function loadStory() {
+        const story = stories[currentStoryIdx];
+        document.getElementById('story-title').innerText = story.title;
+        document.getElementById('story-text').innerText = story.text;
+        
+        const qArea = document.getElementById('questions-area');
+        qArea.innerHTML = "";
+        selectedAnswers.fill(null);
+
+        story.questions.forEach((q, qIdx) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-card';
+            qDiv.innerHTML = `<p><strong>${qIdx + 1}. ${q.q}</strong></p>
+                <div class="options">
+                    ${q.a.map((opt, optIdx) => `
+                        <button class="option-btn" id="q${qIdx}o${optIdx}" onclick="selectOption(${qIdx}, ${optIdx})">${opt}</button>
+                    `).join('')}
+                </div>`;
+            qArea.appendChild(qDiv);
+        });
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('check-btn').disabled = false;
+    }
+
+    function selectOption(qIdx, optIdx) {
+        selectedAnswers[qIdx] = optIdx;
+        const btns = document.querySelectorAll(`.question-card:nth-child(${qIdx + 1}) .option-btn`);
+        btns.forEach(b => b.classList.remove('selected'));
+        document.getElementById(`q${qIdx}o${optIdx}`).classList.add('selected');
+    }
+
+    function checkAnswers() {
+        const story = stories[currentStoryIdx];
+        let score = 0;
+        story.questions.forEach((q, qIdx) => {
+            const correctIdx = q.correct;
+            const selectedIdx = selectedAnswers[qIdx];
+            if (selectedIdx === correctIdx) {
+                document.getElementById(`q${qIdx}o${selectedIdx}`).classList.add('correct');
+                score++;
+            } else if (selectedIdx !== null) {
+                document.getElementById(`q${qIdx}o${selectedIdx}`).classList.add('wrong');
+                document.getElementById(`q${qIdx}o${correctIdx}`).classList.add('correct');
+            }
+        });
+        document.getElementById('check-btn').disabled = true;
+        if (currentStoryIdx < stories.length - 1) {
+            document.getElementById('next-btn').style.display = 'block';
+        }
+        alert(`Assessment Complete: You scored ${score}/10.`);
+    }
+
+    function nextStory() {
+        currentStoryIdx++;
+        loadStory();
+        window.scrollTo(0,0);
+    }
+
+    loadStory();
+</script>
+
+</body>
+</html>
