@@ -3,116 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Word Fall Game</title>
+    <title>EduGlobal - Match & Win</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #2c3e50; margin: 0; overflow: hidden; color: white; text-align: center; }
-        #game-container { position: relative; width: 100vw; height: 100vh; background: linear-gradient(to bottom, #2c3e50, #000); }
-        .falling-word { position: absolute; font-size: 1.5rem; font-weight: bold; color: #3498db; background: white; padding: 10px 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: top 0.1s linear; }
-        #input-box { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); }
-        input { padding: 15px 30px; border-radius: 30px; border: none; font-size: 1.2rem; width: 300px; text-align: center; outline: none; }
-        #score-board { position: absolute; top: 20px; left: 20px; font-size: 1.5rem; }
-        #lives { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #e74c3c; }
-        #start-screen { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: #333; padding: 40px; border-radius: 20px; }
-        button { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: bold; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; text-align: center; padding: 20px; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; max-width: 900px; margin: 20px auto; }
+        .word-card { background: white; padding: 15px; border: 2px solid #3498db; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 0.9rem; }
+        .word-card.selected { background: #3498db; color: white; }
+        .word-card.matched { background: #27ae60; color: white; border-color: #27ae60; visibility: hidden; }
+        #status { margin: 20px; font-size: 1.2rem; font-weight: 600; color: #2c3e50; }
+        .btn-cert { display: none; background: #9b59b6; color: white; padding: 15px 30px; text-decoration: none; border-radius: 50px; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div id="game-container">
-    <div id="score-board">Score: <span id="score">0</span></div>
-    <div id="lives">Lives: ❤️❤️❤️</div>
-    
-    <div id="start-screen">
-        <h1>Word Fall Game 🎮</h1>
-        <p>Sözlər yerə dəymədən onların tərcüməsini yazın!</p>
-        <button onclick="startGame()">Start Game</button>
-        <br><br>
-        <a href="index.html" style="color: #7f8c8d; text-decoration: none;">Back to Home</a>
-    </div>
+    <h1>Match 30 Words to Unlock Certificate 🎓</h1>
+    <p id="status">Matches: <span id="match-count">0</span> / 30</p>
 
-    <div id="input-box" style="display: none;">
-        <input type="text" id="word-input" placeholder="Type translation here..." autocomplete="off">
-    </div>
-</div>
+    <div class="game-grid" id="game-board"></div>
 
-<script>
-    const wordBank = [
-        {eng: "Apple", aze: "alma"}, {eng: "Bread", aze: "çörək"}, {eng: "Water", aze: "su"},
-        {eng: "Friend", aze: "dost"}, {eng: "School", aze: "məktəb"}, {eng: "Success", aze: "uğur"},
-        {eng: "Kitchen", aze: "mətbəx"}, {eng: "Healthy", aze: "sağlam"}, {eng: "Weather", aze: "hava"},
-        {eng: "Experience", aze: "təcrübə"}, {eng: "Improve", aze: "inkişaf"}
-    ];
+    <a href="certificate.html?pass=true" id="cert-link" class="btn-cert">Congratulations! Claim Your Certificate Now</a>
 
-    let score = 0;
-    let lives = 3;
-    let gameActive = false;
-    let currentWords = [];
-    const input = document.getElementById("word-input");
+    <script>
+        const wordBank = [
+            {en: "Success", az: "uğur"}, {en: "Improve", az: "inkişaf"}, {en: "Knowledge", az: "bilik"},
+            {en: "Experience", az: "təcrübə"}, {en: "Education", az: "təhsil"}, {en: "Global", az: "qlobal"},
+            {en: "Challenge", az: "sınaq"}, {en: "Resource", az: "mənbə"}, {en: "Justice", az: "ədalət"},
+            {en: "Environment", az: "ətraf mühit"}, {en: "Health", az: "sağlamlıq"}, {en: "Travel", az: "səyahət"},
+            {en: "Believe", az: "inanmaq"}, {en: "Opportunity", az: "imkan"}, {en: "Patient", az: "səbirli"},
+            {en: "Support", az: "dəstək"}, {en: "Decision", az: "qərar"}, {en: "Future", az: "gələcək"},
+            {en: "Science", az: "elm"}, {en: "Technology", az: "texnologiya"}, {en: "Business", az: "biznes"},
+            {en: "Culture", az: "mədəniyyət"}, {en: "Language", az: "dil"}, {en: "Skill", az: "bacarıq"},
+            {en: "Mastery", az: "ustalıq"}, {en: "Progress", az: "tərəqqi"}, {en: "Understand", az: "anlamaq"},
+            {en: "Creative", az: "yaradıcı"}, {en: "Solution", az: "həll"}, {en: "Confidence", az: "inam"}
+        ];
 
-    function startGame() {
-        document.getElementById("start-screen").style.display = "none";
-        document.getElementById("input-box").style.display = "block";
-        gameActive = true;
-        input.focus();
-        spawnWord();
-        gameLoop();
-    }
+        let selectedCards = [];
+        let matches = 0;
 
-    function spawnWord() {
-        if (!gameActive) return;
-        const randomWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-        const wordElement = document.createElement("div");
-        wordElement.className = "falling-word";
-        wordElement.innerText = randomWord.eng;
-        wordElement.style.left = Math.random() * (window.innerWidth - 150) + "px";
-        wordElement.style.top = "-50px";
-        
-        const wordObj = { el: wordElement, aze: randomWord.aze, top: -50 };
-        document.getElementById("game-container").appendChild(wordElement);
-        currentWords.push(wordObj);
+        // Kartları qarışdır və ekrana düz
+        function initGame() {
+            let cards = [];
+            wordBank.forEach(pair => {
+                cards.push({text: pair.en, type: 'en', match: pair.az});
+                cards.push({text: pair.az, type: 'az', match: pair.en});
+            });
+            cards.sort(() => Math.random() - 0.5);
 
-        setTimeout(spawnWord, 2500 - (score * 10)); // Score artdıqca sürətlənir
-    }
+            const board = document.getElementById('game-board');
+            cards.forEach(card => {
+                const div = document.createElement('div');
+                div.className = 'word-card';
+                div.innerText = card.text;
+                div.onclick = () => handleSelect(div, card);
+                board.appendChild(div);
+            });
+        }
 
-    function gameLoop() {
-        if (!gameActive) return;
-        currentWords.forEach((word, index) => {
-            word.top += 2; // Düşmə sürəti
-            word.el.style.top = word.top + "px";
+        function handleSelect(div, card) {
+            if (div.classList.contains('matched') || selectedCards.includes(div)) return;
+            
+            div.classList.add('selected');
+            selectedCards.push({div, card});
 
-            if (word.top > window.innerHeight) {
-                word.el.remove();
-                currentWords.splice(index, 1);
-                loseLife();
+            if (selectedCards.length === 2) {
+                if (selectedCards[0].card.match === selectedCards[1].card.text) {
+                    selectedCards.forEach(item => item.div.classList.add('matched'));
+                    matches++;
+                    document.getElementById('match-count').innerText = matches;
+                    if (matches === 30) {
+                        document.getElementById('cert-link').style.display = 'inline-block';
+                        document.getElementById('status').innerText = "All matches found! Certificate Unlocked!";
+                    }
+                } else {
+                    const temp = [...selectedCards];
+                    setTimeout(() => temp.forEach(item => item.div.classList.remove('selected')), 500);
+                }
+                selectedCards = [];
             }
-        });
-        requestAnimationFrame(gameLoop);
-    }
-
-    input.addEventListener("input", (e) => {
-        const val = e.target.value.toLowerCase().trim();
-        const foundIndex = currentWords.findIndex(w => w.aze === val);
-        
-        if (foundIndex !== -1) {
-            currentWords[foundIndex].el.remove();
-            currentWords.splice(foundIndex, 1);
-            score += 10;
-            document.getElementById("score").innerText = score;
-            input.value = "";
         }
-    });
 
-    function loseLife() {
-        lives--;
-        document.getElementById("lives").innerText = "Lives: " + "❤️".repeat(lives);
-        if (lives <= 0) {
-            gameActive = false;
-            alert("Game Over! Your Score: " + score);
-            location.reload();
-        }
-    }
-</script>
-
+        initGame();
+    </script>
 </body>
 </html>
