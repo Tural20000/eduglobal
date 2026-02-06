@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>English Learning Hub</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 50px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        button { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 18px; }
+        button:hover { background-color: #218838; }
+        .question { margin-bottom: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome to English Hub! 🇬🇧</h1>
+    <p>Dünyanın hər yerindən ingilis dilini bizimlə öyrənin.</p>
+    <hr>
+    <div id="quiz-area">
+        <p class="question">Sual 1: "I ___ to the school every day." boşluğa nə gəlməlidir?</p>
+        <button onclick="checkAnswer('go')">go</button>
+        <button onclick="checkAnswer('goes')">goes</button>
+        <button onclick="checkAnswer('gone')">gone</button>
+    </div>
+    <p id="result"></p>
+</div>
+
+<script>
+    function checkAnswer(answer) {
+        if(answer === 'go') {
+            document.getElementById('result').innerHTML = "✅ Doğrudur! Siz hazırsınız.";
+            document.getElementById('result').style.color = "green";
+        } else {
+            document.getElementById('result').innerHTML = "❌ Səhvdir. Yenidən yoxlayın.";
+            document.getElementById('result').style.color = "red";
+        }
+    }
+</script>
+
+</body>
+</html>
