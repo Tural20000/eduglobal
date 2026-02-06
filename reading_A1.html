@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A1 Reading Practice - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; padding: 80px 5% 20px; }
+        header { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; z-index: 1000; }
+        .reading-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .text-box { background: #eef2f3; padding: 20px; border-radius: 10px; margin-bottom: 25px; line-height: 1.8; }
+        .question { margin-bottom: 20px; padding: 15px; border-bottom: 1px solid #eee; }
+        .options { display: grid; gap: 10px; margin-top: 10px; }
+        .option-btn { padding: 10px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; text-align: left; background: white; }
+        .option-btn.selected { background: #3498db; color: white; }
+        .correct { background: #2ecc71 !color: white; }
+        .wrong { background: #e74c3c !important; color: white; }
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 30px; }
+        button { padding: 10px 25px; border-radius: 5px; border: none; cursor: pointer; font-weight: 600; }
+        .check-btn { background: #2ecc71; color: white; }
+        .next-btn { background: #3498db; color: white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" style="text-decoration:none; color:#3498db; font-weight:700;">🏠 Ana Menyu</a>
+    <span>Reading Practice - Level A1</span>
+</header>
+
+<div class="reading-container" id="reading-content">
+    <h2 id="story-title">Yüklənir...</h2>
+    <div class="text-box" id="story-text"></div>
+    
+    <div id="questions-area"></div>
+
+    <div class="nav-btns">
+        <button class="check-btn" onclick="checkAnswers()">Cavabları Yoxla</button>
+        <button class="next-btn" id="next-story-btn" onclick="nextStory()" style="display:none;">Növbəti Mətn ➡</button>
+    </div>
+</div>
+
+<script>
+    const stories = [
+        {
+            title: "My Daily Routine",
+            text: "My name is Tural. I wake up at 7 o'clock every morning. First, I wash my face and brush my teeth. Then, I have breakfast with my family. I like eggs and tea. At 8:30, I go to work by bus. I am a teacher. I love my students.",
+            questions: [
+                { q: "What time does Tural wake up?", a: ["6 o'clock", "7 o'clock", "8 o'clock"], correct: 1 },
+                { q: "What does he do first?", a: ["Has breakfast", "Goes to work", "Washes his face"], correct: 2 },
+                { q: "What does he drink for breakfast?", a: ["Coffee", "Tea", "Milk"], correct: 1 },
+                { q: "How does he go to work?", a: ["By car", "By bus", "On foot"], correct: 1 },
+                { q: "What is his job?", a: ["Doctor", "Teacher", "Driver"], correct: 1 },
+                { q: "Who does he have breakfast with?", a: ["Friends", "Family", "Alone"], correct: 1 },
+                { q: "Does he like eggs?", a: ["Yes", "No", "Not mentioned"], correct: 0 },
+                { q: "When does he go to work?", a: ["7:30", "8:30", "9:30"], correct: 1 },
+                { q: "Does he like his students?", a: ["No", "Yes", "He doesn't have students"], correct: 1 },
+                { q: "What is the story about?", a: ["A holiday", "Daily routine", "A city"], correct: 1 }
+            ]
+        },
+        {
+            title: "The Blue Lake",
+            text: "The Blue Lake is very beautiful. It is in the mountains. Many people visit the lake in summer. They swim in the water and play games. There are many tall trees around the lake. Small birds sing songs in the trees.",
+            questions: [
+                { q: "What color is the lake?", a: ["Green", "Blue", "White"], correct: 1 },
+                { q: "Where is the lake?", a: ["In the city", "In the mountains", "In the desert"], correct: 1 },
+                { q: "When do people visit the lake?", a: ["Winter", "Summer", "Autumn"], correct: 1 },
+                { q: "What do people do in the water?", a: ["Sleep", "Swim", "Eat"], correct: 1 },
+                { q: "Are there trees around the lake?", a: ["No", "Yes", "Only one"], correct: 1 },
+                { q: "What sings songs?", a: ["Cats", "Birds", "People"], correct: 1 },
+                { q: "Is the lake ugly?", a: ["Yes", "No", "Maybe"], correct: 1 },
+                { q: "What size are the trees?", a: ["Small", "Short", "Tall"], correct: 2 },
+                { q: "Do people play games?", a: ["Yes", "No", "Sometimes"], correct: 0 },
+                { q: "Is the lake popular?", a: ["No", "Yes", "Only for birds"], correct: 1 }
+            ]
+        }
+    ];
+
+    let currentStoryIndex = 0;
+    let selectedAnswers = new Array(10).fill(null);
+
+    function loadStory() {
+        const story = stories[currentStoryIndex];
+        document.getElementById('story-title').innerText = story.title;
+        document.getElementById('story-text').innerText = story.text;
+        
+        const qArea = document.getElementById('questions-area');
+        qArea.innerHTML = "";
+        selectedAnswers.fill(null);
+
+        story.questions.forEach((q, qIdx) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question';
+            qDiv.innerHTML = `<p><strong>${qIdx + 1}. ${q.q}</strong></p>
+                <div class="options">
+                    ${q.a.map((opt, optIdx) => `
+                        <button class="option-btn" id="q${qIdx}o${optIdx}" onclick="selectOption(${qIdx}, ${optIdx})">${opt}</button>
+                    `).join('')}
+                </div>`;
+            qArea.appendChild(qDiv);
+        });
+        document.getElementById('next-story-btn').style.display = 'none';
+    }
+
+    function selectOption(qIdx, optIdx) {
+        selectedAnswers[qIdx] = optIdx;
+        const btns = document.querySelectorAll(`.question:nth-child(${qIdx + 1}) .option-btn`);
+        btns.forEach(b => b.classList.remove('selected'));
+        document.getElementById(`q${qIdx}o${optIdx}`).classList.add('selected');
+    }
+
+    function checkAnswers() {
+        const story = stories[currentStoryIndex];
+        let score = 0;
+        story.questions.forEach((q, qIdx) => {
+            const correctIdx = q.correct;
+            const selectedIdx = selectedAnswers[qIdx];
+            
+            if (selectedIdx === correctIdx) {
+                document.getElementById(`q${qIdx}o${selectedIdx}`).classList.add('correct');
+                score++;
+            } else if (selectedIdx !== null) {
+                document.getElementById(`q${qIdx}o${selectedIdx}`).classList.add('wrong');
+                document.getElementById(`q${qIdx}o${correctIdx}`).classList.add('correct');
+            }
+        });
+        
+        alert(`Nəticə: 10 sualdan ${score} düzgün!`);
+        if (currentStoryIndex < stories.length - 1) {
+            document.getElementById('next-story-btn').style.display = 'block';
+        }
+    }
+
+    function nextStory() {
+        currentStoryIndex++;
+        loadStory();
+    }
+
+    loadStory();
+</script>
+</body>
+</html>
