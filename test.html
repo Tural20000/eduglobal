@@ -3,80 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Level Test</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Level Placement Test - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .test-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 90%; text-align: center; }
-        .progress-bar { height: 10px; background: #eee; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
-        .progress { height: 100%; background: #3498db; width: 0%; transition: 0.3s; }
-        .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; color: #2c3e50; }
-        .options { display: grid; gap: 12px; }
-        button.opt-btn { padding: 15px; border: 2px solid #3498db; background: white; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 1rem; color: #3498db; font-weight: 600; }
-        button.opt-btn:hover { background: #3498db; color: white; }
-        #result-screen { display: none; }
-        .level-badge { font-size: 2.2rem; color: #27ae60; font-weight: bold; margin: 20px 0; border: 3px solid #27ae60; display: inline-block; padding: 10px 20px; border-radius: 10px; }
-        .btn-action { display: inline-block; margin-top: 15px; padding: 12px 25px; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; padding: 20px; color: #333; }
+        .test-container { max-width: 700px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #3498db; }
+        .question { margin-bottom: 25px; display: none; }
+        .question.active { display: block; }
+        .options-grid { display: grid; gap: 10px; margin-top: 15px; }
+        .opt-btn { padding: 12px; border: 2px solid #eee; border-radius: 10px; background: none; cursor: pointer; text-align: left; transition: 0.3s; }
+        .opt-btn:hover { border-color: #3498db; background: #ebf5fb; }
+        .progress { height: 10px; background: #eee; border-radius: 5px; margin-bottom: 30px; }
+        .progress-fill { height: 100%; background: #3498db; width: 0%; transition: 0.4s; }
+        #result-box { text-align: center; display: none; }
+        .level-badge { font-size: 2rem; font-weight: bold; color: #2ecc71; margin: 20px 0; }
     </style>
 </head>
 <body>
 
-<div class="test-container" id="quiz-box">
-    <div class="progress-bar"><div id="progress" class="progress"></div></div>
-    <div id="question-text" class="question">Sual yüklənir...</div>
-    <div id="options-box" class="options"></div>
-</div>
+<div class="test-container">
+    <div id="quiz-area">
+        <h1>Placement Test</h1>
+        <div class="progress"><div class="progress-fill" id="progress-bar"></div></div>
+        <div id="questions-wrapper"></div>
+    </div>
 
-<div class="test-container" id="result-screen">
-    <h2>Your Result 🎉</h2>
-    <div id="user-level" class="level-badge">---</div>
-    <p id="level-desc" style="margin-bottom: 20px; color: #7f8c8d;"></p>
-    <button onclick="window.location.href='study.html?lvl='+finalLvl" style="background:#27ae60" class="btn-action">Start Lessons</button>
+    <div id="result-box">
+        <h2>Test Bitdi!</h2>
+        <p>Sizin təxmini ingilis dili səviyyəniz:</p>
+        <div class="level-badge" id="level-text">...</div>
+        <p id="score-text"></p>
+        <a href="index.html" style="display:inline-block; margin-top:20px; color:#3498db; text-decoration:none; font-weight:600;">Ana Səhifəyə Qayıt</a>
+    </div>
 </div>
 
 <script>
-    const questions = [
-        { q: "I ___ a doctor.", a: ["am", "is", "are"], c: "am" },
-        { q: "She ___ breakfast every morning.", a: ["eat", "eats", "eating"], c: "eats" },
-        { q: "Where ___ you go last night?", a: ["do", "did", "were"], c: "did" },
-        { q: "I haven't seen him ___ 2010.", a: ["for", "since", "during"], c: "since" },
-        { q: "If I ___ money, I would buy a car.", a: ["have", "had", "will have"], c: "had" },
-        { q: "This cake ___ by my mother yesterday.", a: ["was made", "is made", "made"], c: "was made" },
-        { q: "I am looking forward to ___ you.", a: ["see", "seeing", "saw"], c: "seeing" },
-        { q: "By next year, I ___ my degree.", a: ["will finish", "will have finished", "finished"], c: "will have finished" },
-        { q: "He works ___ than his brother.", a: ["hard", "harder", "hardest"], c: "harder" },
-        { q: "___ of the students passed the exam.", a: ["None", "No", "Any"], c: "None" },
-        { q: "I wish I ___ play the piano.", a: ["can", "could", "will"], c: "could" },
-        { q: "___ you mind closing the door?", a: ["Would", "Do", "Should"], c: "Would" },
-        { q: "Despite ___ tired, he continued working.", a: ["be", "being", "he was"], c: "being" },
-        { q: "Hardly ___ I started when it rained.", a: ["did", "had", "have"], c: "had" },
-        { q: "It's time you ___ home.", a: ["go", "went", "gone"], c: "went" }
-    ];
+const quizData = [
+    // A1 - 5 Sual
+    {q: "Hello, what ___ your name?", a: ["is", "are", "am", "be"], c: 0},
+    {q: "I ___ to the gym every Monday.", a: ["goes", "go", "going", "gone"], c: 1},
+    {q: "There ___ a book on the table.", a: ["is", "are", "am", "be"], c: 0},
+    {q: "___ you like pizza?", a: ["Does", "Do", "Are", "Is"], c: 1},
+    {q: "Where ___ you from?", a: ["is", "am", "are", "be"], c: 2},
+    // B1 - 5 Sual
+    {q: "I ___ English for three years now.", a: ["study", "am studying", "have been studying", "studied"], c: 2},
+    {q: "If it rains tomorrow, we ___ go to the park.", a: ["don't", "won't", "wouldn't", "didn't"], c: 1},
+    {q: "This is the man ___ car was stolen.", a: ["who", "which", "whose", "whom"], c: 2},
+    {q: "I'm not used to ___ up so early.", a: ["get", "getting", "got", "gets"], c: 1},
+    {q: "The movie ___ by the time we got there.", a: ["started", "has started", "had started", "was starting"], c: 2},
+    // C1 - 5 Sual
+    {q: "Hardly ___ the office when my phone rang.", a: ["I had left", "had I left", "I left", "did I leave"], c: 1},
+    {q: "I'd rather you ___ tell anyone about this.", a: ["don't", "didn't", "not", "won't"], c: 1},
+    {q: "It's high time you ___ a job.", a: ["found", "find", "finding", "to find"], c: 0},
+    {q: "Were it not for your help, I ___ in trouble now.", a: ["would be", "will be", "had been", "am"], c: 0},
+    {q: "Not until the next morning ___ the truth.", a: ["did she find out", "she found out", "had she find out", "she did find out"], c: 0},
+    // General/Mix - 5 Sual
+    {q: "She suggested ___ to the cinema.", a: ["go", "to go", "going", "goes"], c: 2},
+    {q: "By next year, I ___ my degree.", a: ["will finish", "will have finished", "finish", "am finishing"], c: 1},
+    {q: "The cake smells ___.", a: ["deliciously", "delicious", "more delicious", "most delicious"], c: 1},
+    {q: "You ___ better see a doctor.", a: ["would", "had", "should", "did"], c: 1},
+    {q: "Despite ___ tired, he kept working.", a: ["being", "he was", "he is", "be"], c: 0}
+];
 
-    let currentQ = 0; let score = 0; let finalLvl = "A1";
+let currentQ = 0;
+let score = 0;
 
-    function showQuestion() {
-        document.getElementById("progress").style.width = (currentQ / questions.length * 100) + "%";
-        const qData = questions[currentQ];
-        document.getElementById("question-text").innerText = (currentQ + 1) + ". " + qData.q;
-        const ob = document.getElementById("options-box"); ob.innerHTML = "";
-        qData.a.forEach(opt => {
-            const btn = document.createElement("button"); btn.innerText = opt; btn.className = "opt-btn";
-            btn.onclick = () => { if(opt === qData.c) score++; currentQ++; 
-            if(currentQ < questions.length) showQuestion(); else showResult(); };
-            ob.appendChild(btn);
-        });
+function initQuiz() {
+    const wrapper = document.getElementById('questions-wrapper');
+    quizData.forEach((data, idx) => {
+        const div = document.createElement('div');
+        div.className = `question ${idx === 0 ? 'active' : ''}`;
+        div.innerHTML = `<h3>${idx + 1}. ${data.q}</h3>
+            <div class="options-grid">
+                ${data.a.map((opt, i) => `<button class="opt-btn" onclick="next(${i})">${opt}</button>`).join('')}
+            </div>`;
+        wrapper.appendChild(div);
+    });
+}
+
+function next(choice) {
+    if(choice === quizData[currentQ].c) score++;
+    
+    const qs = document.querySelectorAll('.question');
+    qs[currentQ].classList.remove('active');
+    currentQ++;
+    
+    const progress = (currentQ / quizData.length) * 100;
+    document.getElementById('progress-bar').style.width = `${progress}%`;
+
+    if(currentQ < quizData.length) {
+        qs[currentQ].classList.add('active');
+    } else {
+        showResult();
     }
+}
 
-    function showResult() {
-        document.getElementById("quiz-box").style.display = "none";
-        document.getElementById("result-screen").style.display = "block";
-        if(score <= 3) finalLvl = "A1"; else if(score <= 6) finalLvl = "A2";
-        else if(score <= 9) finalLvl = "B1"; else if(score <= 12) finalLvl = "B2"; else finalLvl = "C1";
-        document.getElementById("user-level").innerText = finalLvl;
-        document.getElementById("level-desc").innerText = "You answered " + score + " questions correctly.";
-    }
-    showQuestion();
+function showResult() {
+    document.getElementById('quiz-area').style.display = 'none';
+    const box = document.getElementById('result-box');
+    const levelText = document.getElementById('level-text');
+    box.style.display = 'block';
+
+    let level = "";
+    if(score <= 7) level = "A1 (Beginner)";
+    else if(score <= 14) level = "B1 (Intermediate)";
+    else level = "C1 (Advanced)";
+
+    levelText.innerText = level;
+    document.getElementById('score-text').innerText = `Düzgün cavab: ${score} / 20`;
+}
+
+initQuiz();
 </script>
 </body>
 </html>
