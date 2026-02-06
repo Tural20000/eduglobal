@@ -3,137 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Dil Öyrənmə Paneli</title>
+    <title>EduGlobal Pro Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2c3e50;
-            --a1-color: #3498db;
-            --b1-color: #e67e22;
-            --c1-color: #8e44ad;
-            --bg: #f4f7f6;
+            --bg: #f4f7f6; --card: #ffffff; --text: #2c3e50; --accent: #3498db;
         }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        /* Dark Mode Rəngləri */
+        .dark-theme {
+            --bg: #1a1a2e; --card: #16213e; --text: #e94560; --accent: #0f3460;
         }
+        body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; margin: 0; transition: 0.4s; }
+        
+        .navbar { position: fixed; top: 0; width: 100%; background: var(--card); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; box-sizing: border-box;}
+        
+        .theme-toggle { cursor: pointer; font-size: 1.5rem; color: var(--text); }
+        
+        .container { max-width: 1100px; margin: 100px auto 40px; padding: 20px; }
+        
+        .hero { text-align: center; margin-bottom: 50px; }
 
-        .dashboard {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 800px;
-            width: 90%;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .logo span { color: var(--a1-color); }
-
-        p.subtitle {
-            color: #7f8c8d;
-            margin-bottom: 40px;
-        }
-
-        .levels-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 25px;
-        }
-
-        .level-card {
-            padding: 30px;
-            border-radius: 20px;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        
+        .card { 
+            background: var(--card); padding: 30px; border-radius: 20px; text-align: center; 
+            text-decoration: none; color: var(--text); transition: 0.3s; border: 1px solid rgba(0,0,0,0.05);
             position: relative;
-            overflow: hidden;
         }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .card i { font-size: 3rem; margin-bottom: 15px; color: #3498db; }
+        
+        .badge { position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; padding: 4px 8px; border-radius: 8px; font-size: 0.7rem; }
 
-        .level-card i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .level-card h3 {
-            margin: 10px 0 5px 0;
-            font-size: 1.5rem;
-        }
-
-        .level-card p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin: 0;
-        }
-
-        /* Rənglər */
-        .a1 { background: var(--a1-color); box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3); }
-        .b1 { background: var(--b1-color); box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3); }
-        .c1 { background: var(--c1-color); box-shadow: 0 10px 20px rgba(142, 68, 173, 0.3); }
-
-        .level-card:hover {
-            transform: translateY(-10px);
-            filter: brightness(1.1);
-        }
-
-        .footer {
-            margin-top: 40px;
-            font-size: 0.8rem;
-            color: #bdc3c7;
-        }
+        .lvl-btns { display: none; gap: 10px; margin-top: 15px; justify-content: center; }
+        .card:hover .lvl-btns { display: flex; }
+        .lvl-btn { background: #3498db; color: white; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div class="dashboard">
-    <div class="logo">Edu<span>Global</span></div>
-    <p class="subtitle">İngilis dili qrammatikasını mükəmməl öyrən</p>
+<nav class="navbar">
+    <div style="font-size: 1.5rem; font-weight: bold;">Edu<span>Global</span></div>
+    <div class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></div>
+</nav>
 
-    <div class="levels-grid">
-        <a href="grammar_A1.html" class="level-card a1">
-            <i class="fas fa-seedling"></i>
-            <h3>A1</h3>
-            <p>Beginner (Başlanğıc)</p>
-            <p>150 Sual / 15 Qayda</p>
-        </a>
-
-        <a href="grammar_B1.html" class="level-card b1">
-            <i class="fas fa-mountain"></i>
-            <h3>B1</h3>
-            <p>Intermediate (Orta)</p>
-            <p>150 Sual / 15 Qayda</p>
-        </a>
-
-        <a href="grammar_C1.html" class="level-card c1">
-            <i class="fas fa-crown"></i>
-            <h3>C1</h3>
-            <p>Advanced (Ali)</p>
-            <p>150 Sual / 15 Qayda</p>
-        </a>
+<div class="container">
+    <div class="hero">
+        <h1>Xoş gəldin, Çempion! 🏆</h1>
+        <p>Gələcəyini bizimlə inşa et.</p>
     </div>
 
-    <div class="footer">
-        &copy; 2026 EduGlobal Pro Hub - Bütün hüquqlar qorunur.
+    <div class="main-grid">
+        <div class="card">
+            <div class="badge">150+ Sual</div>
+            <i class="fas fa-book-open"></i>
+            <h3>Qrammatika</h3>
+            <p>Səviyyəni seç və başla:</p>
+            <div class="lvl-btns">
+                <a href="grammar_a1.html" class="lvl-btn">A1</a>
+                <a href="grammar_b1.html" class="lvl-btn">B1</a>
+                <a href="grammar_c1.html" class="lvl-btn">C1</a>
+            </div>
+        </div>
+
+        <a href="games.html" class="card">
+            <div class="badge">ƏYLƏNCƏ</div>
+            <i class="fas fa-gamepad"></i>
+            <h3>Dil Oyunları</h3>
+            <p>Sözləri yarışaraq öyrən.</p>
+        </a>
+
+        <a href="certificates.html" class="card">
+            <i class="fas fa-award"></i>
+            <h3>Sertifikatlar</h3>
+            <p>İmtahanı keç, diplomunu al.</p>
+        </a>
+
+        <a href="vocabulary.html" class="card">
+            <i class="fas fa-spell-check"></i>
+            <h3>Söz Bazası</h3>
+            <p>3000+ ən vacib söz.</p>
+        </a>
+
+        <a href="exams.html" class="card">
+            <i class="fas fa-user-graduate"></i>
+            <h3>Sınaq İmtahanı</h3>
+            <p>Özünü real sınaqda yoxla.</p>
+        </a>
     </div>
 </div>
 
+<script>
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        const icon = document.querySelector('.theme-toggle i');
+        if(document.body.classList.contains('dark-theme')) {
+            icon.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            icon.classList.replace('fa-sun', 'fa-moon');
+        }
+    }
+</script>
 </body>
 </html>
