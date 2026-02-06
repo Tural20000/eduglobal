@@ -3,35 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Match Game - EduGlobal</title>
+    <title>Speed Word Match - EduGlobal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #3498db; --success: #2ecc71; --error: #e74c3c; --dark: #2c3e50; }
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding-top: 80px; text-align: center; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding-top: 70px; overflow-x: hidden; }
         
         header { position: fixed; top: 0; width: 100%; background: white; padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-sizing: border-box; }
         .back-home { text-decoration: none; color: var(--primary); font-weight: 600; }
 
-        .game-container { max-width: 800px; margin: auto; display: flex; justify-content: space-around; padding: 20px; }
-        .column { display: flex; flex-direction: column; gap: 10px; width: 45%; }
-        
+        /* Oyun Sahəsi */
+        .stats-bar { display: flex; justify-content: center; gap: 30px; font-size: 1.2rem; font-weight: 700; margin: 15px 0; }
+        #timer { color: var(--error); }
+        #score { color: var(--success); }
+
+        .game-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); 
+            gap: 10px; 
+            padding: 20px 5%; 
+            max-width: 1200px; 
+            margin: auto;
+        }
+
         .word-card { 
-            background: white; padding: 15px; border: 2px solid #ddd; border-radius: 10px; 
-            cursor: pointer; transition: 0.3s; font-weight: 600; user-select: none;
+            background: white; padding: 15px 5px; border-radius: 8px; cursor: pointer; 
+            transition: 0.3s; font-weight: 600; font-size: 0.9rem; text-align: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1); border: 2px solid transparent;
+            display: flex; align-items: center; justify-content: center; min-height: 60px;
         }
-        .word-card:hover { border-color: var(--primary); transform: scale(1.02); }
-        .word-card.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        .word-card.matched { background: var(--success); color: white; border-color: var(--success); cursor: default; opacity: 0.7; }
-        .word-card.wrong { background: var(--error); color: white; border-color: var(--error); }
+        .word-card:hover { transform: scale(1.05); border-color: var(--primary); }
+        .word-card.selected { background: var(--primary); color: white; }
+        .word-card.hidden { opacity: 0; pointer-events: none; transform: scale(0.8); }
+        .word-card.wrong { background: var(--error); color: white; animation: shake 0.3s; }
 
-        #score-board { font-size: 1.5rem; font-weight: 700; margin: 20px; color: var(--dark); }
-
-        /* Sertifikat Düyməsi */
-        #cert-modal { 
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 40px; border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.3); z-index: 2000;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
+
+        /* Başlanğıc və Son Modal */
+        .modal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); display: flex; align-items: center; 
+            justify-content: center; z-index: 2000; text-align: center; color: white;
+        }
+        .modal-content { background: white; color: #333; padding: 40px; border-radius: 20px; max-width: 400px; width: 90%; }
+        .btn-start { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 50px; cursor: pointer; font-size: 1.1rem; font-weight: 700; margin-top: 20px; }
         .btn-cert { background: #9b59b6; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; display: inline-block; margin-top: 20px; }
     </style>
 </head>
@@ -39,89 +59,148 @@
 
 <header>
     <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Geri</a>
-    <div style="font-weight: 700;">30 Sözü Birləşdir</div>
+    <div style="font-weight: 700; color: var(--primary);">EduGlobal Speed Match</div>
 </header>
 
-<div id="score-board">Xal: <span id="score">0</span> / 30</div>
-
-<div class="game-container">
-    <div class="column" id="en-column"></div>
-    <div class="column" id="az-column"></div>
+<div class="stats-bar">
+    <div>Vaxt: <span id="timer">60</span>s</div>
+    <div>Xal: <span id="score">0</span> / 30</div>
 </div>
 
-<div id="cert-modal">
-    <i class="fas fa-trophy" style="font-size: 4rem; color: #f1c40f;"></i>
-    <h2>Möhtəşəm!</h2>
-    <p>Bütün sözləri düzgün tapdınız.</p>
-    <a href="certificate.html" class="btn-cert">Sertifikatı Al 🎓</a>
+<div class="game-grid" id="game-grid"></div>
+
+<div id="start-modal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-stopwatch" style="font-size: 3rem; color: var(--primary);"></i>
+        <h2>Hazırsınız?</h2>
+        <p>1 dəqiqə ərzində 30 cütlüyü birləşdirərək 30 xal toplamalısınız!</p>
+        <button class="btn-start" onclick="startGame()">Oyuna Başla</button>
+    </div>
+</div>
+
+<div id="end-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div id="end-result"></div>
+    </div>
 </div>
 
 <script>
     const wordPairs = [
-        {en: "Abstain", az: "Çəkinmək"}, {en: "Accurate", az: "Dəqiq"}, {en: "Ancient", az: "Qədim"},
-        {en: "Believe", az: "İnanmaq"}, {en: "Challenge", az: "Sınaq"}, {en: "Danger", az: "Təhlükə"},
-        {en: "Education", az: "Təhsil"}, {en: "Focus", az: "Fokus"}, {en: "Future", az: "Gələcək"},
-        {en: "Garden", az: "Bağça"}, {en: "Habit", az: "Vərdiş"}, {en: "Identity", az: "Kimlik"},
-        {en: "Journey", az: "Səyahət"}, {en: "Knowledge", az: "Bilik"}, {en: "Language", az: "Dil"},
-        {en: "Memory", az: "Yaddaş"}, {en: "Nature", az: "Təbiət"}, {en: "Opportunity", az: "Fürsət"},
-        {en: "Practice", az: "Təcrübə"}, {en: "Quality", az: "Keyfiyyət"}, {en: "Respect", az: "Hörmət"},
-        {en: "Success", az: "Uğur"}, {en: "Trust", az: "Etibar"}, {en: "Understand", az: "Anlamaq"},
-        {en: "Vision", az: "Vizyon"}, {en: "Wisdom", az: "Hikmət"}, {en: "Always", az: "Həmişə"},
-        {en: "Freedom", az: "Azadlıq"}, {en: "Improve", az: "Təkmilləşdirmək"}, {en: "Value", az: "Dəyər"}
+        {en: "Always", az: "Həmişə"}, {en: "Success", az: "Uğur"}, {en: "Country", az: "Ölkə"},
+        {en: "Danger", az: "Təhlükə"}, {en: "Example", az: "Nümunə"}, {en: "Family", az: "Ailə"},
+        {en: "Garden", az: "Bağça"}, {en: "Health", az: "Sağlamlıq"}, {en: "Improve", az: "Təkmilləşdirmək"},
+        {en: "Journey", az: "Səyahət"}, {en: "Kitchen", az: "Mətbəx"}, {en: "Library", az: "Kitabxana"},
+        {en: "Mountain", az: "Dağ"}, {en: "Nature", az: "Təbiət"}, {en: "Ocean", az: "Okean"},
+        {en: "People", az: "İnsanlar"}, {en: "Question", az: "Sual"}, {en: "River", az: "Çay"},
+        {en: "Science", az: "Elm"}, {en: "Table", az: "Masa"}, {en: "Universe", az: "Kainat"},
+        {en: "Village", az: "Kənd"}, {en: "Weather", az: "Hava"}, {en: "Yesterday", az: "Dünən"},
+        {en: "Knowledge", az: "Bilik"}, {en: "Freedom", az: "Azadlıq"}, {en: "Practice", az: "Təcrübə"},
+        {en: "Believe", az: "İnanmaq"}, {en: "Challenge", az: "Çətinlik"}, {en: "Future", az: "Gələcək"}
     ];
 
-    let selectedEn = null;
+    let selectedCards = [];
     let score = 0;
+    let timeLeft = 60;
+    let timerInterval;
 
-    function initGame() {
-        const enCol = document.getElementById('en-column');
-        const azCol = document.getElementById('az-column');
+    function startGame() {
+        document.getElementById('start-modal').style.display = 'none';
+        initGrid();
+        startTimer();
+    }
 
-        // İngilis sözlərini qarışdır və əlavə et
-        [...wordPairs].sort(() => Math.random() - 0.5).forEach(pair => {
-            const div = document.createElement('div');
-            div.className = 'word-card';
-            div.innerText = pair.en;
-            div.onclick = () => selectEn(div, pair);
-            enCol.appendChild(div);
+    function initGrid() {
+        const grid = document.getElementById('game-grid');
+        let cards = [];
+
+        wordPairs.forEach(p => {
+            cards.push({ text: p.en, id: p.en, type: 'en' });
+            cards.push({ text: p.az, id: p.en, type: 'az' });
         });
 
-        // Azərbaycan sözlərini qarışdır və əlavə et
-        [...wordPairs].sort(() => Math.random() - 0.5).forEach(pair => {
+        // Kartları qarışdır
+        cards.sort(() => Math.random() - 0.5);
+
+        cards.forEach(card => {
             const div = document.createElement('div');
             div.className = 'word-card';
-            div.innerText = pair.az;
-            div.onclick = () => selectAz(div, pair);
-            azCol.appendChild(div);
+            div.innerText = card.text;
+            div.dataset.id = card.id;
+            div.onclick = () => handleCardClick(div);
+            grid.appendChild(div);
         });
     }
 
-    function selectEn(element, pair) {
-        if (element.classList.contains('matched')) return;
-        document.querySelectorAll('#en-column .word-card').forEach(c => c.classList.remove('selected'));
-        element.classList.add('selected');
-        selectedEn = { element, pair };
-    }
+    function handleCardClick(card) {
+        if (selectedCards.length === 2 || card.classList.contains('hidden') || card.classList.contains('selected')) return;
 
-    function selectAz(element, pair) {
-        if (!selectedEn || element.classList.contains('matched')) return;
+        card.classList.add('selected');
+        selectedCards.push(card);
 
-        if (selectedEn.pair.en === pair.en) {
-            // DÜZDÜRSƏ
-            element.classList.add('matched');
-            selectedEn.element.classList.add('matched');
-            score++;
-            document.getElementById('score').innerText = score;
-            selectedEn = null;
-            if (score === 30) document.getElementById('cert-modal').style.display = 'block';
-        } else {
-            // SƏHVDİRSƏ
-            element.classList.add('wrong');
-            setTimeout(() => element.classList.remove('wrong'), 500);
+        if (selectedCards.length === 2) {
+            checkMatch();
         }
     }
 
-    initGame();
+    function checkMatch() {
+        const [c1, c2] = selectedCards;
+        if (c1.dataset.id === c2.dataset.id && c1.innerText !== c2.innerText) {
+            // DÜZ TAPILDI
+            setTimeout(() => {
+                c1.classList.add('hidden');
+                c2.classList.add('hidden');
+                score++;
+                document.getElementById('score').innerText = score;
+                selectedCards = [];
+                if (score === 30) endGame(true);
+            }, 300);
+        } else {
+            // SƏHV TAPILDI
+            setTimeout(() => {
+                c1.classList.add('wrong');
+                c2.classList.add('wrong');
+                setTimeout(() => {
+                    c1.classList.remove('selected', 'wrong');
+                    c2.classList.remove('selected', 'wrong');
+                    selectedCards = [];
+                }, 500);
+            }, 300);
+        }
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                if (score < 30) endGame(false);
+            }
+        }, 1000);
+    }
+
+    function endGame(isWin) {
+        clearInterval(timerInterval);
+        const modal = document.getElementById('end-modal');
+        const resultDiv = document.getElementById('end-result');
+        modal.style.display = 'flex';
+
+        if (isWin) {
+            resultDiv.innerHTML = `
+                <i class="fas fa-trophy" style="font-size: 4rem; color: #f1c40f;"></i>
+                <h2>Möhtəşəm!</h2>
+                <p>Bütün sözləri 1 dəqiqədən tez tapdınız.</p>
+                <a href="certificate.html" class="btn-cert">Sertifikatı Al 🎓</a>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <i class="fas fa-times-circle" style="font-size: 4rem; color: var(--error);"></i>
+                <h2>Vaxt Bitdi!</h2>
+                <p>Siz ${score} xal topladınız. Sertifikat üçün 30 xal lazımdır.</p>
+                <button class="btn-start" onclick="location.reload()">Yenidən Cəhd Et</button>
+            `;
+        }
+    }
 </script>
 </body>
 </html>
