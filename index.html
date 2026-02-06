@@ -3,41 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Learn English with Tural</title>
+    <title>EduGlobal - Master English with Tural</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; --card-bg: #ffffff; --text: #333; }
         .dark-mode { --primary: #5dade2; --dark: #ecf0f1; --light: #1a1a1a; --card-bg: #2d2d2d; --text: #f4f4f4; }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: 0.3s; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: var(--text); line-height: 1.6; }
-        
         nav { background: var(--card-bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        .nav-links { display: flex; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text); margin-left: 20px; font-weight: 400; }
-        .mode-toggle { background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-left: 15px; }
-
-        .hero { padding: 80px 20px; text-align: center; background: var(--card-bg); border-bottom: 1px solid #eee; }
+        .hero { padding: 80px 20px; text-align: center; background: var(--card-bg); }
         .hero h2 { font-size: 2.5rem; margin-bottom: 15px; }
-        .btn-test { display: inline-block; background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); }
-
-        .levels-section { padding: 60px 5%; max-width: 1100px; margin: auto; }
+        .btn-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px; }
+        .btn { padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; }
+        .btn-test { background: var(--primary); color: white; }
+        .btn-game { background: #f1c40f; color: #333; }
+        .btn-cert { background: #9b59b6; color: white; }
+        .levels-section { padding: 50px 5%; max-width: 1100px; margin: auto; }
         .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .level-card { background: var(--card-bg); padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; border-bottom: 4px solid var(--primary); }
-        .level-card:hover { transform: translateY(-5px); }
-        
-        .seo-content { padding: 40px 5%; max-width: 800px; margin: auto; text-align: justify; }
-
-        /* Professional Footer */
+        .level-card { background: var(--card-bg); padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; border-bottom: 4px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         footer { background: #1a1a1a; color: white; padding: 60px 5% 30px; margin-top: 60px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1100px; margin: auto; text-align: left; }
-        .footer-section h4 { color: var(--primary); margin-bottom: 20px; font-size: 1.2rem; }
-        .footer-section p { font-size: 0.9rem; color: #bdc3c7; margin-bottom: 10px; }
-        .social-links a { color: white; font-size: 1.5rem; margin-right: 20px; transition: 0.3s; }
-        .social-links a:hover { color: var(--primary); }
-        .footer-bottom { border-top: 1px solid #333; margin-top: 40px; padding-top: 20px; text-align: center; font-size: 0.8rem; color: #7f8c8d; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1100px; margin: auto; }
+        .social-links a { color: white; font-size: 1.5rem; margin-right: 20px; }
     </style>
 </head>
 <body>
@@ -45,16 +33,19 @@
 <nav>
     <a href="index.html" class="logo">EduGlobal</a>
     <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="test.html">Test</a>
-        <button class="mode-toggle" onclick="toggleDarkMode()" id="theme-icon">🌙</button>
+        <a href="test.html" style="text-decoration:none; color:inherit; margin-right:15px;">Test</a>
+        <button onclick="toggleDarkMode()" style="background:none; border:none; cursor:pointer; font-size:1.3rem;">🌙</button>
     </div>
 </nav>
 
 <section class="hero">
-    <h2>Improve Your English Skills 🚀</h2>
-    <p>Discover your English level and get free learning materials instantly.</p>
-    <a href="test.html" class="btn-test">Start Level Test</a>
+    <h2>Your Journey to English Mastery 🚀</h2>
+    <p>Practice with interactive tools, play games, and get your certificate.</p>
+    <div class="btn-group">
+        <a href="test.html" class="btn btn-test">Start Level Test</a>
+        <a href="game.html" class="btn btn-game">Play Word Game 🎮</a>
+        <a href="certificate.html" class="btn btn-cert">Get Certificate 🎓</a>
+    </div>
 </section>
 
 <div class="levels-section">
@@ -65,51 +56,34 @@
     </div>
 </div>
 
-<article class="seo-content">
-    <h3>Expert English Learning</h3>
-    <p>English is the global language of business and technology. EduGlobal helps you master <b>vocabulary</b> and <b>grammar</b> through level-based exercises. Developed for students who want to excel in their professional careers.</p>
-</article>
-
 <footer>
     <div class="footer-grid">
-        <div class="footer-section">
+        <div>
             <h4>EduGlobal</h4>
-            <p>Your journey to fluency starts here. High-quality resources for every English level.</p>
+            <p>Developing future leaders through language skills.</p>
         </div>
-        <div class="footer-section">
+        <div>
             <h4>Contact Developer</h4>
             <p><i class="fas fa-envelope"></i> abdullayevtural2004@gmail.com</p>
-            <p><i class="fas fa-map-marker-alt"></i> Baku, Azerbaijan</p>
+            <p><i class="fab fa-instagram"></i> @t_abdullayev0</p>
         </div>
-        <div class="footer-section">
-            <h4>Follow Me</h4>
+        <div>
+            <h4>Professional Links</h4>
             <div class="social-links">
-                <a href="https://instagram.com/t_abdullayev0" target="_blank"><i class="fab fa-instagram"></i></a>
                 <a href="https://linkedin.com/in/tural-abdullayev-44497b3a5" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="mailto:abdullayevtural2004@gmail.com"><i class="fas fa-at"></i></a>
+                <a href="https://instagram.com/t_abdullayev0" target="_blank"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </div>
-    <div class="footer-bottom">
-        &copy; 2026 EduGlobal. Developed by <b>Tural Abdullayev</b>. All rights reserved.
-    </div>
+    <p style="text-align:center; margin-top:40px; font-size:0.8rem; opacity:0.5;">Developed by Tural Abdullayev &copy; 2026</p>
 </footer>
 
 <script>
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('dark-mode', isDark);
-        updateIcon(isDark);
+        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
     }
-    function updateIcon(isDark) {
-        document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
-    }
-    const savedMode = localStorage.getItem('dark-mode') === 'true';
-    if(savedMode) {
-        document.body.classList.add('dark-mode');
-        updateIcon(true);
-    }
+    if(localStorage.getItem('dark-mode') === 'true') document.body.classList.add('dark-mode');
 </script>
 
 </body>
