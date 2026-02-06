@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGlobal - C1 Advanced Grammar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #8e44ad; --secondary: #2c3e50; --success: #2ecc71; --danger: #e74c3c; --bg: #f4f7f6; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .rule-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 40px; border-left: 8px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .formula { background: #f4ecf7; padding: 12px; border-radius: 8px; font-family: monospace; color: #8e44ad; font-weight: bold; margin: 15px 0; border: 1px dashed var(--primary); }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .opt-btn { padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: 0.2s; text-align: left; }
+        .correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
+        h1 { text-align: center; color: var(--secondary); }
+        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>C1 Advanced Grammar (15 Qayda / 150 Sual)</h1>
+    <div id="c1-content"></div>
+</div>
+
+<script>
+const c1Data = [
+    { t: "1. Inversion (Negative Adverbs)", d: "Cümlənin təsir gücünü artırmaq üçün köməkçi felin mübtədadan qabağa keçməsi.", f: "Negative Word + Aux + Subject + Verb", q: [
+        {q: "Never ___ I seen such a beautiful sunset.", a: ["have", "did", "had", "was"], c: 0},
+        {q: "Little ___ he know about the surprise.", a: ["did", "does", "had", "was"], c: 0},
+        {q: "Seldom ___ she venture out after dark.", a: ["does", "do", "did", "is"], c: 0},
+        {q: "Under no circumstances ___ you open this door.", a: ["should", "you should", "must", "can"], c: 0},
+        {q: "Only then ___ the gravity of the situation.", a: ["did I realize", "I realized", "had I realized", "I had realize"], c: 0},
+        {q: "Not only ___ talented, but also modest.", a: ["is he", "he is", "was he", "he was"], c: 0},
+        {q: "Hardly ___ I started working when the power went out.", a: ["had", "did", "was", "am"], c: 0},
+        {q: "No sooner ___ we arrived than the rain started.", a: ["had", "did", "were", "have"], c: 0},
+        {q: "Rarely ___ such an opportunity arise.", a: ["does", "do", "did", "is"], c: 0},
+        {q: "On no account ___ the alarm be turned off.", a: ["must", "should", "does", "is"], c: 0}
+    ]},
+    { t: "2. Mixed Conditionals", d: "Keçmişdəki hərəkətin indiki zamandakı nəticəsini (və ya əksini) bildirmək üçün.", f: "If + Past Perfect, would + V1 (və ya əksi)", q: [
+        {q: "If I had studied harder, I ___ a doctor now.", a: ["would be", "will be", "would have been", "am"], c: 0},
+        {q: "I wouldn't be tired if I ___ earlier.", a: ["had slept", "slept", "sleep", "would sleep"], c: 0},
+        {q: "If they ___ the map, they wouldn't be lost now.", a: ["had checked", "check", "checked", "would check"], c: 0},
+        {q: "She ___ here today if she hadn't missed the flight.", a: ["would be", "will be", "is", "was"], c: 0},
+        {q: "If you ___ me, I wouldn't be in this mess.", a: ["had listened to", "listen to", "listened to", "would listen"], c: 0},
+        {q: "If he were more careful, he ___ that mistake.", a: ["wouldn't have made", "wouldn't make", "didn't make", "won't make"], c: 0},
+        {q: "I ___ hungry now if I had eaten breakfast.", a: ["wouldn't be", "won't be", "am not", "wasn't"], c: 0},
+        {q: "If they ___ rich, they would have bought that house.", a: ["were", "had been", "are", "would be"], c: 0},
+        {q: "If I ___ English better, I would have got the job.", a: ["spoke", "had spoken", "speak", "would speak"], c: 0},
+        {q: "She would have won if she ___ faster.", a: ["were", "had been", "is", "was"], c: 0}
+    ]},
+    { t: "3. The Subjunctive Mood", d: "Tələb, arzu, məsləhət və ya vaciblik bildirən formal konstruksiya.", f: "It is essential that + Subject + V1 (s-siz)", q: [
+        {q: "It is essential that he ___ on time.", a: ["be", "is", "was", "being"], c: 0},
+        {q: "I suggest that she ___ the offer.", a: ["accept", "accepts", "accepted", "accepting"], c: 0},
+        {q: "The doctor recommended that he ___ smoking.", a: ["quit", "quits", "quitted", "quitting"], c: 0},
+        {q: "It is vital that we ___ immediately.", a: ["act", "acts", "acted", "acting"], c: 0},
+        {q: "I insist that he ___ present.", a: ["be", "is", "was", "will be"], c: 0},
+        {q: "It's important that she ___ the truth.", a: ["know", "knows", "knew", "knowing"], c: 0},
+        {q: "He proposed that the meeting ___ postponed.", a: ["be", "is", "was", "being"], c: 0},
+        {q: "The judge ordered that he ___ a fine.", a: ["pay", "pays", "paid", "paying"], c: 0},
+        {q: "It is necessary that everyone ___ silent.", a: ["remain", "remains", "remained", "remaining"], c: 0},
+        {q: "I demand that she ___ an apology.", a: ["make", "makes", "made", "making"], c: 0}
+    ]},
+    { t: "4. Cleft Sentences (It/What)", d: "Məlumatın müəyyən bir hissəsini vurğulamaq üçün cümlənin bölünməsi.", f: "It is/was... that / What... is...", q: [
+        {q: "___ I need is a long vacation.", a: ["What", "It", "That", "Which"], c: 0},
+        {q: "It was Tom ___ broke the window.", a: ["who", "which", "whom", "whose"], c: 0},
+        {q: "___ happened was that we got lost.", a: ["What", "That", "Which", "It"], c: 0},
+        {q: "It is money ___ they want, not advice.", a: ["that", "who", "which", "whom"], c: 0},
+        {q: "___ she loves most is playing the piano.", a: ["What", "It", "That", "Which"], c: 0},
+        {q: "It was in 1990 ___ we first met.", a: ["that", "when", "which", "where"], c: 0},
+        {q: "What I don't understand ___ why he left.", a: ["is", "was", "are", "be"], c: 0},
+        {q: "It was her ___ solved the problem.", a: ["who", "which", "whom", "that"], c: 0},
+        {q: "___ matters is your health.", a: ["What", "It", "That", "Which"], c: 0},
+        {q: "It is Paris ___ they are moving to.", a: ["that", "which", "where", "what"], c: 0}
+    ]},
+    { t: "5. Passive Reporting Verbs", d: "Ümumi inancları və ya iddiaları rəsmi şəkildə ifadə etmək.", f: "It is said that... / Subject is said to...", q: [
+        {q: "He is said ___ a millionaire.", a: ["to be", "being", "is", "was"], c: 0},
+        {q: "It is believed ___ the ancient city exists.", a: ["that", "to", "which", "what"], c: 0},
+        {q: "They are thought ___ the country.", a: ["to have left", "to leave", "leaving", "left"], c: 0},
+        {q: "The painting is reported ___ stolen.", a: ["to have been", "to be", "being", "is"], c: 0},
+        {q: "It is expected ___ prices will rise.", a: ["that", "to", "which", "what"], c: 0},
+        {q: "She is considered ___ the best.", a: ["to be", "being", "is", "was"], c: 0},
+        {q: "It is estimated ___ 500 people attended.", a: ["that", "to", "which", "what"], c: 0},
+        {q: "He is known ___ a difficult boss.", a: ["to be", "is", "being", "was"], c: 0},
+        {q: "The bridge is understood ___ unsafe.", a: ["to be", "being", "is", "was"], c: 0},
+        {q: "It is claimed ___ he cheated.", a: ["that", "to", "which", "what"], c: 0}
+    ]},
+    { t: "6. Future in the Past", d: "Keçmişdə gələcəyə dair olan planlar və ya ehtimallar.", f: "Was/Were going to / Would / Was about to", q: [
+        {q: "I knew she ___ succeed.", a: ["would", "will", "shall", "is"], c: 0},
+        {q: "We were ___ leave when it started raining.", a: ["about to", "going", "will", "would"], c: 0},
+        {q: "I was going to call you, but I ___.", a: ["forgot", "forget", "had forgotten", "would forget"], c: 0},
+        {q: "They were to ___ married in June.", a: ["be", "been", "being", "is"], c: 0},
+        {q: "I thought it ___ be easy.", a: ["would", "will", "was", "is"], c: 0},
+        {q: "She was ___ start her new job.", a: ["about to", "going to", "would", "will"], c: 0},
+        {q: "He ___ going to pay, but he didn't.", a: ["was", "were", "is", "will"], c: 0},
+        {q: "I had a feeling they ___ win.", a: ["would", "will", "were", "did"], c: 0},
+        {q: "We ___ to meet at 6, but she was late.", a: ["were", "was", "had", "would"], c: 0},
+        {q: "He said he ___ help.", a: ["would", "will", "is", "does"], c: 0}
+    ]},
+    { t: "7. Modal Verbs of Deduction (Past)", d: "Keçmişlə bağlı güclü və ya zəif ehtimallar.", f: "Must/Might/Can't + have + V3", q: [
+        {q: "She ___ have forgotten the keys at home.", a: ["must", "can't", "should", "will"], c: 0},
+        {q: "You ___ have seen him; he's in Paris.", a: ["can't", "must", "might", "should"], c: 0},
+        {q: "They ___ have arrived by now.", a: ["might", "must", "can't", "should"], c: 0},
+        {q: "I ___ have left my phone in the car.", a: ["may", "must", "should", "will"], c: 0},
+        {q: "He ___ have been joking!", a: ["must", "can't", "should", "might"], c: 0},
+        {q: "You ___ have told me earlier.", a: ["should", "must", "can't", "might"], c: 0},
+        {q: "The ground is wet. It ___ have rained.", a: ["must", "can't", "might", "shall"], c: 0},
+        {q: "She ___ have been sleeping when you called.", a: ["might", "must", "can't", "should"], c: 0},
+        {q: "They ___ have missed the train.", a: ["must", "can't", "should", "will"], c: 0},
+        {q: "You ___ have been more careful.", a: ["should", "must", "might", "can't"], c: 0}
+    ]},
+    { t: "8. Participle Clauses", d: "Cümləni qısaltmaq və daha akademik etmək üçün istifadə olunur.", f: "V-ing / V3 / Having + V3", q: [
+        {q: "___ the news, she started crying.", a: ["Hearing", "Heard", "Having hear", "Hears"], c: 0},
+        {q: "___ my work, I went to bed.", a: ["Having finished", "Finished", "Finishing", "Finish"], c: 0},
+        {q: "___ in Japan, the car is very reliable.", a: ["Made", "Making", "Having made", "Makes"], c: 0},
+        {q: "Not ___ what to do, I asked for help.", a: ["knowing", "known", "know", "knows"], c: 0},
+        {q: "___ by his friends, he felt happy.", a: ["Surrounded", "Surrounding", "Having surround", "Surrounds"], c: 0},
+        {q: "___ through the park, I saw a cat.", a: ["Walking", "Walked", "Having walked", "Walks"], c: 0},
+        {q: "___ all the tickets, they went home.", a: ["Having sold", "Selling", "Sold", "Sells"], c: 0},
+        {q: "___ for ages, the letter finally arrived.", a: ["Having been lost", "Losing", "Lost", "Loses"], c: 0},
+        {q: "___ hungry, I ate a sandwich.", a: ["Feeling", "Felt", "Having felt", "Feels"], c: 0},
+        {q: "___ from a distance, it looks like a star.", a: ["Seen", "Seeing", "Having seen", "Sees"], c: 0}
+    ]},
+    { t: "9. Advanced Relative Clauses", d: "Prepozisiya + Whom/Which və ya 'Whose' ilə daha mürəkkəb təsvirlər.", f: "Prep + whom/which", q: [
+        {q: "The company for ___ I work is big.", a: ["which", "whom", "who", "that"], c: 0},
+        {q: "The man to ___ I spoke was the manager.", a: ["whom", "who", "which", "that"], c: 0},
+        {q: "A situation ___ which I have no control.", a: ["over", "at", "in", "to"], c: 0},
+        {q: "The reason ___ which she left is unknown.", a: ["for", "at", "in", "with"], c: 0},
+        {q: "Ten people, two of ___ were children.", a: ["whom", "who", "which", "whose"], c: 0},
+        {q: "The house, the roof of ___ is red.", a: ["which", "whose", "whom", "that"], c: 1},
+        {q: "The tools ___ which we work are old.", a: ["with", "for", "at", "by"], c: 0},
+        {q: "He is a man ___ opinion I value.", a: ["whose", "whom", "which", "that"], c: 0},
+        {q: "The city in ___ I was born is small.", a: ["which", "where", "whom", "that"], c: 0},
+        {q: "The lady ___ son I know is a teacher.", a: ["whose", "whom", "who", "which"], c: 0}
+    ]},
+    { t: "10. Nominal Clauses", d: "Bir cümlənin isim kimi istifadə olunması.", f: "What/Whether/That + Clause as Subject/Object", q: [
+        {q: "___ he said was true.", a: ["What", "That", "Which", "Whether"], c: 0},
+        {q: "I wonder ___ it will rain.", a: ["whether", "that", "what", "which"], c: 0},
+        {q: "___ she succeeds depends on her.", a: ["Whether", "What", "That", "Which"], c: 0},
+        {q: "I believe ___ you are right.", a: ["that", "what", "whether", "which"], c: 0},
+        {q: "___ happened is a secret.", a: ["What", "That", "Whether", "Which"], c: 0},
+        {q: "The fact ___ he lied is shocking.", a: ["that", "what", "whether", "which"], c: 0},
+        {q: "I don't know ___ she lives.", a: ["where", "what", "whether", "that"], c: 0},
+        {q: "___ you do is your business.", a: ["Whatever", "What", "Whether", "That"], c: 0},
+        {q: "The question is ___ we can afford it.", a: ["whether", "that", "what", "which"], c: 0},
+        {q: "He told me ___ he was tired.", a: ["that", "what", "whether", "which"], c: 0}
+    ]},
+    { t: "11. Wish / If Only (Advanced)", d: "Keçmiş və indiki zamanla bağlı dərin təəssüf və arzular.", f: "Wish + Past Perfect (Keçmiş üçün)", q: [
+        {q: "I wish I ___ so much yesterday.", a: ["hadn't eaten", "didn't eat", "don't eat", "haven't eaten"], c: 0},
+        {q: "If only she ___ here now.", a: ["were", "is", "had been", "been"], c: 0},
+        {q: "I wish you ___ stop talking!", a: ["would", "will", "had", "did"], c: 0},
+        {q: "If only I ___ that job last year.", a: ["had taken", "took", "take", "would take"], c: 0},
+        {q: "I wish I ___ speak French.", a: ["could", "can", "would", "had"], c: 0},
+        {q: "If only it ___ raining.", a: ["would stop", "will stop", "stops", "stopped"], c: 0},
+        {q: "I wish they ___ us earlier.", a: ["had told", "told", "tell", "would tell"], c: 0},
+        {q: "If only I ___ taller.", a: ["were", "am", "had been", "will be"], c: 0},
+        {q: "I wish I ___ more time.", a: ["had", "have", "would have", "had had"], c: 0},
+        {q: "If only we ___ lost.", a: ["weren't", "aren't", "hadn't been", "didn't"], c: 0}
+    ]},
+    { t: "12. Conditionals (Alternative structures)", d: "If əvəzinə 'Provided', 'As long as', 'Had I known' və s. istifadəsi.", f: "Had I + V3... (If I had...)", q: [
+        {q: "___ I known, I would have helped.", a: ["Had", "If", "Did", "Were"], c: 0},
+        {q: "___ you arrive on time, you can go.", a: ["Provided", "Unless", "But for", "Had"], c: 0},
+        {q: "___ you study, you will fail.", a: ["Unless", "Provided", "If", "As long as"], c: 0},
+        {q: "___ it not for his help, I'd be lost.", a: ["Were", "Had", "Was", "If"], c: 0},
+        {q: "I'll go ___ you come with me.", a: ["as long as", "unless", "but for", "had"], c: 0},
+        {q: "___ I you, I wouldn't do that.", a: ["Were", "If", "Had", "Am"], c: 0},
+        {q: "Supposing you ___ the lottery, what would you do?", a: ["won", "win", "had won", "wins"], c: 0},
+        {q: "Take an umbrella ___ it rains.", a: ["in case", "unless", "provided", "if"], c: 0},
+        {q: "___ any problems arise, call me.", a: ["Should", "If", "Had", "Were"], c: 0},
+        {q: "But for his advice, I ___ failed.", a: ["would have", "will", "did", "had"], c: 0}
+    ]},
+    { t: "13. Narrative Tenses", d: "Hekayə danışarkən zamanların (Past Perfect Cont. və s.) kombinasiyası.", f: "Past Perfect Continuous: Had been + V-ing", q: [
+        {q: "I ___ for two hours when he arrived.", a: ["had been waiting", "was waiting", "waited", "have been waiting"], c: 0},
+        {q: "The sun ___ and the birds were singing.", a: ["was shining", "shone", "had shone", "shines"], c: 0},
+        {q: "She ___ all day, so she was exhausted.", a: ["had been working", "was working", "worked", "has been working"], c: 0},
+        {q: "He realized he ___ his keys at home.", a: ["had left", "left", "was leaving", "has left"], c: 0},
+        {q: "By the time we got there, the film ___.", a: ["had started", "started", "was starting", "has started"], c: 0},
+        {q: "I ___ the book you gave me.", a: ["was reading", "had read", "read", "readed"], c: 0},
+        {q: "They ___ for years before they married.", a: ["had been dating", "dated", "were dating", "have been dating"], c: 0},
+        {q: "The house was empty; everyone ___ out.", a: ["had gone", "went", "was going", "has gone"], c: 0},
+        {q: "It ___ for days, so the river flooded.", a: ["had been raining", "rained", "was raining", "has rained"], c: 0},
+        {q: "I ___ a strange noise last night.", a: ["heard", "was hearing", "had heard", "hear"], c: 0}
+    ]},
+    { t: "14. Adverbs & Adverbial Phrases", d: "Hərəkətin tərzini, zamanını və dərəcəsini vurğulayan ifadələr.", f: "Hardly / Scarcely / Utterly", q: [
+        {q: "I was ___ exhausted after the race.", a: ["utterly", "very", "too", "much"], c: 0},
+        {q: "He speaks English ___ well.", a: ["remarkably", "remark", "remarkable", "more remark"], c: 0},
+        {q: "The plan was ___ flawed.", a: ["fundamentally", "fundamental", "fun", "more fundamental"], c: 0},
+        {q: "I ___ ever go out these days.", a: ["hardly", "hard", "harder", "hardest"], c: 0},
+        {q: "___, we reached our destination.", a: ["Eventually", "Eventual", "Events", "Event"], c: 0},
+        {q: "She was ___ disappointed.", a: ["bitterly", "bitter", "bitters", "more bitter"], c: 0},
+        {q: "He works ___ hard.", a: ["incredibly", "incredible", "incredibles", "more incredible"], c: 0},
+        {q: "___ speaking, I don't like it.", a: ["Frankly", "Frank", "Franks", "Franker"], c: 0},
+        {q: "It's ___ possible.", a: ["highly", "high", "higher", "highest"], c: 0},
+        {q: "They are ___ married.", a: ["happily", "happy", "happier", "happiest"], c: 0}
+    ]},
+    { t: "15. Emphasis (Do/Did & Inversion)", d: "Feli və ya bütün fikri vurğulamaq üçün 'do/did' istifadəsi.", f: "I DO like coffee / Not only did he...", q: [
+        {q: "I ___ like your new dress!", a: ["do", "does", "am", "is"], c: 0},
+        {q: "She ___ call you, I'm sure.", a: ["did", "does", "was", "had"], c: 0},
+        {q: "Not only ___ he late, he forgot his books.", a: ["was", "he was", "is", "he is"], c: 0},
+        {q: "Do ___ sit down!", a: ["please", "do", "you", "did"], c: 1},
+        {q: "I ___ believe we've met before.", a: ["do", "does", "am", "did"], c: 0},
+        {q: "He ___ try his best, didn't he?", a: ["did", "do", "does", "was"], c: 0},
+        {q: "Only by working hard ___ you succeed.", a: ["will", "you will", "do", "you do"], c: 0},
+        {q: "I ___ hope you can come.", a: ["do", "does", "am", "did"], c: 0},
+        {q: "So ___ the weather that we stayed in.", a: ["bad was", "bad it was", "was bad", "it was bad"], c: 0},
+        {q: "___ you need any help, let me know.", a: ["Should", "If", "Do", "Did"], c: 0}
+    ]}
+];
+
+function renderC1() {
+    const ctx = document.getElementById('c1-content');
+    c1Data.forEach((rule, rIdx) => {
+        const card = document.createElement('div');
+        card.className = 'rule-card';
+        card.innerHTML = `
+            <h2>${rule.t}</h2>
+            <p>${rule.d}</p>
+            <div class="formula">Advanced Structure: ${rule.f}</div>
+            <div id="q-box-${rIdx}"></div>
+        `;
+        ctx.appendChild(card);
+        const qBox = document.getElementById(`q-box-${rIdx}`);
+        rule.q.forEach((qObj, qIdx) => {
+            const qDiv = document.createElement('div');
+            qDiv.style.marginBottom = "20px";
+            qDiv.innerHTML = `<p><b>${qIdx+1}.</b> ${qObj.q}</p><div class="opt-grid" id="opts-${rIdx}-${qIdx}"></div>`;
+            qBox.appendChild(qDiv);
+            const grid = document.getElementById(`opts-${rIdx}-${qIdx}`);
+            qObj.a.forEach((opt, oIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const btns = grid.querySelectorAll('.opt-btn');
+                    btns.forEach(b => b.disabled = true);
+                    if(oIdx === qObj.c) btn.classList.add('correct');
+                    else {
+                        btn.classList.add('wrong');
+                        btns[qObj.c].classList.add('correct');
+                    }
+                };
+                grid.appendChild(btn);
+            });
+        });
+    });
+}
+renderC1();
+</script>
+</body>
+</html>
