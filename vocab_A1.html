@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A1 Vocabulary - 150 Words - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #3498db; --dark: #2c3e50; --light: #f4f7f6; --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--light); padding-top: 80px; }
+
+        /* HƏMİŞƏ GÖRÜNƏN SABİT MENYU */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; background: var(--white);
+            padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center; z-index: 10000;
+        }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .logo-text { font-weight: 700; color: var(--dark); }
+
+        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        .page-title { text-align: center; margin-bottom: 30px; color: var(--dark); }
+
+        /* LÜĞƏT CƏDVƏLİ */
+        .vocab-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--primary); color: white; padding: 15px; text-align: left; position: sticky; top: 70px; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f9f9f9; }
+
+        /* SƏSLƏNDİRMƏ DÜYMƏLƏRİ */
+        .audio-btns { display: flex; gap: 10px; }
+        .speak-btn { 
+            border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; 
+            color: white; font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 0.85rem;
+        }
+        .btn-slow { background: #e67e22; }
+        .btn-normal { background: #2ecc71; }
+        .speak-btn:hover { opacity: 0.8; }
+        .speak-btn i { font-size: 1rem; }
+
+        @media (max-width: 600px) {
+            th:nth-child(2), td:nth-child(2) { display: none; } /* Mobildə yer qazanmaq üçün */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="back-btn"><i class="fas fa-home"></i> Ana Menyuya Qayıt</a>
+    <div class="logo-text">A1 Level Vocabulary</div>
+</header>
+
+<div class="container">
+    <h1 class="page-title">A1 Səviyyəsi: 150 Əsas Söz</h1>
+    
+    <div class="vocab-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Söz (English)</th>
+                    <th>Tərcümə (Azerbaijani)</th>
+                    <th>Səsləndirmə</th>
+                </tr>
+            </thead>
+            <tbody id="vocab-table-body">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // A1 Səviyyəsi üçün 150 sözlük siyahının başlanğıcı (Bura istədiyin qədər əlavə edə bilərsən)
+    const wordsA1 = [
+        {en: "Always", az: "Həmişə"}, {en: "Beautiful", az: "Gözəl"}, {en: "Big", az: "Böyük"},
+        {en: "Book", az: "Kitab"}, {en: "Breakfast", az: "Səhər yeməyi"}, {en: "Brother", az: "Qardaş"},
+        {en: "City", az: "Şəhər"}, {en: "Clean", az: "Təmiz"}, {en: "Cold", az: "Soyuq"},
+        {en: "Daily", az: "Gündəlik"}, {en: "Daughter", az: "Qız (övlad)"}, {en: "Day", az: "Gün"},
+        {en: "Drink", az: "İçmək"}, {en: "Eat", az: "Yemək"}, {en: "Family", az: "Ailə"},
+        {en: "Friend", az: "Dost"}, {en: "Garden", az: "Bağça"}, {en: "Happy", az: "Xoşbəxt"},
+        {en: "House", az: "Ev"}, {en: "Important", az: "Vacib"}, {en: "Kitchen", az: "Mətbəx"},
+        {en: "Learn", az: "Öyrənmək"}, {en: "Listen", az: "Dinləmək"}, {en: "Morning", az: "Səhər"},
+        {en: "Name", az: "Ad"}, {en: "New", az: "Yeni"}, {en: "Night", az: "Gecə"},
+        {en: "Often", az: "Tez-tez"}, {en: "Paper", az: "Kağız"}, {en: "Question", az: "Sual"},
+        {en: "Read", az: "Oxumaq"}, {en: "School", az: "Məktəb"}, {en: "Sister", az: "Bacı"},
+        {en: "Small", az: "Kiçik"}, {en: "Study", az: "Oxumaq (təhsil)"}, {en: "Table", az: "Masa"},
+        {en: "Teacher", az: "Müəllim"}, {en: "Time", az: "Vaxt"}, {en: "Under", az: "Altında"},
+        {en: "Village", az: "Kənd"}, {en: "Water", az: "Su"}, {en: "Week", az: "Həftə"},
+        {en: "Write", az: "Yazmaq"}, {en: "Year", az: "İl"}, {en: "Young", az: "Gənc"},
+        // Siyahını 150-ə tamamlamaq üçün bura eyni formatda yeni sözlər əlavə et
+    ];
+
+    const tableBody = document.getElementById('vocab-table-body');
+
+    function displayWords() {
+        wordsA1.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${item.en}</strong></td>
+                <td>${item.az}</td>
+                <td>
+                    <div class="audio-btns">
+                        <button class="speak-btn btn-slow" onclick="speak('${item.en}', 0.5)">
+                            <i class="fas fa-turtle"></i> Asta
+                        </button>
+                        <button class="speak-btn btn-normal" onclick="speak('${item.en}', 1.0)">
+                            <i class="fas fa-volume-up"></i> Normal
+                        </button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function speak(text, rate) {
+        // Mövcud səsləndirməni dayandır
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US'; // İngilis dili
+        utterance.rate = rate;    // Sürət (0.5 asta, 1.0 normal)
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Səhifə yüklənəndə sözləri göstər
+    displayWords();
+</script>
+
+</body>
+</html>
