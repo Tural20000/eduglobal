@@ -3,71 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level Placement Test - EduGlobal</title>
+    <title>Placement Test - EduGlobal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; padding: 20px; color: #333; }
-        .test-container { max-width: 700px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #3498db; }
-        .question { margin-bottom: 25px; display: none; }
+        :root { --primary: #3498db; --bg: #f4f7f6; --card: #ffffff; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-top: 80px; }
+        
+        /* HƏMİŞƏ GÖRÜNƏN ÜST MENYU */
+        .fixed-nav {
+            position: fixed; top: 0; left: 0; width: 100%; background: var(--card);
+            padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center; z-index: 9999; box-sizing: border-box;
+        }
+        .back-home { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+        .test-container { max-width: 700px; margin: 20px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .question { display: none; }
         .question.active { display: block; }
-        .options-grid { display: grid; gap: 10px; margin-top: 15px; }
-        .opt-btn { padding: 12px; border: 2px solid #eee; border-radius: 10px; background: none; cursor: pointer; text-align: left; transition: 0.3s; }
-        .opt-btn:hover { border-color: #3498db; background: #ebf5fb; }
-        .progress { height: 10px; background: #eee; border-radius: 5px; margin-bottom: 30px; }
-        .progress-fill { height: 100%; background: #3498db; width: 0%; transition: 0.4s; }
+        .options-grid { display: grid; gap: 10px; margin-top: 20px; }
+        .opt-btn { padding: 15px; border: 2px solid #eee; border-radius: 12px; background: none; cursor: pointer; text-align: left; font-family: inherit; transition: 0.3s; }
+        .opt-btn:hover { border-color: var(--primary); background: #f0f9ff; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.4s; }
         #result-box { text-align: center; display: none; }
-        .level-badge { font-size: 2rem; font-weight: bold; color: #2ecc71; margin: 20px 0; }
+        .level-badge { font-size: 2.5rem; font-weight: bold; color: #2ecc71; margin: 20px 0; }
     </style>
 </head>
 <body>
 
+<div class="fixed-nav">
+    <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Ana Menyuya Qayıt</a>
+    <div style="font-weight: 700; color: #2c3e50;">EduGlobal Placement Test</div>
+</div>
+
 <div class="test-container">
     <div id="quiz-area">
-        <h1>Placement Test</h1>
-        <div class="progress"><div class="progress-fill" id="progress-bar"></div></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-bar"></div></div>
         <div id="questions-wrapper"></div>
     </div>
 
     <div id="result-box">
-        <h2>Test Bitdi!</h2>
-        <p>Sizin təxmini ingilis dili səviyyəniz:</p>
+        <h2>Test Tamamlandı!</h2>
+        <p>Sizin təxmini səviyyəniz:</p>
         <div class="level-badge" id="level-text">...</div>
         <p id="score-text"></p>
-        <a href="index.html" style="display:inline-block; margin-top:20px; color:#3498db; text-decoration:none; font-weight:600;">Ana Səhifəyə Qayıt</a>
+        <a href="index.html" class="back-home" style="justify-content: center; margin-top: 20px;">Kurslara Başla</a>
     </div>
 </div>
 
 <script>
 const quizData = [
-    // A1 - 5 Sual
-    {q: "Hello, what ___ your name?", a: ["is", "are", "am", "be"], c: 0},
-    {q: "I ___ to the gym every Monday.", a: ["goes", "go", "going", "gone"], c: 1},
-    {q: "There ___ a book on the table.", a: ["is", "are", "am", "be"], c: 0},
-    {q: "___ you like pizza?", a: ["Does", "Do", "Are", "Is"], c: 1},
-    {q: "Where ___ you from?", a: ["is", "am", "are", "be"], c: 2},
-    // B1 - 5 Sual
-    {q: "I ___ English for three years now.", a: ["study", "am studying", "have been studying", "studied"], c: 2},
-    {q: "If it rains tomorrow, we ___ go to the park.", a: ["don't", "won't", "wouldn't", "didn't"], c: 1},
-    {q: "This is the man ___ car was stolen.", a: ["who", "which", "whose", "whom"], c: 2},
-    {q: "I'm not used to ___ up so early.", a: ["get", "getting", "got", "gets"], c: 1},
-    {q: "The movie ___ by the time we got there.", a: ["started", "has started", "had started", "was starting"], c: 2},
-    // C1 - 5 Sual
-    {q: "Hardly ___ the office when my phone rang.", a: ["I had left", "had I left", "I left", "did I leave"], c: 1},
-    {q: "I'd rather you ___ tell anyone about this.", a: ["don't", "didn't", "not", "won't"], c: 1},
-    {q: "It's high time you ___ a job.", a: ["found", "find", "finding", "to find"], c: 0},
-    {q: "Were it not for your help, I ___ in trouble now.", a: ["would be", "will be", "had been", "am"], c: 0},
-    {q: "Not until the next morning ___ the truth.", a: ["did she find out", "she found out", "had she find out", "she did find out"], c: 0},
-    // General/Mix - 5 Sual
-    {q: "She suggested ___ to the cinema.", a: ["go", "to go", "going", "goes"], c: 2},
-    {q: "By next year, I ___ my degree.", a: ["will finish", "will have finished", "finish", "am finishing"], c: 1},
-    {q: "The cake smells ___.", a: ["deliciously", "delicious", "more delicious", "most delicious"], c: 1},
-    {q: "You ___ better see a doctor.", a: ["would", "had", "should", "did"], c: 1},
-    {q: "Despite ___ tired, he kept working.", a: ["being", "he was", "he is", "be"], c: 0}
+    // A1 Level
+    {q: "I ___ a student.", a: ["is", "am", "are", "be"], c: 1},
+    {q: "She ___ to school every day.", a: ["go", "goes", "going", "gone"], c: 1},
+    {q: "Do you like coffee? - Yes, I ___.", a: ["am", "do", "like", "does"], c: 1},
+    {q: "Where ___ they live?", a: ["do", "does", "is", "are"], c: 0},
+    {q: "This is ___ apple.", a: ["a", "an", "the", "some"], c: 1},
+    // B1 Level
+    {q: "I ___ my homework yet.", a: ["didn't finish", "haven't finished", "don't finish", "am not finishing"], c: 1},
+    {q: "If I ___ more time, I would travel.", a: ["have", "had", "will have", "would have"], c: 1},
+    {q: "English ___ all over the world.", a: ["speaks", "is spoken", "is speaking", "has spoken"], c: 1},
+    {q: "He told me that he ___ before.", a: ["never saw", "has never seen", "had never seen", "is never seeing"], c: 2},
+    {q: "I am looking forward to ___ you.", a: ["see", "seeing", "saw", "be seen"], c: 1},
+    // C1 Level
+    {q: "Hardly ___ entered the room when the lights went out.", a: ["I had", "had I", "did I", "I did"], c: 1},
+    {q: "I'd rather you ___ smoke in here.", a: ["don't", "not", "didn't", "won't"], c: 2},
+    {q: "It's time we ___.", a: ["leave", "left", "leaving", "to leave"], c: 1},
+    {q: "Were it not for your help, I ___ successful.", a: ["wouldn't be", "am not", "won't be", "haven't been"], c: 0},
+    {q: "She is said ___ the best in her field.", a: ["to be", "being", "is", "that she is"], c: 0},
+    // General
+    {q: "Despite ___ the weather, they went out.", a: ["bad", "the bad", "being bad", "the badness of"], c: 1},
+    {q: "He is ___ tallest boy in class.", a: ["a", "an", "the", "-"], c: 2},
+    {q: "I suggest ___ a doctor.", a: ["to see", "see", "seeing", "saw"], c: 2},
+    {q: "I've been working here ___ 2010.", a: ["for", "since", "during", "ago"], c: 1},
+    {q: "You ___ better hurry up!", a: ["should", "had", "would", "must"], c: 1}
 ];
 
-let currentQ = 0;
-let score = 0;
+let currentQ = 0; let score = 0;
 
 function initQuiz() {
     const wrapper = document.getElementById('questions-wrapper');
@@ -84,19 +97,12 @@ function initQuiz() {
 
 function next(choice) {
     if(choice === quizData[currentQ].c) score++;
-    
     const qs = document.querySelectorAll('.question');
     qs[currentQ].classList.remove('active');
     currentQ++;
-    
-    const progress = (currentQ / quizData.length) * 100;
-    document.getElementById('progress-bar').style.width = `${progress}%`;
-
-    if(currentQ < quizData.length) {
-        qs[currentQ].classList.add('active');
-    } else {
-        showResult();
-    }
+    document.getElementById('progress-bar').style.width = `${(currentQ / quizData.length) * 100}%`;
+    if(currentQ < quizData.length) { qs[currentQ].classList.add('active'); } 
+    else { showResult(); }
 }
 
 function showResult() {
@@ -104,16 +110,10 @@ function showResult() {
     const box = document.getElementById('result-box');
     const levelText = document.getElementById('level-text');
     box.style.display = 'block';
-
-    let level = "";
-    if(score <= 7) level = "A1 (Beginner)";
-    else if(score <= 14) level = "B1 (Intermediate)";
-    else level = "C1 (Advanced)";
-
+    let level = score <= 7 ? "A1 (Beginner)" : score <= 14 ? "B1 (Intermediate)" : "C1 (Advanced)";
     levelText.innerText = level;
-    document.getElementById('score-text').innerText = `Düzgün cavab: ${score} / 20`;
+    document.getElementById('score-text').innerText = `Doğru: ${score} / 20`;
 }
-
 initQuiz();
 </script>
 </body>
