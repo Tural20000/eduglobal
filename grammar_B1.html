@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGlobal - B1 Intermediate Grammar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #3498db; --secondary: #2c3e50; --success: #2ecc71; --danger: #e74c3c; --bg: #f4f7f6; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .rule-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 40px; border-left: 8px solid #e67e22; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .formula { background: #fff5e6; padding: 12px; border-radius: 8px; font-family: monospace; color: #d35400; font-weight: bold; margin: 15px 0; border: 1px dashed #e67e22; }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .opt-btn { padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: 0.2s; text-align: left; }
+        .correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
+        h1 { text-align: center; color: var(--secondary); }
+        h2 { color: #e67e22; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>B1 Intermediate Grammar (15 Qayda / 150 Sual)</h1>
+    <div id="b1-content"></div>
+</div>
+
+<script>
+const b1Data = [
+    { t: "1. Present Perfect Simple", d: "Keçmişdə başlamış və hələ də davam edən və ya nəticəsi görünən hərəkətlər.", f: "Subject + have/has + Past Participle (V3)", q: [
+        {q: "I ___ London twice.", a: ["have visited", "visited", "has visited", "visit"], c: 0},
+        {q: "She ___ her homework yet.", a: ["hasn't finished", "didn't finish", "haven't finished", "not finish"], c: 0},
+        {q: "___ you ever eaten sushi?", a: ["Have", "Did", "Has", "Do"], c: 0},
+        {q: "We have lived here ___ 2010.", a: ["since", "for", "during", "from"], c: 0},
+        {q: "They ___ just left the office.", a: ["have", "has", "did", "were"], c: 0},
+        {q: "How long ___ you known him?", a: ["have", "has", "did", "do"], c: 0},
+        {q: "He ___ never been abroad.", a: ["has", "have", "is", "was"], c: 0},
+        {q: "I have stayed here ___ three days.", a: ["for", "since", "while", "ago"], c: 0},
+        {q: "Where ___ she gone?", a: ["has", "have", "is", "did"], c: 0},
+        {q: "We ___ this movie already.", a: ["have seen", "saw", "see", "has seen"], c: 0}
+    ]},
+    { t: "2. Passive Voice (Present & Past)", d: "İş görən yox, hərəkətin üzərində icra olunduğu obyekt vacib olduqda işlənir.", f: "Be (am/is/are/was/were) + V3", q: [
+        {q: "The room ___ every day.", a: ["is cleaned", "cleans", "is clean", "cleaned"], c: 0},
+        {q: "This book ___ in 1950.", a: ["was written", "wrote", "is written", "was write"], c: 0},
+        {q: "Rice ___ in China.", a: ["is grown", "grows", "are grown", "was grow"], c: 0},
+        {q: "The windows ___ yesterday.", a: ["were washed", "was washed", "are washed", "washed"], c: 0},
+        {q: "My car ___ at the moment.", a: ["is being repaired", "is repaired", "was repaired", "repairs"], c: 0},
+        {q: "Letters ___ by the postman.", a: ["are delivered", "deliver", "is delivered", "delivers"], c: 0},
+        {q: "The thief ___ by the police last night.", a: ["was caught", "is caught", "caught", "were caught"], c: 0},
+        {q: "The dinner ___ now.", a: ["is being cooked", "is cooked", "was cooked", "cooks"], c: 0},
+        {q: "English ___ all over the world.", a: ["is spoken", "spoke", "speaks", "are spoken"], c: 0},
+        {q: "This house ___ by my father.", a: ["was built", "built", "is built", "builds"], c: 0}
+    ]},
+    { t: "3. Past Continuous", d: "Keçmişdə müəyyən bir zamanda davam edən hərəkətləri təsvir edir.", f: "Was/Were + V-ing", q: [
+        {q: "I ___ TV when you called.", a: ["was watching", "watched", "am watching", "were watching"], c: 0},
+        {q: "What ___ they doing at 10 PM?", a: ["were", "was", "did", "are"], c: 0},
+        {q: "She ___ not sleeping at noon.", a: ["was", "were", "is", "did"], c: 0},
+        {q: "While I ___ cooking, the lights went out.", a: ["was", "were", "am", "did"], c: 0},
+        {q: "They ___ playing football in the rain.", a: ["were", "was", "are", "did"], c: 0},
+        {q: "It ___ snowing when we left.", a: ["was", "were", "is", "did"], c: 0},
+        {q: "___ you studying yesterday evening?", a: ["Were", "Was", "Did", "Are"], c: 0},
+        {q: "He ___ driving fast when the accident happened.", a: ["was", "were", "did", "is"], c: 0},
+        {q: "We ___ having dinner at 8.", a: ["were", "was", "are", "did"], c: 0},
+        {q: "Why ___ she crying?", a: ["was", "were", "did", "is"], c: 0}
+    ]},
+    { t: "4. Modal Verbs (Advice & Obligation)", d: "Məsləhət (should) və məcburiyyət (must/have to) bildirir.", f: "Modal + V1", q: [
+        {q: "You ___ see a doctor.", a: ["should", "musts", "should to", "ought"], c: 0},
+        {q: "I ___ wear a uniform at work (qaydadır).", a: ["have to", "must", "should", "may"], c: 0},
+        {q: "You ___ smoke here. It's forbidden.", a: ["mustn't", "don't have to", "shouldn't", "can't"], c: 0},
+        {q: "___ I help you?", a: ["Shall", "Must", "Will", "Should"], c: 0},
+        {q: "He ___ study harder for the exam.", a: ["should", "must", "have to", "has to"], c: 0},
+        {q: "We ___ leave now or we'll be late.", a: ["must", "have to", "should", "ought"], c: 0},
+        {q: "You ___ wash the dishes. I'll do it.", a: ["don't have to", "mustn't", "shouldn't", "can't"], c: 0},
+        {q: "Drivers ___ stop at red lights.", a: ["must", "should", "may", "can"], c: 0},
+        {q: "You ___ be more careful.", a: ["should", "must", "ought", "have to"], c: 1},
+        {q: "Does she ___ work on Saturdays?", a: ["have to", "has to", "must", "should"], c: 0}
+    ]},
+    { t: "5. Conditionals Type 1", d: "Gələcəkdə olması real olan hadisələr.", f: "If + Present Simple, Will + V1", q: [
+        {q: "If it rains, I ___ at home.", a: ["will stay", "stay", "stayed", "am stay"], c: 0},
+        {q: "If she ___ hard, she will pass.", a: ["studies", "study", "will study", "studied"], c: 0},
+        {q: "We will be late if we ___ now.", a: ["don't leave", "doesn't leave", "won't leave", "didn't leave"], c: 0},
+        {q: "If I see him, I ___ him.", a: ["will tell", "tell", "told", "am tell"], c: 0},
+        {q: "What ___ you do if you lose?", a: ["will", "do", "are", "did"], c: 0},
+        {q: "She will buy a car if she ___ enough money.", a: ["has", "have", "will have", "had"], c: 0},
+        {q: "If you ___ early, you'll find a seat.", a: ["arrive", "arrives", "will arrive", "arrived"], c: 0},
+        {q: "I ___ to the party if I'm tired.", a: ["won't go", "don't go", "not go", "haven't go"], c: 0},
+        {q: "If they ___ us, we will go.", a: ["invite", "invites", "will invite", "invited"], c: 0},
+        {q: "Will you help me if I ___ you?", a: ["ask", "asks", "will ask", "asked"], c: 0}
+    ]},
+    { t: "6. Relative Clauses (Who, Which, That)", d: "İnsanları (who) və əşyaları (which/that) təsvir etmək üçün istifadə olunur.", f: "Noun + Relative Pronoun + Clause", q: [
+        {q: "The man ___ lives next door is a doctor.", a: ["who", "which", "whose", "whom"], c: 0},
+        {q: "The movie ___ we watched was great.", a: ["that", "who", "whom", "where"], c: 0},
+        {q: "A baker is a person ___ makes bread.", a: ["who", "which", "where", "whose"], c: 0},
+        {q: "The car ___ he bought is very fast.", a: ["which", "who", "whom", "where"], c: 0},
+        {q: "I know a place ___ sells good coffee.", a: ["that", "who", "whom", "whose"], c: 0},
+        {q: "The woman ___ I met was very kind.", a: ["who", "which", "whose", "where"], c: 0},
+        {q: "Is this the book ___ you wanted?", a: ["that", "who", "where", "whom"], c: 0},
+        {q: "The children ___ live here are noisy.", a: ["who", "which", "where", "whose"], c: 0},
+        {q: "This is the dog ___ bit me.", a: ["that", "who", "whom", "where"], c: 0},
+        {q: "I like books ___ have a happy ending.", a: ["which", "who", "where", "whom"], c: 0}
+    ]},
+    { t: "7. Used to", d: "Keçmişdə olan, lakin indi artıq olmayan vərdişlər.", f: "Used to + V1", q: [
+        {q: "I ___ smoke, but I stopped.", a: ["used to", "use to", "used", "was used to"], c: 0},
+        {q: "Did you ___ live in Baku?", a: ["use to", "used to", "uses to", "using to"], c: 1},
+        {q: "He ___ be very shy.", a: ["used to", "use to", "was use to", "uses to"], c: 0},
+        {q: "We ___ play football every day.", a: ["used to", "use to", "are used to", "using to"], c: 0},
+        {q: "I didn't ___ like vegetables.", a: ["use to", "used to", "uses to", "using to"], c: 0},
+        {q: "___ she use to have long hair?", a: ["Did", "Does", "Was", "Has"], c: 0},
+        {q: "There ___ be a cinema here.", a: ["used to", "use to", "was used to", "uses to"], c: 0},
+        {q: "They ___ travel a lot.", a: ["used to", "use to", "are used to", "did used to"], c: 0},
+        {q: "I ___ enjoy school.", a: ["didn't use to", "used not to", "don't use to", "wasn't used to"], c: 0},
+        {q: "Did they ___ go to the same school?", a: ["use to", "used to", "uses to", "using to"], c: 0}
+    ]},
+    { t: "8. Gerunds and Infinitives", d: "Bəzi fellərdən sonra -ing (gerund), bəzilərindən sonra to+V (infinitive) gəlir.", f: "Verb + -ing / Verb + to + V", q: [
+        {q: "I enjoy ___ music.", a: ["listening to", "to listen", "listen", "listened"], c: 0},
+        {q: "She decided ___ a new car.", a: ["to buy", "buying", "buy", "bought"], c: 0},
+        {q: "I want ___ home.", a: ["to go", "going", "go", "gone"], c: 0},
+        {q: "He finished ___ his homework.", a: ["doing", "to do", "do", "done"], c: 0},
+        {q: "Avoid ___ junk food.", a: ["eating", "to eat", "eat", "eaten"], c: 0},
+        {q: "We hope ___ you soon.", a: ["to see", "seeing", "see", "saw"], c: 0},
+        {q: "Stop ___ so much noise!", a: ["making", "to make", "make", "made"], c: 0},
+        {q: "I promise ___ you.", a: ["to help", "helping", "help", "helped"], c: 0},
+        {q: "Suggest ___ a taxi.", a: ["taking", "to take", "take", "taken"], c: 0},
+        {q: "I'd like ___ a coffee.", a: ["to have", "having", "have", "had"], c: 0}
+    ]},
+    { t: "9. Reported Speech (Statements)", d: "Başqasının dediyi sözü dolayısı ilə ötürmək.", f: "Say/Tell + (that) + Backshift (Tense change)", q: [
+        {q: "He said, 'I am tired.' -> He said he ___ tired.", a: ["was", "is", "were", "been"], c: 0},
+        {q: "She said, 'I like tea.' -> She said she ___ tea.", a: ["liked", "likes", "like", "liking"], c: 1},
+        {q: "He told me he ___ help me.", a: ["would", "will", "can", "is"], c: 0},
+        {q: "They said they ___ finished.", a: ["had", "have", "has", "were"], c: 0},
+        {q: "She said she ___ to Baku twice.", a: ["had been", "has been", "was", "is"], c: 0},
+        {q: "He said he ___ call me later.", a: ["would", "will", "was", "did"], c: 0},
+        {q: "She told me she ___ English.", a: ["was studying", "is studying", "studies", "study"], c: 0},
+        {q: "They said they ___ late.", a: ["might be", "will be", "are", "have been"], c: 0},
+        {q: "He said he ___ his keys.", a: ["had lost", "has lost", "lost", "loses"], c: 0},
+        {q: "She said, 'I can swim.' -> She said she ___ swim.", a: ["could", "can", "would", "was"], c: 0}
+    ]},
+    { t: "10. Comparatives and Superlatives", d: "Müqayisə (er/more) və üstünlük (est/most) dərəcələri.", f: "adj+er than / the most+adj", q: [
+        {q: "Gold is ___ than silver.", a: ["more expensive", "expensiver", "expensive", "most expensive"], c: 0},
+        {q: "Russia is the ___ country.", a: ["largest", "larger", "large", "most large"], c: 0},
+        {q: "This test is ___ than the last one.", a: ["easier", "more easy", "easy", "easiest"], c: 0},
+        {q: "He is the ___ student in class.", a: ["best", "better", "good", "goodest"], c: 0},
+        {q: "A car is ___ than a bike.", a: ["faster", "fast", "fastest", "more fast"], c: 0},
+        {q: "It's the ___ movie I've ever seen.", a: ["worst", "worse", "bad", "badest"], c: 0},
+        {q: "She is ___ than her sister.", a: ["taller", "tall", "tallest", "more tall"], c: 0},
+        {q: "This is the ___ book in the shop.", a: ["most interesting", "more interesting", "interesting", "interestinger"], c: 0},
+        {q: "Summer is ___ than winter.", a: ["hotter", "hot", "hottest", "more hot"], c: 0},
+        {q: "He is ___ than me.", a: ["older", "old", "oldest", "more old"], c: 0}
+    ]},
+    { t: "11. Quantifiers (Much, Many, Little, Few)", d: "Sayılan və sayılmayan isimlərin miqdarı.", f: "Many/Few (Sayılan) | Much/Little (Sayılmayan)", q: [
+        {q: "I don't have ___ money.", a: ["much", "many", "few", "a few"], c: 0},
+        {q: "How ___ friends do you have?", a: ["many", "much", "little", "a little"], c: 0},
+        {q: "There is ___ milk in the fridge.", a: ["a little", "a few", "many", "few"], c: 0},
+        {q: "I have ___ books to read.", a: ["a few", "a little", "much", "any"], c: 0},
+        {q: "Do you need ___ help?", a: ["any", "many", "few", "a few"], c: 0},
+        {q: "There are ___ cars on the road today.", a: ["too many", "too much", "a little", "any"], c: 0},
+        {q: "He has ___ patience.", a: ["little", "few", "many", "a few"], c: 0},
+        {q: "How ___ coffee do you drink?", a: ["much", "many", "few", "little"], c: 0},
+        {q: "I know ___ people in this city.", a: ["a few", "a little", "much", "any"], c: 0},
+        {q: "There isn't ___ water left.", a: ["much", "many", "few", "a few"], c: 0}
+    ]},
+    { t: "12. Future Forms (Will vs Going to)", d: "Qəfil qərarlar (will) və əvvəlcədən planlaşdırılmış işlər (going to).", f: "Will + V1 / Am-is-are going to + V1", q: [
+        {q: "I think it ___ rain tomorrow.", a: ["will", "is going to", "goes", "rained"], c: 0},
+        {q: "Look at those clouds! It ___ rain.", a: ["is going to", "will", "rains", "is raining"], c: 0},
+        {q: "I ___ travel to Italy next summer (plan).", a: ["am going to", "will", "travel", "travelled"], c: 0},
+        {q: "The phone is ringing. I ___ answer it.", a: ["will", "am going to", "answer", "answering"], c: 1},
+        {q: "What ___ you do this weekend?", a: ["are going to", "will", "do", "did"], c: 0},
+        {q: "I ___ meet him at 5 PM.", a: ["am going to", "will", "meets", "met"], c: 0},
+        {q: "I'm sure you ___ pass the exam.", a: ["will", "are going to", "pass", "passes"], c: 0},
+        {q: "We ___ have a party on Saturday.", a: ["are going to", "will", "have", "had"], c: 0},
+        {q: "I ___ buy some milk. (qəfil qərar)", a: ["will", "am going to", "buy", "buying"], c: 0},
+        {q: "She ___ be 20 next month.", a: ["will", "is going to", "is", "be"], c: 0}
+    ]},
+    { t: "13. Question Tags", d: "Təsdiq cümləyə inkar, inkar cümləyə təsdiq sual əlavə etmək.", f: "Clause, (Auxiliary + Not) + Pronoun?", q: [
+        {q: "You are a student, ___?", a: ["aren't you", "are you", "don't you", "do you"], c: 0},
+        {q: "She likes pizza, ___?", a: ["doesn't she", "does she", "isn't she", "is she"], c: 0},
+        {q: "He didn't call, ___?", a: ["did he", "didn't he", "was he", "does he"], c: 0},
+        {q: "We can go, ___?", a: ["can't we", "can we", "don't we", "aren't we"], c: 0},
+        {q: "They have finished, ___?", a: ["haven't they", "have they", "didn't they", "don't they"], c: 0},
+        {q: "It's cold, ___?", a: ["isn't it", "is it", "doesn't it", "it is"], c: 0},
+        {q: "You don't smoke, ___?", a: ["do you", "don't you", "are you", "aren't you"], c: 0},
+        {q: "He will come, ___?", a: ["won't he", "will he", "doesn't he", "isn't he"], c: 0},
+        {q: "There is a park, ___?", a: ["isn't there", "is there", "doesn't there", "it isn't"], c: 0},
+        {q: "Let's go, ___?", a: ["shall we", "will we", "don't we", "won't we"], c: 0}
+    ]},
+    { t: "14. Reflexive Pronouns", d: "Hərəkətin icraçısı ilə ona məruz qalan eyni olduqda (özüm, özün).", f: "-self / -selves", q: [
+        {q: "I cut ___ while cooking.", a: ["myself", "me", "my", "mine"], c: 0},
+        {q: "She taught ___ to play piano.", a: ["herself", "her", "hers", "she"], c: 0},
+        {q: "They enjoyed ___ at the party.", a: ["themselves", "them", "their", "theirs"], c: 0},
+        {q: "He looks at ___ in the mirror.", a: ["himself", "him", "his", "he"], c: 0},
+        {q: "We fixed the car ___.", a: ["ourselves", "us", "our", "ours"], c: 0},
+        {q: "Did you do it ___?", a: ["yourself", "you", "your", "yours"], c: 0},
+        {q: "The cat cleaned ___.", a: ["itself", "it", "its", "it's"], c: 0},
+        {q: "You both should help ___.", a: ["yourselves", "yourself", "you", "yours"], c: 0},
+        {q: "I live by ___.", a: ["myself", "me", "my", "mine"], c: 0},
+        {q: "She made the cake ___.", a: ["herself", "her", "hers", "she"], c: 0}
+    ]},
+    { t: "15. Past Perfect Simple", d: "Keçmişdə baş vermiş iki hərəkətdən daha əvvəl olanı.", f: "Had + V3", q: [
+        {q: "When I arrived, they ___ left.", a: ["had", "have", "were", "did"], c: 0},
+        {q: "She had ___ the film before.", a: ["seen", "see", "saw", "seeing"], c: 0},
+        {q: "I realized I ___ my keys.", a: ["had lost", "lost", "have lost", "lose"], c: 0},
+        {q: "The train ___ already started.", a: ["had", "has", "was", "did"], c: 0},
+        {q: "We had ___ dinner when he came.", a: ["finished", "finish", "finishing", "finishes"], c: 0},
+        {q: "Had you ___ there before?", a: ["been", "be", "was", "were"], c: 0},
+        {q: "He said he ___ her once.", a: ["had met", "met", "has met", "meets"], c: 0},
+        {q: "I hadn't ___ him for ages.", a: ["seen", "see", "saw", "seeing"], c: 0},
+        {q: "Everything ___ been prepared.", a: ["had", "has", "was", "did"], c: 0},
+        {q: "After he had ___ his work, he went out.", a: ["done", "did", "do", "doing"], c: 0}
+    ]}
+];
+
+function renderB1() {
+    const ctx = document.getElementById('b1-content');
+    b1Data.forEach((rule, rIdx) => {
+        const card = document.createElement('div');
+        card.className = 'rule-card';
+        card.innerHTML = `
+            <h2>${rule.t}</h2>
+            <p>${rule.d}</p>
+            <div class="formula">Quruluş: ${rule.f}</div>
+            <div id="q-box-${rIdx}"></div>
+        `;
+        ctx.appendChild(card);
+        const qBox = document.getElementById(`q-box-${rIdx}`);
+        rule.q.forEach((qObj, qIdx) => {
+            const qDiv = document.createElement('div');
+            qDiv.style.marginBottom = "20px";
+            qDiv.innerHTML = `<p><b>${qIdx+1}.</b> ${qObj.q}</p><div class="opt-grid" id="opts-${rIdx}-${qIdx}"></div>`;
+            qBox.appendChild(qDiv);
+            const grid = document.getElementById(`opts-${rIdx}-${qIdx}`);
+            qObj.a.forEach((opt, oIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const btns = grid.querySelectorAll('.opt-btn');
+                    btns.forEach(b => b.disabled = true);
+                    if(oIdx === qObj.c) btn.classList.add('correct');
+                    else {
+                        btn.classList.add('wrong');
+                        btns[qObj.c].classList.add('correct');
+                    }
+                };
+                grid.appendChild(btn);
+            });
+        });
+    });
+}
+renderB1();
+</script>
+
+</body>
+</html>
