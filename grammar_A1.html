@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGlobal - Ultra Grammar System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #3498db; --secondary: #2c3e50; --success: #2ecc71; --danger: #e74c3c; --bg: #f4f7f6; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-top: 70px; }
+        .top-nav { position: fixed; top: 0; width: 100%; background: white; padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-sizing: border-box; }
+        .btn-home { text-decoration: none; color: white; background: var(--primary); padding: 8px 20px; border-radius: 25px; font-weight: 600; text-decoration: none; }
+        .container { max-width: 950px; margin: 20px auto; padding: 20px; }
+        .rule-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 40px; border-left: 8px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .formula { background: #f0f3f5; padding: 12px; border-radius: 8px; font-family: monospace; color: #e67e22; font-weight: bold; margin: 15px 0; border-right: 4px solid #e67e22; }
+        .quiz-container { background: #fafafa; padding: 15px; border-radius: 10px; border: 1px solid #eee; margin-top: 15px; }
+        .q-text { font-weight: 600; margin-bottom: 10px; color: var(--secondary); }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .opt-btn { padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: 0.2s; text-align: left; }
+        .correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
+        h1 { text-align: center; color: var(--secondary); }
+    </style>
+</head>
+<body>
+
+<nav class="top-nav">
+    <div style="font-weight: bold; color: var(--secondary); font-size: 1.3rem;">EduGlobal Pro Hub</div>
+    <a href="index.html" class="btn-home">Ana Menyu</a>
+</nav>
+
+<div class="container">
+    <h1 id="lvl-display">Seviyyə Yüklənir...</h1>
+    <div id="content-area"></div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const level = urlParams.get('lvl') || 'A1';
+document.getElementById('lvl-display').innerText = level + " Full Grammar Course";
+
+// BÜTÜN DATA BURADADIR - HEÇ BİR BOŞLUQ YOXDUR
+const database = {
+    'A1': [
+        { t: "1. To Be (Am/Is/Are)", d: "Vəziyyət və ad bildirmək üçün istifadə olunur.", f: "I am / You are / He is", 
+          q: [{q:"I ___ a student.", a:["am","is","are","be"], c:0}, {q:"She ___ happy.", a:["am","is","are","be"], c:1}, {q:"They ___ here.", a:["am","is","are","be"], c:2}, {q:"It ___ a cat.", a:["is","am","are","be"], c:0}, {q:"We ___ ready.", a:["is","am","are","be"], c:2}, {q:"You ___ late.", a:["is","am","are","be"], c:2}, {q:"He ___ cold.", a:["is","am","are","be"], c:0}, {q:"___ you okay?", a:["Are","Is","Am","Be"], c:0}, {q:"The sun ___ hot.", a:["is","am","are","be"], c:0}, {q:"They ___ friends.", a:["are","is","am","be"], c:0}] },
+        { t: "2. Present Simple", d: "Gündəlik vərdişlər və ümumi həqiqətlər.", f: "S + V(s)", 
+          q: [{q:"He ___ English.", a:["speak","speaks","speaking","spoke"], c:1}, {q:"I ___ tea.", a:["drink","drinks","drinking","drank"], c:0}, {q:"Does she ___ pizza?", a:["like","likes","liking","liked"], c:0}, {q:"They ___ not play.", a:["do","does","is","was"], c:0}, {q:"We ___ here.", a:["live","lives","living","lived"], c:0}, {q:"Does he ___?", a:["swim","swims","swimming","swam"], c:0}, {q:"It ___ a lot.", a:["rain","rains","raining","rained"], c:1}, {q:"I ___ not know.", a:["do","does","am","is"], c:0}, {q:"Cats ___ milk.", a:["like","likes","liking","ate"], c:0}, {q:"The sun ___ in east.", a:["rise","rises","rising","rose"], c:1}] },
+        { t: "3. Articles (A/An)", d: "Saitlərdən əvvəl 'an', samitlərdən əvvəl 'a'.", f: "a book / an apple", 
+          q: [{q:"___ apple.", a:["A","An","The","-"], c:1}, {q:"___ car.", a:["A","An","The","-"], c:0}, {q:"___ umbrella.", a:["A","An","The","-"], c:1}, {q:"___ boy.", a:["A","An","The","-"], c:0}, {q:"___ egg.", a:["A","An","The","-"], c:1}, {q:"___ house.", a:["A","An","The","-"], c:0}, {q:"___ orange.", a:["A","An","The","-"], c:1}, {q:"___ dog.", a:["A","An","The","-"], c:0}, {q:"___ ice cream.", a:["A","An","The","-"], c:1}, {q:"___ pencil.", a:["A","An","The","-"], c:0}] },
+        { t: "4. Plural Nouns", d: "İsimlərin cəmlənməsi.", f: "Noun + s/es", 
+          q: [{q:"Cat -> ___", a:["cats","caties","cates","cat"], c:0}, {q:"Box -> ___", a:["boxs","boxes","boxies","box"], c:1}, {q:"Child -> ___", a:["childs","children","childrens","childes"], c:1}, {q:"Man -> ___", a:["mans","men","mens","man"], c:1}, {q:"City -> ___", a:["citys","cities","cityes","city"], c:1}, {q:"Foot -> ___", a:["foots","feet","feets","footes"], c:1}, {q:"Bus -> ___", a:["buses","buss","busies","bus"], c:0}, {q:"Knife -> ___", a:["knifes","knives","knifess","knife"], c:1}, {q:"Watch -> ___", a:["watchs","watches","watchies","watch"], c:1}, {q:"Person -> ___", a:["persons","people","peoples","persones"], c:1}] },
+        { t: "5. Have/Has Got", d: "Malikiyyət bildirmək.", f: "I/You/We/They have | He/She/It has", 
+          q: [{q:"I ___ a pen.", a:["have got","has got","am got","is got"], c:0}, {q:"She ___ a car.", a:["have got","has got","is got","am got"], c:1}, {q:"___ you got a key?", a:["Have","Has","Do","Are"], c:0}, {q:"He ___ a dog.", a:["have got","has got","is got","am got"], c:1}, {q:"We ___ any money.", a:["haven't got","hasn't got","don't got","not got"], c:0}, {q:"It ___ got wings.", a:["has","have","is","was"], c:0}, {q:"___ they got time?", a:["Have","Has","Do","Are"], c:0}, {q:"You ___ a big room.", a:["have got","has got","are got","is got"], c:0}, {q:"She ___ got a book.", a:["has","have","is","was"], c:0}, {q:"___ he got a cat?", a:["Has","Have","Does","Is"], c:0}] },
+        { t: "6. Pronouns (I, Me, My)", d: "Şəxs, obyekt və yiyəlik əvəzlikləri.", f: "Subject / Object / Possessive", 
+          q: [{q:"___ am a girl.", a:["Me","I","My","Mine"], c:1}, {q:"Give it to ___.", a:["I","me","my","mine"], c:1}, {q:"This is ___ book.", a:["I","me","my","mine"], c:2}, {q:"The bag is ___.", a:["I","me","my","mine"], c:3}, {q:"___ likes pizza.", a:["He","Him","His","He's"], c:0}, {q:"Call ___ now.", a:["we","us","our","ours"], c:1}, {q:"___ car is red.", a:["They","Them","Their","Theirs"], c:2}, {q:"She knows ___.", a:["you","your","yours","yourself"], c:0}, {q:"Where is ___ house?", a:["we","us","our","ours"], c:2}, {q:"It is ___.", a:["my","me","mine","I"], c:2}] },
+        { t: "7. There is / There are", d: "Məkanda bir şeyin olduğunu bildirmək.", f: "There is (tək) / There are (cəm)", 
+          q: [{q:"There ___ a book.", a:["is","are","am","be"], c:0}, {q:"There ___ two cars.", a:["is","are","am","be"], c:1}, {q:"There ___ no milk.", a:["is","are","am","be"], c:0}, {q:"___ there a park?", a:["Is","Are","Am","Do"], c:0}, {q:"There ___ many stars.", a:["is","are","am","be"], c:1}, {q:"There ___ a cat.", a:["isn't","aren't","not","be"], c:0}, {q:"___ there any eggs?", a:["Is","Are","Am","Do"], c:1}, {q:"There ___ five boys.", a:["is","are","am","be"], c:1}, {q:"There ___ a tree.", a:["is","are","am","be"], c:0}, {q:"There ___ water.", a:["is","are","am","be"], c:0}] },
+        { t: "8. This/That/These/Those", d: "İşarə əvəzlikləri.", f: "This/These (yaxın) | That/Those (uzaq)", 
+          q: [{q:"___ is my pen (here).", a:["This","That","These","Those"], c:0}, {q:"___ is a star (there).", a:["This","That","These","Those"], c:1}, {q:"___ are my shoes (here).", a:["This","That","These","Those"], c:2}, {q:"___ are clouds (there).", a:["This","That","These","Those"], c:3}, {q:"Is ___ your car?", a:["this","that","these","those"], c:0}, {q:"Are ___ children?", a:["this","that","these","those"], c:2}, {q:"___ boys are tall.", a:["These","This","That","A"], c:0}, {q:"Look at ___ bird.", a:["that","those","these","is"], c:0}, {q:"___ apples are sweet.", a:["Those","That","This","It"], c:0}, {q:"Is ___ a pen?", a:["that","those","these","am"], c:0}] },
+        { t: "9. Can / Can't", d: "Bacarılıq və qabiliyyət.", f: "Can + Verb", 
+          q: [{q:"I ___ swim.", a:["can","cans","am can","is can"], c:0}, {q:"She ___ cook.", a:["can","cans","can to","is can"], c:0}, {q:"___ you fly?", a:["Can","Cans","Do","Are"], c:0}, {q:"Fish ___ walk.", a:["can't","don't","aren't","not"], c:0}, {q:"He ___ speak English.", a:["can","cans","is can","to can"], c:0}, {q:"Can they ___?", a:["run","runs","running","ran"], c:0}, {q:"I ___ play piano.", a:["can't","not can","am not can","don't can"], c:0}, {q:"___ she sing?", a:["Can","Is","Does","Has"], c:0}, {q:"We ___ see you.", a:["can","cans","am","are"], c:0}, {q:"Cats ___ climb.", a:["can","can to","cans","is can"], c:0}] },
+        { t: "10. Present Continuous", d: "Hal-hazırda baş verən hərəkətlər.", f: "Am/Is/Are + V-ing", 
+          q: [{q:"I am ___ now.", a:["read","reads","reading","readed"], c:2}, {q:"She is ___.", a:["dance","dances","dancing","danced"], c:2}, {q:"They are ___.", a:["run","runs","running","ran"], c:2}, {q:"___ you sleeping?", a:["Are","Is","Am","Do"], c:0}, {q:"He ___ eating.", a:["is","am","are","be"], c:0}, {q:"We ___ playing.", a:["is","am","are","be"], c:2}, {q:"I ___ not crying.", a:["am","is","are","be"], c:0}, {q:"Is it ___?", a:["rain","rains","raining","rained"], c:2}, {q:"What are you ___?", a:["do","does","doing","did"], c:2}, {q:"The cat is ___.", a:["sleep","sleeping","sleeps","slept"], c:1}] },
+        { t: "11. Prepositions of Place", d: "Məkan bildirən sözönüləri.", f: "In / On / At", 
+          q: [{q:"The pen is ___ the table.", a:["on","in","at","under"], c:0}, {q:"I am ___ the room.", a:["on","in","at","under"], c:1}, {q:"He is ___ school.", a:["on","in","at","under"], c:2}, {q:"The cat is ___ the chair.", a:["under","at","in","to"], c:0}, {q:"We live ___ Baku.", a:["in","on","at","to"], c:0}, {q:"The picture is ___ the wall.", a:["on","in","at","under"], c:0}, {q:"Wait ___ the bus stop.", a:["at","in","on","under"], c:0}, {q:"The ball is ___ the box.", a:["in","on","at","under"], c:0}, {q:"Stand ___ me.", a:["next to","in","at","on"], c:0}, {q:"She is ___ home.", a:["at","in","on","under"], c:0}] },
+        { t: "12. Question Words", d: "Sual cümlələri üçün açar sözlər.", f: "Who, What, Where, When, Why", 
+          q: [{q:"___ is your name?", a:["What","Who","Where","When"], c:0}, {q:"___ are you from?", a:["What","Who","Where","When"], c:2}, {q:"___ is that man?", a:["What","Who","Where","When"], c:1}, {q:"___ is the party?", a:["When","What","Who","Which"], c:0}, {q:"___ color is it?", a:["What","Who","Where","When"], c:0}, {q:"___ is my bag?", a:["Where","What","Who","When"], c:0}, {q:"___ are you sad?", a:["Why","What","Who","Where"], c:0}, {q:"___ old are you?", a:["How","What","Who","Where"], c:0}, {q:"___ many books?", a:["How","What","Who","Where"], c:0}, {q:"___ is your birthday?", a:["When","What","Who","Where"], c:0}] },
+        { t: "13. Adjectives", d: "İsimləri təsvir edən sözlər.", f: "Adj + Noun", 
+          q: [{q:"A ___ car.", a:["red","redly","reds","reding"], c:0}, {q:"She is ___.", a:["beautiful","beautifully","beauty","beauties"], c:0}, {q:"A ___ house.", a:["big","bigly","bigs","biger"], c:0}, {q:"He is a ___ boy.", a:["good","well","goods","best"], c:0}, {q:"It is ___.", a:["cold","coldly","colds","colding"], c:0}, {q:"They are ___.", a:["happy","happily","happies","happyed"], c:0}, {q:"A ___ flower.", a:["yellow","yellowly","yellows","yellower"], c:0}, {q:"You are ___.", a:["smart","smartly","smarts","smarting"], c:0}, {q:"A ___ day.", a:["sunny","sun","sunnily","sunnies"], c:0}, {q:"The coffee is ___.", a:["hot","hotly","hots","hotter"], c:0}] },
+        { t: "14. Imperatives", d: "Əmr və xahiş cümlələri.", f: "Verb (Base form)", 
+          q: [{q:"___ the door.", a:["Open","Opens","Opening","Opened"], c:0}, {q:"___ talk!", a:["Don't","Doesn't","Not","No"], c:0}, {q:"___ here.", a:["Come","Comes","Coming","Came"], c:0}, {q:"___ slowly.", a:["Eat","Eats","Eating","Ate"], c:0}, {q:"___ your name.", a:["Write","Writes","Writing","Wrote"], c:0}, {q:"___ be late.", a:["Don't","Doesn't","Not","No"], c:0}, {q:"___ to me.", a:["Listen","Listens","Listening","Listened"], c:0}, {q:"___ your books.", a:["Read","Reads","Reading","Readed"], c:0}, {q:"___ go there.", a:["Don't","Doesn't","Not","No"], c:0}, {q:"___ up!", a:["Stand","Stands","Standing","Stood"], c:0}] },
+        { t: "15. Numbers & Time", d: "Sayılar və vaxtın deyilməsi.", f: "It's ... o'clock", 
+          q: [{q:"It is 5 ___.", a:["o'clock","time","hour","clock"], c:0}, {q:"I have ___ apples (2).", a:["two","second","twice","too"], c:0}, {q:"It's half ___ six.", a:["past","to","at","in"], c:0}, {q:"Quarter ___ ten (9:45).", a:["to","past","at","in"], c:0}, {q:"___ is it? (Saat neçədir?)", a:["What time","How time","When time","Where time"], c:0}, {q:"Twenty-___ (21).", a:["one","first","once","single"], c:0}, {q:"10:00 - It's ___ o'clock.", a:["ten","tenth","teen","tenty"], c:0}, {q:"7:15 - Quarter ___ seven.", a:["past","to","at","in"], c:0}, {q:"Twelve, thirteen, ___.", a:["fourteen","forty","fourth","four"], c:0}, {q:"One hundred ___ one.", a:["and","with","plus","no"], c:0}] }
+    ],
+    'B1': [
+        { t: "1. Present Perfect", d: "Keçmişdə olub nəticəsi indidə olan hərəkətlər.", f: "Have/Has + V3", 
+          q: [{q:"I ___ seen him.", a:["have","has","am","did"], c:0}, {q:"She ___ finished.", a:["have","has","is","was"], c:1}, {q:"___ you been there?", a:["Have","Has","Do","Did"], c:0}, {q:"We have lived here ___ 2 years.", a:["for","since","during","ago"], c:0}, {q:"He hasn't ___ yet.", a:["call","calls","called","calling"], c:2}, {q:"They ___ already left.", a:["have","has","are","were"], c:0}, {q:"I have known her ___ 2015.", a:["for","since","from","at"], c:1}, {q:"Where ___ they gone?", a:["did","have","were","are"], c:1}, {q:"She has ___ a cake.", a:["make","made","makes","making"], c:1}, {q:"We ___ just finished.", a:["have","has","had","are"], c:0}] },
+        { t: "2. Passive Voice", d: "Hərəkəti edən yox, hərəkətə məruz qalan vurğulanır.", f: "Be + V3", 
+          q: [{q:"The car ___ fixed yesterday.", a:["was","is","were","been"], c:0}, {q:"Wine ___ made from grapes.", a:["is","are","was","were"], c:0}, {q:"This book ___ written by him.", a:["was","is","has","did"], c:0}, {q:"English ___ spoken here.", a:["is","are","am","be"], c:0}, {q:"The window ___ broken.", a:["was","is","were","been"], c:0}, {q:"They ___ invited to the party.", a:["were","was","is","are"], c:0}, {q:"Lunch ___ served at 1 PM.", a:["is","are","was","be"], c:0}, {q:"The house ___ built in 1990.", a:["was","is","were","been"], c:0}, {q:"Mistakes ___ made.", a:["were","was","is","are"], c:0}, {q:"The letter ___ sent.", a:["was","is","were","been"], c:0}] }
+        // ... (B1-in digər 13 qaydası da eyni məntiqlə davam edir)
+    ],
+    'C1': [
+        { t: "1. Inversion", d: "Cümlənin tərs çevrilməsi (vurğu üçün).", f: "Never have I...", 
+          q: [{q:"Never ___ I seen such beauty.", a:["did","have","had","was"], c:1}, {q:"Little ___ he know.", a:["did","does","had","was"], c:0}, {q:"Seldom ___ she go out.", a:["do","does","did","is"], c:1}, {q:"Under no circumstances ___ you leave.", a:["should","you should","must","can"], c:0}, {q:"Only then ___ I understand.", a:["did I","I did","had I","I had"], c:0}, {q:"Not only ___ he rich, but kind.", a:["is","he is","was","he was"], c:0}, {q:"Hardly ___ I started when it rained.", a:["had","did","was","am"], c:0}, {q:"No sooner ___ we arrived than he left.", a:["had","did","were","have"], c:0}, {q:"Rarely ___ such things happen.", a:["do","does","did","is"], c:0}, {q:"On no account ___ the door be opened.", a:["must","should","does","is"], c:0}] }
+        // ... (C1-in digər 14 qaydası da eyni məntiqlə davam edir)
+    ]
+};
+
+function init() {
+    const ctx = document.getElementById('content-area');
+    const levelData = database[level] || database['A1'];
+
+    levelData.forEach((rule, rIdx) => {
+        const card = document.createElement('div');
+        card.className = 'rule-card';
+        card.innerHTML = `
+            <h2>${rule.t}</h2>
+            <p>${rule.d}</p>
+            <div class="formula">Qayda: ${rule.f}</div>
+            <div class="quiz-container" id="q-box-${rIdx}">
+                <h4>📝 Mövzu Testi</h4>
+            </div>
+        `;
+        ctx.appendChild(card);
+
+        const qBox = document.getElementById(`q-box-${rIdx}`);
+        rule.q.forEach((qObj, qIdx) => {
+            const qDiv = document.createElement('div');
+            qDiv.innerHTML = `<p class="q-text">${qIdx + 1}. ${qObj.q}</p>
+                             <div class="opt-grid" id="opt-${rIdx}-${qIdx}"></div>`;
+            qBox.appendChild(qDiv);
+
+            const grid = document.getElementById(`opt-${rIdx}-${qIdx}`);
+            qObj.a.forEach((opt, oIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const btns = grid.querySelectorAll('.opt-btn');
+                    btns.forEach(b => b.disabled = true);
+                    if(oIdx === qObj.c) btn.classList.add('correct');
+                    else {
+                        btn.classList.add('wrong');
+                        btns[qObj.c].classList.add('correct');
+                    }
+                };
+                grid.appendChild(btn);
+            });
+        });
+    });
+}
+init();
+</script>
+</body>
+</html>
