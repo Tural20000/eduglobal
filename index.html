@@ -3,37 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGlobal - Learn English Online</title>
+    <title>EduGlobal - Learn English Online Free</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: #333; line-height: 1.6; }
+        :root { --primary: #3498db; --dark: #2c3e50; --light: #f8f9fa; --card-bg: #ffffff; --text: #333; }
+        .dark-mode { --primary: #5dade2; --dark: #ecf0f1; --light: #1a1a1a; --card-bg: #2d2d2d; --text: #f4f4f4; }
         
-        /* Navbar */
-        nav { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: var(--text); line-height: 1.6; }
+        
+        nav { background: var(--card-bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        .nav-links a { text-decoration: none; color: var(--dark); margin-left: 20px; font-weight: 400; font-size: 0.9rem; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); margin-left: 20px; font-weight: 400; }
+        .mode-toggle { background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-left: 15px; }
 
-        /* Hero Section */
-        .hero { padding: 80px 20px; text-align: center; background: white; border-bottom: 1px solid #eee; }
-        .hero h2 { font-size: 2.5rem; color: var(--dark); margin-bottom: 15px; }
-        .btn-test { display: inline-block; background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; transition: 0.3s; }
-        .btn-test:hover { background: #2980b9; transform: scale(1.05); }
+        .hero { padding: 80px 20px; text-align: center; background: var(--card-bg); border-bottom: 1px solid #eee; }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .btn-test { display: inline-block; background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; }
 
-        /* Levels */
         .levels-section { padding: 60px 5%; max-width: 1100px; margin: auto; }
         .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .level-card { background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; border-bottom: 4px solid #eee; }
-        .level-card:hover { transform: translateY(-10px); border-bottom-color: var(--primary); }
-        .level-card h3 { font-size: 1.8rem; color: var(--dark); }
+        .level-card { background: var(--card-bg); padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; border-bottom: 4px solid var(--primary); }
+        
+        /* SEO Content Section */
+        .seo-content { padding: 40px 5%; max-width: 800px; margin: auto; text-align: justify; }
+        .seo-content h3 { color: var(--primary); margin-bottom: 15px; }
 
-        /* Footer */
-        footer { background: var(--dark); color: white; padding: 40px 5% 20px; text-align: center; margin-top: 60px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: left; max-width: 1100px; margin: auto; }
-        .footer-section h4 { margin-bottom: 15px; color: var(--primary); }
-        .footer-section p { font-size: 0.85rem; color: #bdc3c7; }
-        .footer-bottom { margin-top: 30px; padding-top: 20px; border-top: 1px solid #3e4f5f; font-size: 0.8rem; color: #7f8c8d; }
+        footer { background: #1a1a1a; color: white; padding: 40px 5%; text-align: center; margin-top: 60px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: left; max-width: 1100px; margin: auto; }
     </style>
 </head>
 <body>
@@ -43,52 +41,66 @@
     <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="test.html">Test</a>
-        <a href="#about">About</a>
+        <button class="mode-toggle" onclick="toggleDarkMode()" id="theme-icon">🌙</button>
     </div>
 </nav>
 
 <section class="hero">
-    <h2>Improve Your English Skills</h2>
-    <p>Discover your level and access free resources from anywhere in the world.</p>
-    <a href="test.html" class="btn-test">Take Free Level Test</a>
+    <h2>Improve Your English Skills 🚀</h2>
+    <p>Discover your English level and get free learning materials instantly.</p>
+    <a href="test.html" class="btn-test">Start Level Test</a>
 </section>
 
 <div class="levels-section">
     <div class="levels-grid">
-        <div class="level-card" onclick="window.location.href='study.html?lvl=A1'">
-            <h3>A1</h3>
-            <p>Beginner</p>
-        </div>
-        <div class="level-card" onclick="window.location.href='study.html?lvl=B1'">
-            <h3>B1</h3>
-            <p>Intermediate</p>
-        </div>
-        <div class="level-card" onclick="window.location.href='study.html?lvl=C1'">
-            <h3>C1</h3>
-            <p>Advanced</p>
-        </div>
+        <div class="level-card" onclick="window.location.href='study.html?lvl=A1'"><h3>A1</h3><p>Beginner</p></div>
+        <div class="level-card" onclick="window.location.href='study.html?lvl=B1'"><h3>B1</h3><p>Intermediate</p></div>
+        <div class="level-card" onclick="window.location.href='study.html?lvl=C1'"><h3>C1</h3><p>Advanced</p></div>
     </div>
 </div>
 
-<footer id="about">
-    <div class="footer-content">
-        <div class="footer-section">
-            <h4>About EduGlobal</h4>
-            <p>We provide free English learning materials for students worldwide. Our mission is to make language learning accessible to everyone.</p>
+<article class="seo-content">
+    <h3>Why Learn English with EduGlobal?</h3>
+    <p>English is the global language of business, technology, and science. At EduGlobal, we provide a structured way to improve your vocabulary, grammar, and reading skills. Whether you are a beginner at <b>A1 level</b> or an advanced learner at <b>C1 level</b>, our interactive tools and level-based tests help you track your progress effectively. Learning English opens doors to new career opportunities in the tech world, especially for <b>Backend Developers</b> and Java students.</p>
+</article>
+
+<footer>
+    <div class="footer-grid">
+        <div>
+            <h4>EduGlobal</h4>
+            <p>Free English resources for a better future.</p>
         </div>
-        <div class="footer-section">
-            <h4>Contact Us</h4>
-            <p>Email: support@eduglobal.com<br>Baku, Azerbaijan</p>
+        <div>
+            <h4>Contact</h4>
+            <p>Email: support@eduglobal.com</p>
         </div>
-        <div class="footer-section">
+        <div>
             <h4>Legal</h4>
-            <p>Privacy Policy<br>Terms of Service</p>
+            <p>Privacy Policy | Terms</p>
         </div>
     </div>
-    <div class="footer-bottom">
-        &copy; 2026 EduGlobal. All rights reserved. Created with ❤️ for English Learners.
-    </div>
+    <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 EduGlobal. All rights reserved.</p>
 </footer>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('dark-mode', isDark);
+        updateIcon(isDark);
+    }
+
+    function updateIcon(isDark) {
+        document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
+    }
+
+    // Yaddaşdakı rejimi tətbiq et
+    const savedMode = localStorage.getItem('dark-mode') === 'true';
+    if(savedMode) {
+        document.body.classList.add('dark-mode');
+        updateIcon(true);
+    }
+</script>
 
 </body>
 </html>
