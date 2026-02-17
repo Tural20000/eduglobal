@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.eduglobal.backend.dto.ReviewDto;
 import com.eduglobal.backend.entity.Review;
+import com.eduglobal.backend.exception.MyNotFoundException;
 import com.eduglobal.backend.repository.ReviewRepository;
 import com.eduglobal.backend.service.ReviewService;
 
@@ -35,6 +36,16 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public void deleteReview(Long id) {
 		reviewRepository.deleteById(id);
+	}
+
+	@Override
+	public Review updateReview(Long id, ReviewDto dto) {
+		Review review = reviewRepository.findById(id).orElseThrow(() -> new MyNotFoundException("Review not found"));
+
+		review.setName(dto.getName());
+		review.setText(dto.getText());
+
+		return reviewRepository.save(review);
 	}
 
 }
