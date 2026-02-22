@@ -13,7 +13,7 @@ import com.eduglobal.backend.service.QuestionService;
 
 @RestController
 @RequestMapping("/api/questions")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class QuestionController {
 
 	private final QuestionService questionService;

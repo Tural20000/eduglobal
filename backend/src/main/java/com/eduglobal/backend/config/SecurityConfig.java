@@ -33,8 +33,15 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(HttpMethod.OPTIONS, "/**")
-						.permitAll().requestMatchers(HttpMethod.POST, "/apis/login").permitAll()
+				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+						// Static resources (frontend files)
+						.requestMatchers("/*.html", "/*.css", "/*.js", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.ico").permitAll()
+						// API endpoints
+						.requestMatchers(HttpMethod.GET, "/api/reviews").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/reviews").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/apis/login").permitAll()
 						.requestMatchers("/h2-console/**").permitAll()
 						.requestMatchers(HttpMethod.POST, "/apis/refresh-token").permitAll()
 						.requestMatchers(HttpMethod.POST, "/reg-user").permitAll()

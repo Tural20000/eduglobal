@@ -165,6 +165,9 @@
 
     <section class="faq-section" style="margin-top: 30px;">
         <h3><i class="fas fa-comments"></i> İstifadəçi Rəyləri</h3>
+        <div id="backendStatus" style="padding:8px; margin-bottom:10px; border-radius:8px; font-size:0.85rem; text-align:center;">
+            <i class="fas fa-circle" style="color:#ffc107;"></i> Backend yoxlanılır...
+        </div>
         <input type="text" id="revName" placeholder="Adınız" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd; outline:none; background:rgba(255,255,255,0.5);">
         <textarea id="revText" placeholder="Fikirləriniz..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; outline:none; background:rgba(255,255,255,0.5);"></textarea>
         <button onclick="saveReview()" class="btn-choice btn-grammar" style="width:100%; border:none; margin-top:10px; cursor:pointer;">Rəyi Göndər</button>
@@ -211,26 +214,77 @@
         }
     }
 
-    // REVIEW SYSTEM
-    function saveReview() {
+    // API BASE URL
+    const API_BASE_URL = 'http://localhost:8081';
+
+    // Backend əlaqə statusunu yoxla
+    async function checkBackendConnection() {
+        const statusDiv = document.getElementById('backendStatus');
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/reviews`);
+            if (response.ok || response.status === 200) {
+                statusDiv.innerHTML = '<i class="fas fa-check-circle" style="color:#2ecc71;"></i> Backend əlaqəsi aktiv';
+                statusDiv.style.background = 'rgba(46, 204, 113, 0.2)';
+            } else {
+                throw new Error('Backend cavab vermədi');
+            }
+        } catch (error) {
+            statusDiv.innerHTML = '<i class="fas fa-times-circle" style="color:#e74c3c;"></i> Backend əlaqəsi yoxdur - Backend-in işlədiyini yoxlayın';
+            statusDiv.style.background = 'rgba(231, 76, 60, 0.2)';
+            console.error('Backend əlaqə xətası:', error);
+        }
+    }
+
+    // REVIEW SYSTEM - Backend API ilə əlaqə
+    async function saveReview() {
         const name = document.getElementById('revName').value;
         const text = document.getElementById('revText').value;
         if(name && text) {
-            let reviews = JSON.parse(localStorage.getItem('eduReviews') || '[]');
-            reviews.push({name, text});
-            localStorage.setItem('eduReviews', JSON.stringify(reviews));
-            showReviews();
-            document.getElementById('revName').value = ''; document.getElementById('revText').value = '';
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/reviews`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, text })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('revName').value = '';
+                    document.getElementById('revText').value = '';
+                    showReviews(); // Yeniləndikdən sonra rəyləri yenidən yüklə
+                } else {
+                    console.error('Rəy göndərilmədi:', response.statusText);
+                    alert('Xəta: Rəy göndərilmədi. Zəhmət olmasa yenidən cəhd edin.');
+                }
+            } catch (error) {
+                console.error('Xəta:', error);
+                alert('Xəta: Backend ilə əlaqə qurula bilmədi. Zəhmət olmasa backend-in işlədiyini yoxlayın.');
+            }
+        } else {
+            alert('Zəhmət olmasa ad və rəy doldurun.');
         }
     }
-    function showReviews() {
+    
+    async function showReviews() {
         const list = document.getElementById('revList');
-        let reviews = JSON.parse(localStorage.getItem('eduReviews') || '[]');
-        list.innerHTML = reviews.reverse().map(r => `
-            <div style="background:rgba(255,255,255,0.2); padding:10px; border-radius:10px; margin-bottom:8px; border-left:4px solid var(--primary);">
-                <strong>${r.name}:</strong> ${r.text}
-            </div>
-        `).join('');
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/reviews`);
+            if (response.ok) {
+                const reviews = await response.json();
+                list.innerHTML = reviews.reverse().map(r => `
+                    <div style="background:rgba(255,255,255,0.2); padding:10px; border-radius:10px; margin-bottom:8px; border-left:4px solid var(--primary);">
+                        <strong>${r.name}:</strong> ${r.text}
+                    </div>
+                `).join('');
+            } else {
+                console.error('Rəylər yüklənmədi:', response.statusText);
+                list.innerHTML = '<p style="color:red;">Rəylər yüklənmədi. Backend işləyir?</p>';
+            }
+        } catch (error) {
+            console.error('Xəta:', error);
+            list.innerHTML = '<p style="color:red;">Backend ilə əlaqə qurula bilmədi. Backend-in işlədiyini yoxlayın.</p>';
+        }
     }
 
     // RANDOM QUOTE GENERATOR
@@ -243,6 +297,7 @@
     document.getElementById('quote').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
 
     window.onload = function() {
+        checkBackendConnection(); // Backend əlaqəsini yoxla
         showReviews();
         if(localStorage.getItem('theme') === 'dark') toggleTheme();
     }
