@@ -35,8 +35,8 @@ public class SecurityConfig {
 		http.csrf().disable()
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-						// Static resources (frontend files)
-						.requestMatchers("/*.html", "/*.css", "/*.js", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.ico").permitAll()
+						// Root path and static resources (frontend files)
+						.requestMatchers("/", "/index.html", "/*.html", "/*.css", "/*.js", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.ico", "/**/*.svg", "/**/*.woff", "/**/*.woff2", "/**/*.ttf").permitAll()
 						// API endpoints
 						.requestMatchers(HttpMethod.GET, "/api/reviews").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/reviews").permitAll()
