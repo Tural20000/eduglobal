@@ -5,7 +5,9 @@ import com.eduglobal.backend.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@EqualsAndHashCode(exclude = { "level", "progress", "roles" })
+@ToString(exclude = { "level", "progress", "roles", "password" })
 public class UserEntity {
 
 	@Id
@@ -29,7 +33,7 @@ public class UserEntity {
 	private String name;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role", length = 20)
+	@Column(name = "user_role", length = 20)
 	private UserRole userRole = UserRole.USER;
 
 	@ManyToOne(fetch = FetchType.LAZY)

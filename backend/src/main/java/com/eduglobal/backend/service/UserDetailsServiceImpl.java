@@ -1,8 +1,9 @@
 package com.eduglobal.backend.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,13 +29,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		UserEntity user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+		String password = user.getPassword();
+		if (password == null) {
+			password = "";
+		}
+
+		return new org.springframework.security.core.userdetails.User(
+				user.getUsername(),
+				password,
 				mapRolesToAuthorities(user.getRoles(), user.getUserRole()));
 	}
 
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<RoleEntity> roles, UserRole userRole) {
-		java.util.List<GrantedAuthority> list = (roles == null ? java.util.Collections.emptySet() : roles).stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+		List<GrantedAuthority> list = new ArrayList<>();
+		if (roles != null) {
+			for (RoleEntity role : roles) {
+				if (role != null && role.getName() != null) {
+					list.add(new SimpleGrantedAuthority(role.getName()));
+				}
+			}
+		}
 		if (userRole != null && userRole == UserRole.ADMIN) {
 			list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		} else {
