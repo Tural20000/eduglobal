@@ -8,9 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserProgressDto {
-    private Long id;
-    private Long userId;
-    private Long lessonId;
-    private Boolean completed;
-    private Integer score;
+	private Long id;
+	private Long userId;
+	private Long lessonId;
+	private Boolean completed;
+	private Integer score;
 }

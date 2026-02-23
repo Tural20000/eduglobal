@@ -38,7 +38,8 @@ public class UserService {
 		user.setUserRole(UserRole.USER);
 		RoleEntity roleGet = roleRepository.findByName("ROLE_GET");
 		Set<RoleEntity> roles = new HashSet<>();
-		if (roleGet != null) roles.add(roleGet);
+		if (roleGet != null)
+			roles.add(roleGet);
 		user.setRoles(roles);
 		return userRepository.save(user);
 	}

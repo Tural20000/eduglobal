@@ -17,36 +17,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LevelServiceImpl implements LevelService {
 
-    private final LevelRepository levelRepository;
+	private final LevelRepository levelRepository;
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<LevelDto> findAll() {
-        return levelRepository.findAll().stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<LevelDto> findAll() {
+		return levelRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public LevelDto findById(Long id) {
-        return levelRepository.findById(id)
-                .map(this::toDto)
-                .orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + id));
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public LevelDto findById(Long id) {
+		return levelRepository.findById(id).map(this::toDto)
+				.orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + id));
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public LevelDto findByName(Level name) {
-        return levelRepository.findByName(name)
-                .map(this::toDto)
-                .orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + name));
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public LevelDto findByName(Level name) {
+		return levelRepository.findByName(name).map(this::toDto)
+				.orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + name));
+	}
 
-    private LevelDto toDto(LevelEntity e) {
-        return LevelDto.builder()
-                .id(e.getId())
-                .name(e.getName())
-                .build();
-    }
+	private LevelDto toDto(LevelEntity e) {
+		return LevelDto.builder().id(e.getId()).name(e.getName()).build();
+	}
 }

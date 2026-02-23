@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserProgressRepository extends JpaRepository<UserProgressEntity, Long> {
-    List<UserProgressEntity> findByUserId(Long userId);
-    Optional<UserProgressEntity> findByUserIdAndLessonId(Long userId, Long lessonId);
+	List<UserProgressEntity> findByUserId(Long userId);
+
+	Optional<UserProgressEntity> findByUserIdAndLessonId(Long userId, Long lessonId);
 }

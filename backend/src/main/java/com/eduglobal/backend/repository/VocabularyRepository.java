@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface VocabularyRepository extends JpaRepository<VocabularyEntity, Long> {
-    List<VocabularyEntity> findByLevelId(Long levelId);
+	List<VocabularyEntity> findByLevelId(Long levelId);
 }

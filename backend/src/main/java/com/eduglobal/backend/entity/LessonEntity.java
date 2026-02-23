@@ -17,27 +17,26 @@ import java.util.List;
 @Builder
 public class LessonEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable = false, length = 500)
-    private String title;
+	@Column(nullable = false, length = 500)
+	private String title;
 
-    @Lob
-    @Column(columnDefinition = "LONGTEXT", nullable = false)
-    private String content;
+	@Lob
+	@Column(columnDefinition = "LONGTEXT", nullable = false)
+	private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "level_id", nullable = false)
-    private LevelEntity level;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "level_id", nullable = false)
+	private LevelEntity level;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private Category category;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 20)
+	private Category category;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<QuizQuestionEntity> quizQuestions = new ArrayList<>();
+	@OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
+	private List<QuizQuestionEntity> quizQuestions = new ArrayList<>();
 }
-

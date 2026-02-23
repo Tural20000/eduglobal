@@ -32,29 +32,26 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-						// API endpoints - must be before static resources
-						.requestMatchers(HttpMethod.GET, "/api/reviews").permitAll()
-						.requestMatchers(HttpMethod.POST, "/api/reviews").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/levels/**").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/lessons/**").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/vocabulary/**").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/quiz-questions/**").permitAll()
-						.requestMatchers(HttpMethod.POST, "/apis/login").permitAll()
-						.requestMatchers(HttpMethod.POST, "/apis/register").permitAll()
-						.requestMatchers(HttpMethod.POST, "/apis/refresh-token").permitAll()
-						.requestMatchers(HttpMethod.POST, "/reg-user").permitAll()
-						.requestMatchers("/h2-console/**").permitAll()
-						.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-						// Static resources - permit all non-API requests
-						.requestMatchers(request -> {
-							String path = request.getRequestURI();
-							return !path.startsWith("/api/") && !path.startsWith("/apis/");
-						}).permitAll()
-						.anyRequest().authenticated())
+		http.csrf().disable().authorizeHttpRequests(authorizeRequests -> authorizeRequests
+				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				// API endpoints - must be before static resources
+				.requestMatchers(HttpMethod.GET, "/api/reviews").permitAll()
+				.requestMatchers(HttpMethod.POST, "/api/reviews").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/levels/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/lessons/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/vocabulary/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/quiz-questions/**").permitAll()
+				.requestMatchers(HttpMethod.POST, "/apis/login").permitAll()
+				.requestMatchers(HttpMethod.POST, "/apis/register").permitAll()
+				.requestMatchers(HttpMethod.POST, "/apis/refresh-token").permitAll()
+				.requestMatchers(HttpMethod.POST, "/reg-user").permitAll().requestMatchers("/h2-console/**").permitAll()
+				.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+				// Static resources - permit all non-API requests
+				.requestMatchers(request -> {
+					String path = request.getRequestURI();
+					return !path.startsWith("/api/") && !path.startsWith("/apis/");
+				}).permitAll().anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		// Add JWT filter before the default username/password filter

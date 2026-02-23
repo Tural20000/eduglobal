@@ -8,10 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class VocabularyDto {
-    private Long id;
-    private String word;
-    private String meaning;
-    private String exampleSentence;
-    private Long levelId;
-    private String levelName;
+	private Long id;
+	private String word;
+	private String meaning;
+	private String exampleSentence;
+	private Long levelId;
+	private String levelName;
 }

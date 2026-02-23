@@ -9,10 +9,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LessonDto {
-    private Long id;
-    private String title;
-    private String content;
-    private Long levelId;
-    private String levelName;
-    private Category category;
+	private Long id;
+	private String title;
+	private String content;
+	private Long levelId;
+	private String levelName;
+	private Category category;
 }

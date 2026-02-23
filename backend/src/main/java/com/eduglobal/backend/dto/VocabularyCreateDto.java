@@ -10,11 +10,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class VocabularyCreateDto {
-    @NotBlank
-    private String word;
-    @NotBlank
-    private String meaning;
-    private String exampleSentence;
-    @NotNull
-    private Long levelId;
+	@NotBlank
+	private String word;
+	@NotBlank
+	private String meaning;
+	private String exampleSentence;
+	@NotNull
+	private Long levelId;
 }

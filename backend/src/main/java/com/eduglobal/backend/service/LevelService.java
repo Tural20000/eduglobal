@@ -6,7 +6,9 @@ import com.eduglobal.backend.enums.Level;
 import java.util.List;
 
 public interface LevelService {
-    List<LevelDto> findAll();
-    LevelDto findById(Long id);
-    LevelDto findByName(Level name);
+	List<LevelDto> findAll();
+
+	LevelDto findById(Long id);
+
+	LevelDto findByName(Level name);
 }

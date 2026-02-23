@@ -12,12 +12,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LessonCreateDto {
-    @NotBlank
-    private String title;
-    @NotBlank
-    private String content;
-    @NotNull
-    private Long levelId;
-    @NotNull
-    private Category category;
+	@NotBlank
+	private String title;
+	@NotBlank
+	private String content;
+	@NotNull
+	private Long levelId;
+	@NotNull
+	private Category category;
 }

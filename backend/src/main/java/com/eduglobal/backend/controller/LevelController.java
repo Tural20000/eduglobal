@@ -13,24 +13,24 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class LevelController {
 
-    private final LevelService levelService;
+	private final LevelService levelService;
 
-    public LevelController(LevelService levelService) {
-        this.levelService = levelService;
-    }
+	public LevelController(LevelService levelService) {
+		this.levelService = levelService;
+	}
 
-    @GetMapping
-    public ResponseEntity<List<LevelDto>> findAll() {
-        return ResponseEntity.ok(levelService.findAll());
-    }
+	@GetMapping
+	public ResponseEntity<List<LevelDto>> findAll() {
+		return ResponseEntity.ok(levelService.findAll());
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<LevelDto> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(levelService.findById(id));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<LevelDto> findById(@PathVariable Long id) {
+		return ResponseEntity.ok(levelService.findById(id));
+	}
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<LevelDto> findByName(@PathVariable Level name) {
-        return ResponseEntity.ok(levelService.findByName(name));
-    }
+	@GetMapping("/name/{name}")
+	public ResponseEntity<LevelDto> findByName(@PathVariable Level name) {
+		return ResponseEntity.ok(levelService.findByName(name));
+	}
 }

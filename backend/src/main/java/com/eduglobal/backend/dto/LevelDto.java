@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LevelDto {
-    private Long id;
-    private Level name;
+	private Long id;
+	private Level name;
 }

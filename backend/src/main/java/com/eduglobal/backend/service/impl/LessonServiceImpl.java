@@ -20,70 +20,72 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LessonServiceImpl implements LessonService {
 
-    private final LessonRepository lessonRepository;
-    private final LevelRepository levelRepository;
+	private final LessonRepository lessonRepository;
+	private final LevelRepository levelRepository;
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<LessonDto> findAll() {
-        return lessonRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<LessonDto> findAll() {
+		return lessonRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<LessonDto> findByLevelId(Long levelId) {
-        return lessonRepository.findByLevelId(levelId).stream().map(this::toDto).collect(Collectors.toList());
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<LessonDto> findByLevelId(Long levelId) {
+		return lessonRepository.findByLevelId(levelId).stream().map(this::toDto).collect(Collectors.toList());
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<LessonDto> findByLevelIdAndCategory(Long levelId, Category category) {
-        return lessonRepository.findByLevelIdAndCategory(levelId, category).stream().map(this::toDto).collect(Collectors.toList());
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<LessonDto> findByLevelIdAndCategory(Long levelId, Category category) {
+		return lessonRepository.findByLevelIdAndCategory(levelId, category).stream().map(this::toDto)
+				.collect(Collectors.toList());
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public LessonDto findById(Long id) {
-        return lessonRepository.findById(id).map(this::toDto)
-                .orElseThrow(() -> new MyNotFoundException("Dərs tapılmadı: " + id));
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public LessonDto findById(Long id) {
+		return lessonRepository.findById(id).map(this::toDto)
+				.orElseThrow(() -> new MyNotFoundException("Dərs tapılmadı: " + id));
+	}
 
-    @Override
-    @Transactional
-    public LessonDto create(LessonCreateDto dto) {
-        LevelEntity level = levelRepository.findById(dto.getLevelId())
-                .orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + dto.getLevelId()));
-        LessonEntity entity = LessonEntity.builder()
-                .title(dto.getTitle()).content(dto.getContent()).level(level).category(dto.getCategory()).build();
-        entity = lessonRepository.save(entity);
-        return toDto(entity);
-    }
+	@Override
+	@Transactional
+	public LessonDto create(LessonCreateDto dto) {
+		LevelEntity level = levelRepository.findById(dto.getLevelId())
+				.orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + dto.getLevelId()));
+		LessonEntity entity = LessonEntity.builder().title(dto.getTitle()).content(dto.getContent()).level(level)
+				.category(dto.getCategory()).build();
+		entity = lessonRepository.save(entity);
+		return toDto(entity);
+	}
 
-    @Override
-    @Transactional
-    public LessonDto update(Long id, LessonCreateDto dto) {
-        LessonEntity entity = lessonRepository.findById(id)
-                .orElseThrow(() -> new MyNotFoundException("Dərs tapılmadı: " + id));
-        LevelEntity level = levelRepository.findById(dto.getLevelId())
-                .orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + dto.getLevelId()));
-        entity.setTitle(dto.getTitle());
-        entity.setContent(dto.getContent());
-        entity.setLevel(level);
-        entity.setCategory(dto.getCategory());
-        entity = lessonRepository.save(entity);
-        return toDto(entity);
-    }
+	@Override
+	@Transactional
+	public LessonDto update(Long id, LessonCreateDto dto) {
+		LessonEntity entity = lessonRepository.findById(id)
+				.orElseThrow(() -> new MyNotFoundException("Dərs tapılmadı: " + id));
+		LevelEntity level = levelRepository.findById(dto.getLevelId())
+				.orElseThrow(() -> new MyNotFoundException("Level tapılmadı: " + dto.getLevelId()));
+		entity.setTitle(dto.getTitle());
+		entity.setContent(dto.getContent());
+		entity.setLevel(level);
+		entity.setCategory(dto.getCategory());
+		entity = lessonRepository.save(entity);
+		return toDto(entity);
+	}
 
-    @Override
-    @Transactional
-    public void deleteById(Long id) {
-        if (!lessonRepository.existsById(id)) throw new MyNotFoundException("Dərs tapılmadı: " + id);
-        lessonRepository.deleteById(id);
-    }
+	@Override
+	@Transactional
+	public void deleteById(Long id) {
+		if (!lessonRepository.existsById(id))
+			throw new MyNotFoundException("Dərs tapılmadı: " + id);
+		lessonRepository.deleteById(id);
+	}
 
-    private LessonDto toDto(LessonEntity e) {
-        return LessonDto.builder()
-                .id(e.getId()).title(e.getTitle()).content(e.getContent())
-                .levelId(e.getLevel().getId()).levelName(e.getLevel().getName().name()).category(e.getCategory()).build();
-    }
+	private LessonDto toDto(LessonEntity e) {
+		return LessonDto.builder().id(e.getId()).title(e.getTitle()).content(e.getContent())
+				.levelId(e.getLevel().getId()).levelName(e.getLevel().getName().name()).category(e.getCategory())
+				.build();
+	}
 }

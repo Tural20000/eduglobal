@@ -10,16 +10,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class QuizQuestionCreateDto {
-    @NotNull
-    private Long lessonId;
-    @NotBlank
-    private String question;
-    @NotBlank
-    private String optionA;
-    @NotBlank
-    private String optionB;
-    private String optionC;
-    private String optionD;
-    @NotBlank
-    private String correctAnswer; // A, B, C, D
+	@NotNull
+	private Long lessonId;
+	@NotBlank
+	private String question;
+	@NotBlank
+	private String optionA;
+	@NotBlank
+	private String optionB;
+	private String optionC;
+	private String optionD;
+	@NotBlank
+	private String correctAnswer; // A, B, C, D
 }
