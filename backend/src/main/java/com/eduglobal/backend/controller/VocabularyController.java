@@ -35,10 +35,14 @@ public class VocabularyController {
 		if (date == null || date.isEmpty()) {
 			date = java.time.LocalDate.now().toString();
 		}
-		return ResponseEntity.ok(vocabularyService.getWordOfTheDay(date));
+		try {
+			return ResponseEntity.ok(vocabularyService.getWordOfTheDay(date));
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id:\\d+}")
 	public ResponseEntity<VocabularyDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(vocabularyService.findById(id));
 	}
@@ -49,13 +53,13 @@ public class VocabularyController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(vocabularyService.create(dto));
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/{id:\\d+}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<VocabularyDto> update(@PathVariable Long id, @Valid @RequestBody VocabularyCreateDto dto) {
 		return ResponseEntity.ok(vocabularyService.update(id, dto));
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id:\\d+}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		vocabularyService.deleteById(id);

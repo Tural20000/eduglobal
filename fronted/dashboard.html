@@ -495,10 +495,12 @@
                         }
                         return;
                     }
-                } catch (e) {}
+                    if (r.status === 404 && funEl) funEl.textContent = 'Bu gün üçün söz hələ əlavə edilməyib.';
+                } catch (e) {
+                    if (funEl) funEl.textContent = 'Söz yüklənə bilmədi. Backend işləyir?';
+                }
                 if (enEl) enEl.textContent = '—';
                 if (azEl) azEl.textContent = '—';
-                if (funEl) funEl.textContent = '';
             }
             loadWotd();
         })();
