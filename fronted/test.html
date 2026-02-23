@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="theme-init.js"></script>
     <title>Placement Test - EduGlobal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
     <style>
         :root { --primary: #3498db; --bg: #f4f7f6; --card: #ffffff; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-top: 80px; }
@@ -33,7 +35,7 @@
 <body>
 
 <div class="fixed-nav">
-    <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Ana Menyuya Qayıt</a>
+    <a href="dashboard.html" class="back-home"><i class="fas fa-arrow-left"></i> Ana Menyuya Qayıt</a>
     <div style="font-weight: 700; color: #2c3e50;">EduGlobal Placement Test</div>
 </div>
 
@@ -48,7 +50,7 @@
         <p>Sizin təxmini səviyyəniz:</p>
         <div class="level-badge" id="level-text">...</div>
         <p id="score-text"></p>
-        <a href="index.html" class="back-home" style="justify-content: center; margin-top: 20px;">Kurslara Başla</a>
+        <a href="dashboard.html" class="back-home" style="justify-content: center; margin-top: 20px;">Kurslara Başla</a>
     </div>
 </div>
 
@@ -116,5 +118,6 @@ function showResult() {
 }
 initQuiz();
 </script>
+<script src="theme.js"></script>
 </body>
 </html>

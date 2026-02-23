@@ -1,0 +1,434 @@
+/* EduGlobal – Açıq / Qaranlıq tema */
+:root {
+    --tg-bg: #f0f2f5;
+    --tg-bg-card: #ffffff;
+    --tg-text: #2c3e50;
+    --tg-text-muted: #7f8c8d;
+    --tg-border: #e0e0e0;
+    --tg-primary: #3498db;
+    --tg-shadow: rgba(0, 0, 0, 0.08);
+    --tg-input-bg: #ffffff;
+    --tg-input-border: #e0e0e0;
+}
+
+html.dark-mode {
+    --tg-bg: #1a1a2e;
+    --tg-bg-card: #16213e;
+    --tg-text: #e8e8e8;
+    --tg-text-muted: #b0b0b0;
+    --tg-border: #2a2a4a;
+    --tg-primary: #5dade2;
+    --tg-shadow: rgba(0, 0, 0, 0.3);
+    --tg-input-bg: #1f2b4d;
+    --tg-input-border: #2a2a4a;
+}
+
+/* body class for backwards compatibility when theme.js runs */
+body.dark-mode,
+body.theme-ready,
+html.dark-mode body {
+    background: var(--tg-bg) !important;
+    color: var(--tg-text) !important;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Kartlar və konteynerlər */
+html.dark-mode .menu-card,
+html.dark-mode .reviews-box,
+html.dark-mode .q-card,
+html.dark-mode .game-box,
+html.dark-mode .form-container,
+html.dark-mode .welcome-container,
+html.dark-mode .box,
+html.dark-mode .card,
+html.dark-mode .feature-card,
+html.dark-mode .level-card,
+html.dark-mode .info-box,
+html.dark-mode .container,
+html.dark-mode .rule-card,
+html.dark-mode .quiz-container,
+html.dark-mode .reading-container,
+html.dark-mode .game-grid,
+html.dark-mode .result-box,
+html.dark-mode .q-box,
+html.dark-mode .modal-content,
+html.dark-mode .game-card,
+html.dark-mode .test-container {
+    background: var(--tg-bg-card) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border);
+    box-shadow: 0 4px 14px var(--tg-shadow);
+}
+
+/* Oyunlar səhifəsi – oyun adları və təsvirlər oxunaqlı */
+html.dark-mode .game-card h3,
+html.dark-mode .game-card p,
+html.dark-mode .game-card * {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .game-card p {
+    color: var(--tg-text-muted) !important;
+}
+
+/* Tez cavab (game-quiz) – başlanğıc ekranı və nəticə oxunaqlı */
+html.dark-mode #startScreen h2,
+html.dark-mode #startScreen p {
+    color: var(--tg-text) !important;
+}
+html.dark-mode #startScreen p {
+    color: var(--tg-text-muted) !important;
+}
+html.dark-mode .result-box h2,
+html.dark-mode .result-box p,
+html.dark-mode .result-box a[href] {
+    color: var(--tg-text) !important;
+}
+html.dark-mode .result-box a[href]:last-of-type {
+    color: var(--tg-text-muted) !important;
+}
+
+/* Günün sözü kartı – qaranlıq rejim */
+html.dark-mode .word-of-day-card {
+    background: linear-gradient(135deg, var(--tg-bg-card) 0%, var(--tg-input-bg) 100%) !important;
+    border-color: var(--tg-border) !important;
+    box-shadow: 0 6px 20px var(--tg-shadow);
+}
+html.dark-mode .word-of-day-title {
+    color: var(--tg-primary) !important;
+}
+html.dark-mode .word-of-day-en {
+    color: var(--tg-text) !important;
+}
+html.dark-mode .word-of-day-az,
+html.dark-mode .word-of-day-fun {
+    color: var(--tg-text-muted) !important;
+}
+
+html.dark-mode .container h1,
+html.dark-mode .container .subtitle,
+html.dark-mode header span {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .container .subtitle {
+    color: var(--tg-text-muted) !important;
+}
+
+/* Header / nav */
+html.dark-mode header,
+html.dark-mode .top-nav,
+html.dark-mode .fixed-nav {
+    background: var(--tg-bg-card) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border);
+}
+
+/* Başlıqlar və mətn */
+html.dark-mode .username,
+html.dark-mode h1,
+html.dark-mode h2,
+html.dark-mode h3,
+html.dark-mode h4,
+html.dark-mode h5,
+html.dark-mode .form-title,
+html.dark-mode .form-label,
+html.dark-mode .q-text,
+html.dark-mode .welcome-title,
+html.dark-mode .form-subtitle,
+html.dark-mode #lvl-display,
+html.dark-mode .story-title,
+html.dark-mode #story-title {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode p,
+html.dark-mode .form-subtitle,
+html.dark-mode .subtitle,
+html.dark-mode .desc,
+html.dark-mode .level-desc,
+html.dark-mode .hint,
+html.dark-mode #meaning,
+html.dark-mode .progress,
+html.dark-mode .stats,
+html.dark-mode .score-text,
+html.dark-mode .result-screen .desc,
+html.dark-mode .loading,
+html.dark-mode .loading p {
+    color: var(--tg-text-muted) !important;
+}
+
+/* İnputlar */
+html.dark-mode input,
+html.dark-mode textarea {
+    background: var(--tg-input-bg) !important;
+    border-color: var(--tg-border) !important;
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .rev-item,
+html.dark-mode .faq-question {
+    background: var(--tg-input-bg) !important;
+    color: var(--tg-text) !important;
+}
+
+/* Düymələr və seçimlər */
+html.dark-mode .opt-btn,
+html.dark-mode .letter-btn,
+html.dark-mode .slot,
+html.dark-mode .option-btn,
+html.dark-mode .word-card {
+    background: var(--tg-bg-card) !important;
+    border-color: var(--tg-border) !important;
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .word-card.selected {
+    background: var(--tg-primary) !important;
+    color: #fff !important;
+    border-color: var(--tg-primary);
+}
+
+html.dark-mode .level-btn {
+    background: var(--tg-input-bg) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border);
+}
+
+html.dark-mode .modal-box {
+    background: var(--tg-bg-card) !important;
+    color: var(--tg-text) !important;
+}
+
+/* Formula / quiz / text-box */
+html.dark-mode .formula {
+    background: var(--tg-input-bg) !important;
+    color: var(--tg-text-muted) !important;
+    border-color: var(--tg-border);
+}
+
+html.dark-mode .text-box {
+    background: var(--tg-input-bg) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border);
+}
+
+html.dark-mode .question {
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border);
+}
+
+/* Linklər və nav */
+html.dark-mode .back-link,
+html.dark-mode .back-home,
+html.dark-mode .btn-secondary,
+html.dark-mode a[href] {
+    color: var(--tg-primary) !important;
+}
+
+html.dark-mode .btn-secondary:hover {
+    background: var(--tg-primary) !important;
+    color: var(--tg-bg) !important;
+}
+
+/* Welcome / cabinet */
+html.dark-mode .welcome-card,
+html.dark-mode .welcome-container {
+    background: linear-gradient(135deg, #2a2a5e 0%, #1a1a3e 100%) !important;
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .welcome-container .welcome-title,
+html.dark-mode .welcome-container .welcome-subtitle {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .cabinet-card {
+    background: linear-gradient(135deg, #2a2a5e 0%, #1a1a3e 100%) !important;
+}
+
+/* Oyunlar – stats bar, timer, score */
+html.dark-mode .stats-bar,
+html.dark-mode .stats-bar div {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode #timer {
+    color: #e74c3c !important;
+}
+
+html.dark-mode #score {
+    color: #2ecc71 !important;
+}
+
+/* Modal məzmunu – sözlər oxunaqlı */
+html.dark-mode .modal-content h2,
+html.dark-mode .modal-content p,
+html.dark-mode .modal-content div,
+html.dark-mode #end-result,
+html.dark-mode #end-result * {
+    color: var(--tg-text) !important;
+}
+
+/* Seviyyə testi – nəticə ekranı */
+html.dark-mode .result-screen h1,
+html.dark-mode .result-screen .score-text {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .result-screen .desc {
+    color: var(--tg-text-muted) !important;
+}
+
+html.dark-mode .btn-prev {
+    background: var(--tg-input-bg) !important;
+    color: var(--tg-text) !important;
+    border: 1px solid var(--tg-border);
+}
+
+/* Start screen / quiz intro */
+html.dark-mode #startScreen h2,
+html.dark-mode #startScreen p {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .result-msg.success {
+    color: #2ecc71 !important;
+}
+
+/* Slot filled state */
+html.dark-mode .slot.filled {
+    background: var(--tg-input-bg) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-primary);
+}
+
+/* Option selected (reading) */
+html.dark-mode .option-btn.selected {
+    background: var(--tg-primary) !important;
+    color: #fff !important;
+}
+
+/* Vocab / study – sözlər və cədvəl oxunaqlı */
+html.dark-mode .vocab-item,
+html.dark-mode .word-info,
+html.dark-mode .header {
+    background: var(--tg-bg-card) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border);
+}
+
+html.dark-mode .vocab-item b,
+html.dark-mode .word-info b {
+    color: var(--tg-primary) !important;
+}
+
+html.dark-mode .vocab-item span,
+html.dark-mode .word-info span {
+    color: var(--tg-text-muted) !important;
+}
+
+/* Vocabulary cədvəli (vocab_A1, vocab_B1, vocab_C1) */
+html.dark-mode .vocab-card {
+    background: var(--tg-bg-card) !important;
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .vocab-card table,
+html.dark-mode .vocab-card th,
+html.dark-mode .vocab-card td {
+    background: var(--tg-bg-card) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border) !important;
+}
+
+html.dark-mode .vocab-card th {
+    background: var(--tg-primary) !important;
+    color: #fff !important;
+}
+
+html.dark-mode .vocab-card tbody tr:hover {
+    background: var(--tg-input-bg) !important;
+}
+
+html.dark-mode .page-title {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .logo-text {
+    color: var(--tg-text) !important;
+}
+
+/* Ümumi bilik testi – sual mətni və cavablar oxunaqlı */
+html.dark-mode .test-container,
+html.dark-mode #quiz-area,
+html.dark-mode #questions-wrapper {
+    background: var(--tg-bg-card) !important;
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .question,
+html.dark-mode .question h3 {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .question.active h3 {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode .test-container .opt-btn {
+    background: var(--tg-input-bg) !important;
+    color: var(--tg-text) !important;
+    border-color: var(--tg-border);
+}
+
+html.dark-mode .fixed-nav div {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode #result-box,
+html.dark-mode #result-box h2,
+html.dark-mode #result-box p,
+html.dark-mode #score-text {
+    color: var(--tg-text) !important;
+}
+
+html.dark-mode #result-box .level-badge {
+    color: #2ecc71 !important;
+}
+
+/* Ümumi mətn – bütün span/div oxunaqlı */
+html.dark-mode .word-card,
+html.dark-mode .word-card span {
+    color: inherit !important;
+}
+
+/* Tema düyməsi */
+#theme-toggle-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    background: var(--tg-primary);
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--tg-shadow);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.3s;
+}
+
+#theme-toggle-btn:hover {
+    transform: scale(1.08);
+}
+
+html.dark-mode #theme-toggle-btn {
+    background: var(--tg-primary);
+    color: #1a1a2e;
+}

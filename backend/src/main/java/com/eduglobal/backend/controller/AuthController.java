@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eduglobal.backend.dto.AuthRequest;
 import com.eduglobal.backend.dto.AuthResponse;
+import com.eduglobal.backend.dto.RegistrationRequest;
 import com.eduglobal.backend.dto.TokenRequest;
+import com.eduglobal.backend.entity.UserEntity;
 import com.eduglobal.backend.service.UserDetailsServiceImpl;
+import com.eduglobal.backend.service.UserService;
 import com.eduglobal.backend.utils.JwtUtil;
 import com.eduglobal.backend.utils.RefreshTokenUtil;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/apis")
@@ -35,6 +39,21 @@ public class AuthController {
 
 	@Autowired
 	private RefreshTokenUtil refreshTokenUtil;
+
+	@Autowired
+	private UserService userService;
+
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
+		try {
+			UserEntity user = userService.registerUser(registrationRequest);
+			return ResponseEntity.ok().body("Qeydiyyat uğurla tamamlandı! İstifadəçi adı: " + user.getUsername());
+		} catch (RuntimeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body("Qeydiyyat zamanı xəta baş verdi: " + e.getMessage());
+		}
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {

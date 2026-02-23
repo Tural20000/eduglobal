@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="theme-init.js"></script>
+    <title>Ana menyu - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --bg: #f0f2f5;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); min-height: 100vh; }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 16px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .user-info { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .username { color: var(--secondary); font-weight: 600; font-size: 0.95rem; }
+        .btn-logout {
+            padding: 8px 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-logout:hover { background: #2980b9; }
+
+        .main-wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 5%;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 1100px) {
+            .main-wrap { grid-template-columns: 1fr; }
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .menu-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .menu-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+        .menu-card .icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .menu-card h3 { font-size: 1.1rem; color: var(--secondary); margin-bottom: 6px; }
+        .menu-card p { font-size: 0.85rem; color: #7f8c8d; line-height: 1.4; }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+        }
+        .reviews-box {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .reviews-box h3 {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .review-form input, .review-form textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .review-form textarea { min-height: 70px; resize: vertical; }
+        .review-form button {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+        .review-form button:hover { background: #2980b9; }
+        #revList {
+            max-height: 280px;
+            overflow-y: auto;
+            margin-top: 14px;
+        }
+        #revList .rev-item {
+            background: #f8f9fa;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+        }
+        #revList .rev-item strong { color: var(--secondary); }
+
+        .cabinet-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+        .cabinet-card a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.05rem;
+        }
+        .cabinet-card a:hover { text-decoration: underline; }
+        .cabinet-card .icon { font-size: 2rem; }
+
+        /* Level selection modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .modal-box h2 {
+            margin-bottom: 8px;
+            color: var(--secondary);
+            font-size: 1.4rem;
+        }
+        .modal-box p { color: #7f8c8d; margin-bottom: 20px; font-size: 0.95rem; }
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .level-btn {
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .level-btn:hover {
+            border-color: var(--primary);
+            background: #f0f8ff;
+            color: var(--primary);
+        }
+        .modal-close {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background: #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            width: 100%;
+        }
+        .modal-close:hover { background: #d0d0d0; }
+
+        /* Günün sözü – əyləncəli, oxunaqlı blok */
+        .word-of-day-card {
+            margin-top: 28px;
+            background: linear-gradient(135deg, #fff8e7 0%, #ffeaa7 50%, #fdcb6e 100%);
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: 0 6px 20px rgba(253, 203, 110, 0.35);
+            border: 2px solid rgba(243, 156, 18, 0.25);
+        }
+        .word-of-day-inner { max-width: 520px; }
+        .word-of-day-title {
+            font-size: 1rem;
+            color: #b8860b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        .word-of-day-en {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            letter-spacing: 0.02em;
+        }
+        .word-of-day-az {
+            font-size: 1.1rem;
+            color: #5d4e37;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .word-of-day-fun {
+            font-size: 0.9rem;
+            color: #7d6e4a;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="dashboard.html" class="logo"><i class="fas fa-graduation-cap"></i> EduGlobal</a>
+        <div class="user-info">
+            <span class="username" id="usernameDisplay">İstifadəçi</span>
+            <a href="cabinet.html" style="color:var(--primary); text-decoration:none; font-weight:600;"><i class="fas fa-user-circle"></i> Şəxsi kabinet</a>
+            <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Çıxış</button>
+        </div>
+    </header>
+
+    <div class="main-wrap">
+        <div class="content">
+            <div class="welcome-card" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:28px 32px; border-radius:20px; margin-bottom:28px; text-align:center;">
+                <h1 style="font-size:1.8rem; margin-bottom:6px;">Xoş Gəlmisiniz!</h1>
+                <p id="welcomeMessage" style="opacity:0.95;">İngilis dilini öyrənməyə hazırsınız</p>
+            </div>
+
+            <div class="menu-grid">
+                <div class="menu-card" onclick="location.href='level-test.html'">
+                    <div class="icon"><i class="fas fa-clipboard-list"></i></div>
+                    <h3>Seviyyə testi</h3>
+                    <p>30 sual ilə səviyyənizi müəyyən edin</p>
+                </div>
+                <div class="menu-card" onclick="location.href='games.html'">
+                    <div class="icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>Oyunlar</h3>
+                    <p>3 oyunla əylənərək öyrənin</p>
+                </div>
+                <div class="menu-card" data-section="grammar">
+                    <div class="icon"><i class="fas fa-book"></i></div>
+                    <h3>Qrammatika</h3>
+                    <p>Səviyyə seçib materiallara keçin</p>
+                </div>
+                <div class="menu-card" data-section="vocabulary">
+                    <div class="icon"><i class="fas fa-spell-check"></i></div>
+                    <h3>Vocabulary</h3>
+                    <p>Səviyyə seçib lüğətə keçin</p>
+                </div>
+                <div class="menu-card" data-section="reading">
+                    <div class="icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Reading</h3>
+                    <p>Səviyyə seçib oxu materiallarına keçin</p>
+                </div>
+                <div class="menu-card" onclick="location.href='testler.html'">
+                    <div class="icon"><i class="fas fa-tasks"></i></div>
+                    <h3>Testlər</h3>
+                    <p>Müxtəlif testlər</p>
+                </div>
+            </div>
+
+            <!-- Günün sözü -->
+            <section class="word-of-day-card" aria-label="Günün sözü">
+                <div class="word-of-day-inner">
+                    <h3 class="word-of-day-title"><i class="fas fa-sparkles"></i> Günün sözü</h3>
+                    <p class="word-of-day-en" id="wotdEn">—</p>
+                    <p class="word-of-day-az" id="wotdAz">—</p>
+                    <p class="word-of-day-fun" id="wotdFun"></p>
+                </div>
+            </section>
+        </div>
+
+        <aside class="sidebar">
+            <div class="reviews-box">
+                <h3><i class="fas fa-comments"></i> Rəy yaz</h3>
+                <div class="review-form">
+                    <input type="text" id="revName" placeholder="Adınız" maxlength="100">
+                    <textarea id="revText" placeholder="Rəyiniz..." maxlength="500"></textarea>
+                    <button type="button" onclick="saveReview()">Göndər</button>
+                </div>
+                <div id="revList"></div>
+            </div>
+            <div class="cabinet-card">
+                <a href="cabinet.html"><span class="icon"><i class="fas fa-user-shield"></i></span> Şəxsi kabinet</a>
+                <p style="color:rgba(255,255,255,0.9); font-size:0.9rem; margin-top:10px;">Nailiyyətlər və məlumatlar</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Level selection modal -->
+    <div class="modal-overlay" id="levelModal">
+        <div class="modal-box">
+            <h2 id="modalTitle">Səviyyə seçin</h2>
+            <p id="modalDesc">Materiallara keçmək üçün səviyyə seçin.</p>
+            <div class="level-grid">
+                <button type="button" class="level-btn" data-level="A1">A1</button>
+                <button type="button" class="level-btn" data-level="A2">A2</button>
+                <button type="button" class="level-btn" data-level="B1">B1</button>
+                <button type="button" class="level-btn" data-level="B2">B2</button>
+                <button type="button" class="level-btn" data-level="C1">C1</button>
+                <button type="button" class="level-btn" data-level="C2">C2</button>
+            </div>
+            <button type="button" class="modal-close" onclick="closeLevelModal()">Bağla</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8082';
+        const accessToken = localStorage.getItem('accessToken');
+        const username = localStorage.getItem('username');
+
+        if (!accessToken || !username) {
+            window.location.href = 'welcome.html';
+        } else {
+            document.getElementById('usernameDisplay').textContent = username;
+            document.getElementById('welcomeMessage').textContent = username + ', İngilis dilini öyrənməyə hazırsınız';
+        }
+
+        function logout() {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('username');
+            window.location.href = 'welcome.html';
+        }
+
+        // Level modal
+        let currentSection = '';
+        const sectionTitles = {
+            grammar: { title: 'Qrammatika – səviyyə seçin', desc: 'Seçdiyiniz səviyyəyə uyğun qrammatika materiallarına keçəcəksiniz.' },
+            vocabulary: { title: 'Vocabulary – səviyyə seçin', desc: 'Seçdiyiniz səviyyəyə uyğun lüğət materiallarına keçəcəksiniz.' },
+            reading: { title: 'Reading – səviyyə seçin', desc: 'Seçdiyiniz səviyyəyə uyğun oxu materiallarına keçəcəksiniz.' }
+        };
+        const sectionPaths = {
+            grammar: 'grammar',
+            vocabulary: 'vocab',
+            reading: 'reading'
+        };
+
+        document.querySelectorAll('.menu-card[data-section]').forEach(card => {
+            card.addEventListener('click', function() {
+                currentSection = this.getAttribute('data-section');
+                const t = sectionTitles[currentSection];
+                document.getElementById('modalTitle').textContent = t.title;
+                document.getElementById('modalDesc').textContent = t.desc;
+                document.getElementById('levelModal').classList.add('show');
+            });
+        });
+
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const level = this.getAttribute('data-level');
+                closeLevelModal();
+                const base = sectionPaths[currentSection];
+                window.location.href = base + '_' + level + '.html';
+            });
+        });
+
+        function closeLevelModal() {
+            document.getElementById('levelModal').classList.remove('show');
+        }
+
+        document.getElementById('levelModal').addEventListener('click', function(e) {
+            if (e.target === this) closeLevelModal();
+        });
+
+        // Reviews
+        async function saveReview() {
+            const name = document.getElementById('revName').value.trim();
+            const text = document.getElementById('revText').value.trim();
+            if (!name || !text) {
+                alert('Zəhmət olmasa ad və rəy doldurun.');
+                return;
+            }
+            try {
+                const response = await fetch(API_BASE_URL + '/api/reviews', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, text })
+                });
+                if (response.ok) {
+                    document.getElementById('revName').value = '';
+                    document.getElementById('revText').value = '';
+                    showReviews();
+                } else {
+                    alert('Rəy göndərilmədi. Yenidən cəhd edin.');
+                }
+            } catch (err) {
+                alert('Backend ilə əlaqə qurula bilmədi.');
+            }
+        }
+
+        async function showReviews() {
+            const list = document.getElementById('revList');
+            try {
+                const response = await fetch(API_BASE_URL + '/api/reviews');
+                if (response.ok) {
+                    const reviews = await response.json();
+                    list.innerHTML = reviews.reverse().map(r =>
+                        '<div class="rev-item"><strong>' + r.name + ':</strong> ' + r.text + '</div>'
+                    ).join('');
+                } else {
+                    list.innerHTML = '<p style="color:#999; font-size:0.9rem;">Rəylər yüklənmədi.</p>';
+                }
+            } catch (err) {
+                list.innerHTML = '<p style="color:#999; font-size:0.9rem;">Rəylər göstərilə bilmədi.</p>';
+            }
+        }
+        showReviews();
+    </script>
+    <script src="word-of-the-day.js"></script>
+    <script>
+        (function () {
+            var funLines = [
+                'Bu sözü indi öyrən, sabah söhbətdə parla!',
+                'Kiçik addım, böyük lüğət — hər gün bir söz.',
+                'Bir söz əlavə et — beynin sənə minnətdar qalacaq.',
+                'Günün bir sözü ilə səviyyə atlamağa hazırsan.',
+                'Bu sözü xatırla; səviyyən bir addım yuxarı.'
+            ];
+            function renderWotd() {
+                if (typeof getWordOfTheDay !== 'function') return;
+                var w = getWordOfTheDay();
+                var enEl = document.getElementById('wotdEn');
+                var azEl = document.getElementById('wotdAz');
+                var funEl = document.getElementById('wotdFun');
+                if (enEl) enEl.textContent = w.en;
+                if (azEl) azEl.textContent = w.az;
+                if (funEl) {
+                    var seed = (new Date().getFullYear() * 372 + (new Date().getMonth() + 1) * 31 + new Date().getDate()) >>> 0;
+                    funEl.textContent = funLines[seed % funLines.length] + ' (Səviyyə: ' + w.level + ')';
+                }
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', renderWotd);
+            } else {
+                renderWotd();
+            }
+        })();
+    </script>
+    <script src="theme.js"></script>
+</body>
+</html>

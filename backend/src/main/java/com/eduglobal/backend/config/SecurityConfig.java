@@ -35,17 +35,21 @@ public class SecurityConfig {
 		http.csrf().disable()
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-						// Root path and static resources (frontend files)
-						.requestMatchers("/", "/index.html", "/*.html", "/*.css", "/*.js", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.ico", "/**/*.svg", "/**/*.woff", "/**/*.woff2", "/**/*.ttf").permitAll()
-						// API endpoints
+						// API endpoints - must be before static resources
 						.requestMatchers(HttpMethod.GET, "/api/reviews").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/reviews").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
 						.requestMatchers(HttpMethod.POST, "/apis/login").permitAll()
-						.requestMatchers("/h2-console/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/apis/register").permitAll()
 						.requestMatchers(HttpMethod.POST, "/apis/refresh-token").permitAll()
 						.requestMatchers(HttpMethod.POST, "/reg-user").permitAll()
+						.requestMatchers("/h2-console/**").permitAll()
 						.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+						// Static resources - permit all non-API requests
+						.requestMatchers(request -> {
+							String path = request.getRequestURI();
+							return !path.startsWith("/api/") && !path.startsWith("/apis/");
+						}).permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

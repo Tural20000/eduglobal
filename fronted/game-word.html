@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="theme-init.js"></script>
+    <title>Söz tapmacası - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        :root { --primary: #3498db; --success: #2ecc71; --dark: #2c3e50; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; min-height: 100vh; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .back-link { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .score { font-weight: 700; color: var(--dark); }
+        .game-box { max-width: 500px; margin: 0 auto; background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); text-align: center; }
+        .hint { color: #7f8c8d; margin-bottom: 20px; font-size: 1rem; }
+        .letters { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 24px 0; min-height: 50px; }
+        .letter-btn {
+            width: 44px; height: 44px; border: 2px solid #e0e0e0; border-radius: 10px;
+            background: white; font-size: 1.2rem; font-weight: 700; cursor: pointer; color: var(--dark);
+        }
+        .letter-btn:hover { border-color: var(--primary); background: #f0f8ff; }
+        .letter-btn.used { opacity: 0.4; pointer-events: none; }
+        .slots { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; min-height: 50px; }
+        .slot { width: 44px; height: 44px; border: 2px dashed #bdc3c7; border-radius: 10px; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+        .slot.filled { border-style: solid; border-color: var(--primary); background: #e8f4fd; }
+        .slot.correct { border-color: var(--success); background: #e8f8f0; color: var(--success); }
+        .btn-new { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 16px; }
+        .result-msg { font-size: 1.2rem; font-weight: 600; margin-top: 16px; display: none; }
+        .result-msg.success { color: var(--success); display: block; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="games.html" class="back-link"><i class="fas fa-arrow-left"></i> Oyunlara qayıt</a>
+        <span class="score">Xal: <span id="scoreEl">0</span></span>
+    </header>
+    <div class="game-box">
+        <p class="hint" id="hintText">Qarışıq hərflərdən düzgün ingilis sözünü tapın (məna: <span id="meaning"></span>)</p>
+        <div class="slots" id="slots"></div>
+        <div class="letters" id="letters"></div>
+        <p class="result-msg" id="resultMsg">Düzgündür!</p>
+        <button class="btn-new" id="btnNew" style="display:none;" onclick="newWord()">Növbəti söz</button>
+    </div>
+    <script>
+        const words = [
+            { en: "HELLO", az: "Salam" },
+            { en: "BOOK", az: "Kitab" },
+            { en: "WATER", az: "Su" },
+            { en: "HOUSE", az: "Ev" },
+            { en: "SCHOOL", az: "Məktəb" },
+            { en: "FAMILY", az: "Ailə" },
+            { en: "FRIEND", az: "Dost" },
+            { en: "LEARN", az: "Öyrənmək" },
+            { en: "READ", az: "Oxumaq" },
+            { en: "WRITE", az: "Yazmaq" }
+        ];
+        let currentWord = null;
+        let selectedSlots = [];
+        let score = 0;
+        let shuffled = [];
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function newWord() {
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            const letters = currentWord.en.split('');
+            shuffled = shuffle(letters);
+            selectedSlots = [];
+            document.getElementById('resultMsg').classList.remove('success');
+            document.getElementById('resultMsg').style.display = 'none';
+            document.getElementById('btnNew').style.display = 'none';
+            document.getElementById('meaning').textContent = currentWord.az;
+            const slotsHtml = letters.map((_, i) => '<div class="slot" data-i="' + i + '"></div>').join('');
+            document.getElementById('slots').innerHTML = slotsHtml;
+            document.getElementById('letters').innerHTML = shuffled.map((l, i) =>
+                '<button class="letter-btn" data-i="' + i + '">' + l + '</button>'
+            ).join('');
+            document.querySelectorAll('.letter-btn').forEach(btn => {
+                btn.addEventListener('click', () => pickLetter(parseInt(btn.getAttribute('data-i'))));
+            });
+            document.querySelectorAll('.slot').forEach(slot => {
+                slot.addEventListener('click', () => unpickSlot(parseInt(slot.getAttribute('data-i'))));
+            });
+        }
+
+        function pickLetter(i) {
+            const btn = document.querySelector('.letter-btn[data-i="' + i + '"]');
+            if (!btn || btn.classList.contains('used')) return;
+            const firstEmpty = selectedSlots.indexOf(null);
+            if (firstEmpty === -1) return;
+            const letter = shuffled[i];
+            selectedSlots[firstEmpty] = { letter, letterIndex: i };
+            btn.classList.add('used');
+            const slots = document.querySelectorAll('.slot');
+            slots[firstEmpty].textContent = letter;
+            slots[firstEmpty].classList.add('filled');
+            slots[firstEmpty].dataset.letterIndex = i;
+            checkComplete();
+        }
+
+        function unpickSlot(slotIndex) {
+            const obj = selectedSlots[slotIndex];
+            if (!obj) return;
+            selectedSlots[slotIndex] = null;
+            document.querySelector('.letter-btn[data-i="' + obj.letterIndex + '"]').classList.remove('used');
+            const slots = document.querySelectorAll('.slot');
+            slots[slotIndex].textContent = '';
+            slots[slotIndex].classList.remove('filled');
+            delete slots[slotIndex].dataset.letterIndex;
+        }
+
+        function checkComplete() {
+            const word = selectedSlots.map(s => s ? s.letter : '').join('');
+            if (word.length !== currentWord.en.length) return;
+            if (word === currentWord.en) {
+                score++;
+                document.getElementById('scoreEl').textContent = score;
+                document.getElementById('resultMsg').textContent = 'Düzgündür!';
+                document.getElementById('resultMsg').classList.add('success');
+                document.getElementById('resultMsg').style.display = 'block';
+                document.querySelectorAll('.slot').forEach(s => s.classList.add('correct'));
+                document.getElementById('btnNew').style.display = 'inline-block';
+            }
+        }
+
+        newWord();
+    </script>
+    <script src="theme.js"></script>
+</body>
+</html>

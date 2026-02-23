@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="theme-init.js"></script>
+    <title>Seviyyə testi - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        :root { --primary: #3498db; --secondary: #2c3e50; --success: #2ecc71; --error: #e74c3c; --bg: #f0f2f5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); min-height: 100vh; padding-bottom: 40px; }
+        header {
+            background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 14px 5%; display: flex; justify-content: space-between; align-items: center;
+        }
+        .back-link { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        .progress { font-weight: 600; color: var(--secondary); }
+        .container { max-width: 700px; margin: 30px auto; padding: 0 5%; }
+        .q-card {
+            background: white; border-radius: 16px; padding: 28px; margin-bottom: 20px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+        .q-card .q-text { font-size: 1.15rem; color: var(--secondary); margin-bottom: 20px; font-weight: 600; line-height: 1.5; }
+        .opt-list { display: flex; flex-direction: column; gap: 10px; }
+        .opt-btn {
+            padding: 14px 18px; border: 2px solid #e0e0e0; border-radius: 10px; background: white;
+            cursor: pointer; text-align: left; font-family: 'Poppins', sans-serif; font-size: 1rem;
+            transition: 0.2s;
+        }
+        .opt-btn:hover { border-color: var(--primary); background: #f8fbff; }
+        .opt-btn.selected { border-color: var(--primary); background: #e8f4fd; }
+        .opt-btn.correct { border-color: var(--success); background: #e8f8f0; color: #1e7e34; }
+        .opt-btn.wrong { border-color: var(--error); background: #fde8e8; color: #c0392b; }
+        .opt-btn:disabled { cursor: default; }
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 24px; gap: 12px; }
+        .nav-btns button {
+            padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
+            font-family: 'Poppins', sans-serif; font-size: 1rem;
+        }
+        .btn-prev { background: #e0e0e0; color: var(--secondary); }
+        .btn-next { background: var(--primary); color: white; }
+        .btn-submit { background: var(--success); color: white; }
+        .result-screen {
+            text-align: center; padding: 50px 20px; display: none;
+        }
+        .result-screen h1 { font-size: 2rem; color: var(--secondary); margin-bottom: 12px; }
+        .result-screen .level-badge {
+            display: inline-block; padding: 14px 28px; border-radius: 50px; font-weight: 700;
+            font-size: 1.4rem; margin: 20px 0; color: white;
+        }
+        .result-screen .desc { color: #666; font-size: 1.1rem; margin-bottom: 24px; line-height: 1.6; }
+        .result-screen .score-text { font-size: 1.2rem; color: var(--secondary); margin-bottom: 30px; }
+        .loading { text-align: center; padding: 60px 20px; color: #666; }
+        .loading i { font-size: 3rem; color: var(--primary); animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Ana menyu</a>
+        <span class="progress" id="progressText">Sual 1 / 30</span>
+    </header>
+
+    <div class="container">
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner"></i>
+            <p style="margin-top:16px;">Suallar yüklənir...</p>
+        </div>
+        <div id="quizArea" style="display:none;">
+            <div class="q-card">
+                <p class="q-text" id="questionText"></p>
+                <div class="opt-list" id="optionsList"></div>
+                <div class="nav-btns">
+                    <button type="button" class="btn-prev" id="btnPrev" onclick="prevQuestion()">Əvvəlki</button>
+                    <button type="button" class="btn-next" id="btnNext" onclick="nextQuestion()">Növbəti</button>
+                </div>
+            </div>
+        </div>
+        <div id="resultArea" class="result-screen">
+            <h1>Səviyyə nəticəniz</h1>
+            <div class="level-badge" id="levelBadge"></div>
+            <p class="desc" id="levelDesc"></p>
+            <p class="score-text" id="scoreText"></p>
+            <a href="dashboard.html" style="display:inline-block; padding:14px 28px; background:var(--primary); color:white; border-radius:10px; text-decoration:none; font-weight:600;">Ana menyuya qayıt</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8082';
+        let questions = [];
+        let currentIndex = 0;
+        let userAnswers = {};
+        let correctCount = 0;
+
+        const levelConfig = [
+            { max: 10, level: 'A1', label: 'A1 – Başlanğıc', desc: 'Siz yenicə başlayırsınız. Davam edin, tədricən inkişaf edəcəksiniz!', color: '#3498db' },
+            { max: 14, level: 'A2', label: 'A2 – Elementar', desc: 'Gündəlik mövzuları başa düşürsünüz. Bir az daha məşq ilə A2-ni möhkəmləndirə bilərsiniz.', color: '#2ecc71' },
+            { max: 18, level: 'B1', label: 'B1 – Orta', desc: 'Sərbəst danışmağa yaxınsınız. B1 səviyyəsini möhkəmləndirmək üçün oxu və dinləməyə vaxt ayırın.', color: '#f39c12' },
+            { max: 22, level: 'B2', label: 'B2 – Orta-üst', desc: 'Əksər vəziyyətlərdə özünüzü ifadə edə bilirsiniz. Mürəkkəb mətnlərə keçid edin.', color: '#e67e22' },
+            { max: 26, level: 'C1', label: 'C1 – Qabaqcıl', desc: 'Geniş lüğət və qrammatika bilikləriniz var. Peşəkar səviyyəyə yaxınsınız.', color: '#9b59b6' },
+            { max: 30, level: 'C2', label: 'C2 – Sərbəst', desc: 'Əla nəticə! Səviyyəniz çox yüksəkdir. Davam edin və praktika edin.', color: '#1abc9c' }
+        ];
+
+        function getLevelResult(score) {
+            for (let i = levelConfig.length - 1; i >= 0; i--) {
+                if (score <= levelConfig[i].max) return levelConfig[i];
+            }
+            return levelConfig[levelConfig.length - 1];
+        }
+
+        async function loadQuestions() {
+            try {
+                const response = await fetch(API_BASE_URL + '/api/questions/exam');
+                if (!response.ok) throw new Error('Suallar gətirilə bilmədi');
+                questions = await response.json();
+                if (questions.length === 0) {
+                    document.getElementById('loading').innerHTML = '<p>Sual tapılmadı. Verilənlər bazasına suallar əlavə edin.</p>';
+                    return;
+                }
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('quizArea').style.display = 'block';
+                renderQuestion();
+            } catch (err) {
+                document.getElementById('loading').innerHTML = '<p style="color:#c0392b;">Xəta: ' + err.message + '. Backend işləyir?</p>';
+            }
+        }
+
+        function getOptionLetter(i) {
+            return String.fromCharCode(65 + i);
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            if (!q) return;
+            document.getElementById('progressText').textContent = 'Sual ' + (currentIndex + 1) + ' / ' + questions.length;
+            document.getElementById('questionText').textContent = (currentIndex + 1) + '. ' + q.questions;
+            const opts = [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean);
+            const list = document.getElementById('optionsList');
+            list.innerHTML = '';
+            opts.forEach((opt, i) => {
+                const letter = getOptionLetter(i);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'opt-btn' + (userAnswers[currentIndex] === letter ? ' selected' : '');
+                btn.textContent = letter + '. ' + opt;
+                btn.onclick = () => selectOption(letter);
+                list.appendChild(btn);
+            });
+            document.getElementById('btnPrev').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+            const nextBtn = document.getElementById('btnNext');
+            if (currentIndex === questions.length - 1) {
+                nextBtn.textContent = 'Nəticəni gör';
+                nextBtn.className = 'btn-submit';
+                nextBtn.onclick = finishTest;
+            } else {
+                nextBtn.textContent = 'Növbəti';
+                nextBtn.className = 'btn-next';
+                nextBtn.onclick = nextQuestion;
+            }
+        }
+
+        function selectOption(letter) {
+            userAnswers[currentIndex] = letter;
+            const opts = document.querySelectorAll('.opt-btn');
+            opts.forEach((btn, i) => {
+                btn.classList.remove('selected');
+                if (getOptionLetter(i) === letter) btn.classList.add('selected');
+            });
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+            }
+        }
+
+        function finishTest() {
+            correctCount = 0;
+            questions.forEach((q, i) => {
+                const userLetter = userAnswers[i];
+                const correctLetter = q.correctAnswer;
+                if (userLetter && userLetter.toUpperCase() === (correctLetter || '').toUpperCase()) correctCount++;
+            });
+            const result = getLevelResult(correctCount);
+            document.getElementById('quizArea').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'block';
+            document.getElementById('levelBadge').textContent = result.label;
+            document.getElementById('levelBadge').style.background = result.color;
+            document.getElementById('levelDesc').textContent = result.desc;
+            document.getElementById('scoreText').textContent = 'Düzgün cavablar: ' + correctCount + ' / ' + questions.length;
+        }
+
+        if (localStorage.getItem('accessToken')) {
+            loadQuestions();
+        } else {
+            window.location.href = 'welcome.html';
+        }
+    </script>
+    <script src="theme.js"></script>
+</body>
+</html>
