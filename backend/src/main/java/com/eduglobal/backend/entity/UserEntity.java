@@ -40,6 +40,15 @@ public class UserEntity {
 	@JoinColumn(name = "level_id")
 	private LevelEntity level;
 
+	@Column(name = "level_test_level", length = 10)
+	private String levelTestLevel;
+
+	@Column(name = "level_test_score")
+	private Integer levelTestScore;
+
+	@Column(name = "level_test_date")
+	private java.time.LocalDateTime levelTestDate;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<RoleEntity> roles;

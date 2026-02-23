@@ -9,22 +9,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="theme.css">
     <style>
-        :root { --primary: #3498db; --secondary: #2c3e50; --bg: #f0f2f5; }
+        :root { --primary: #3498db; --secondary: #2c3e50; --success: #2ecc71; --bg: #f0f2f5; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); min-height: 100vh; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); min-height: 100vh; padding-bottom: 40px; }
         header {
             background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             padding: 14px 5%; display: flex; justify-content: space-between; align-items: center;
         }
         .back-link { color: var(--primary); text-decoration: none; font-weight: 600; }
-        .container { max-width: 700px; margin: 40px auto; padding: 0 5%; }
+        .back-link:hover { text-decoration: underline; }
+        .container { max-width: 720px; margin: 28px auto; padding: 0 5%; }
         .card {
-            background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-            margin-bottom: 24px; text-align: center;
+            background: white; border-radius: 16px; padding: 24px 28px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
         }
-        .card h2 { color: var(--secondary); margin-bottom: 12px; font-size: 1.4rem; }
-        .card p { color: #7f8c8d; line-height: 1.6; }
-        .icon-placeholder { font-size: 4rem; color: #ddd; margin-bottom: 16px; }
+        .card h2 {
+            font-size: 1.2rem; color: var(--secondary); margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .card h2 i { color: var(--primary); }
+        .level-badge {
+            display: inline-block; padding: 10px 20px; border-radius: 12px; font-weight: 700;
+            font-size: 1.2rem; color: white; margin-bottom: 8px;
+        }
+        .profile-row { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 10px; }
+        .profile-row span:first-child { font-weight: 600; color: #666; min-width: 100px; }
+        .profile-edit-form input { width: 100%; max-width: 320px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-family: inherit; }
+        .profile-edit-form button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: inherit; }
+        .profile-edit-form button:hover { opacity: 0.9; }
+        .btn-edit { padding: 8px 16px; background: #ecf0f1; color: var(--secondary); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+        .btn-edit:hover { background: #ddd; }
+        .news-item { border-left: 4px solid var(--primary); padding: 12px 0 12px 14px; margin-bottom: 16px; }
+        .news-item h4 { font-size: 1rem; color: var(--secondary); margin-bottom: 6px; }
+        .news-item .date { font-size: 0.85rem; color: #999; margin-bottom: 6px; }
+        .news-item p { font-size: 0.95rem; color: #555; line-height: 1.5; }
+        .empty-msg { color: #7f8c8d; font-style: italic; }
+        .loading { text-align: center; padding: 24px; color: #666; }
     </style>
 </head>
 <body>
@@ -33,16 +53,133 @@
         <span style="font-weight:700; color:var(--primary);">Şəxsi kabinet</span>
     </header>
     <div class="container">
+        <div class="card" id="levelTestCard">
+            <h2><i class="fas fa-chart-line"></i> Səviyyə testi nəticəsi</h2>
+            <div id="levelTestContent" class="loading">Yüklənir...</div>
+        </div>
+
         <div class="card">
-            <div class="icon-placeholder"><i class="fas fa-user-shield"></i></div>
-            <h2>Şəxsi kabinet</h2>
-            <p>Bu bölmə hazırlanır. Tezliklə burada nailiyyətləriniz, statistikalar və şəxsi məlumatlarınız görünəcək.</p>
+            <h2><i class="fas fa-trophy"></i> Nailiyyətlər</h2>
+            <p id="achievementsContent" class="empty-msg">Tezliklə burada nailiyyətləriniz görünəcək.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-user"></i> Şəxsi məlumatlar</h2>
+            <div id="profileView">
+                <div class="profile-row"><span>Ad:</span><span id="profileName">—</span></div>
+                <div class="profile-row"><span>Email:</span><span id="profileEmail">—</span></div>
+                <button type="button" class="btn-edit" id="btnEditProfile">Düzəliş et</button>
+            </div>
+            <div id="profileEdit" style="display:none;">
+                <form class="profile-edit-form">
+                    <label>Ad</label>
+                    <input type="text" id="editName" placeholder="Adınız">
+                    <label>Email</label>
+                    <input type="email" id="editEmail" placeholder="Email">
+                    <div>
+                        <button type="submit">Yadda saxla</button>
+                        <button type="button" class="btn-edit" id="btnCancelEdit" style="margin-left:8px;">Ləğv et</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-newspaper"></i> Yeniliklər</h2>
+            <div id="newsContent" class="loading">Yüklənir...</div>
         </div>
     </div>
     <script>
-        if (!localStorage.getItem('accessToken')) {
-            window.location.href = 'welcome.html';
-        }
+        (function () {
+            var API = 'http://localhost:8082';
+            var token = localStorage.getItem('accessToken');
+            if (!token) {
+                window.location.href = 'welcome.html';
+                return;
+            }
+            var headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+
+            function formatDate(d) {
+                if (!d) return '—';
+                var x = new Date(d);
+                return x.toLocaleDateString('az-AZ', { day: 'numeric', month: 'long', year: 'numeric' });
+            }
+
+            async function loadProfile() {
+                var levelContent = document.getElementById('levelTestContent');
+                try {
+                    var r = await fetch(API + '/api/users/me', { headers: headers });
+                    if (r.status === 401) { window.location.href = 'welcome.html'; return; }
+                    if (!r.ok) { levelContent.innerHTML = '<p class="empty-msg">Profil yüklənə bilmədi.</p>'; return; }
+                    var p = await r.json();
+                    if (p.levelTestLevel != null && p.levelTestScore != null) {
+                        levelContent.innerHTML = '<div class="level-badge" style="background:' + (p.levelTestLevel === 'A1' ? '#3498db' : p.levelTestLevel === 'A2' ? '#2ecc71' : p.levelTestLevel === 'B1' ? '#f39c12' : p.levelTestLevel === 'B2' ? '#e67e22' : p.levelTestLevel === 'C1' ? '#9b59b6' : '#1abc9c') + '">' + p.levelTestLevel + '</div>' +
+                            '<p><strong>Xal:</strong> ' + p.levelTestScore + '</p>' +
+                            (p.levelTestDate ? '<p style="margin-top:8px; color:#666;">Tarix: ' + formatDate(p.levelTestDate) + '</p>' : '');
+                    } else {
+                        levelContent.innerHTML = '<p class="empty-msg">Hələ səviyyə testi etməmisiniz. <a href="level-test.html">Testə keçid</a></p>';
+                    }
+                    document.getElementById('profileName').textContent = p.name || '—';
+                    document.getElementById('profileEmail').textContent = p.email || '—';
+                    document.getElementById('editName').value = p.name || '';
+                    document.getElementById('editEmail').value = p.email || '';
+                } catch (e) {
+                    levelContent.innerHTML = '<p class="empty-msg">Xəta: ' + (e.message || 'Profil gəlmədi') + '</p>';
+                }
+            }
+
+            async function loadNews() {
+                var newsContent = document.getElementById('newsContent');
+                try {
+                    var r = await fetch(API + '/api/news?limit=10');
+                    if (!r.ok) { newsContent.innerHTML = '<p class="empty-msg">Yeniliklər yüklənə bilmədi.</p>'; return; }
+                    var list = await r.json();
+                    if (!list.length) {
+                        newsContent.innerHTML = '<p class="empty-msg">Hələ heç bir yenilik yoxdur.</p>';
+                        return;
+                    }
+                    newsContent.innerHTML = list.map(function (n) {
+                        return '<div class="news-item"><h4>' + (n.title || '') + '</h4><div class="date">' + formatDate(n.createdAt) + '</div><p>' + (n.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p></div>';
+                    }).join('');
+                } catch (e) {
+                    newsContent.innerHTML = '<p class="empty-msg">Xəta: ' + (e.message || 'Yeniliklər gəlmədi') + '</p>';
+                }
+            }
+
+            document.getElementById('btnEditProfile').onclick = function () {
+                document.getElementById('profileView').style.display = 'none';
+                document.getElementById('profileEdit').style.display = 'block';
+            };
+            document.getElementById('btnCancelEdit').onclick = function () {
+                document.getElementById('profileView').style.display = 'block';
+                document.getElementById('profileEdit').style.display = 'none';
+            };
+            document.querySelector('.profile-edit-form').onsubmit = async function (e) {
+                e.preventDefault();
+                var name = document.getElementById('editName').value.trim();
+                var email = document.getElementById('editEmail').value.trim();
+                try {
+                    var r = await fetch(API + '/api/users/me', {
+                        method: 'PATCH',
+                        headers: headers,
+                        body: JSON.stringify({ name: name || null, email: email || null })
+                    });
+                    if (r.ok) {
+                        document.getElementById('profileName').textContent = name || '—';
+                        document.getElementById('profileEmail').textContent = email || '—';
+                        document.getElementById('profileView').style.display = 'block';
+                        document.getElementById('profileEdit').style.display = 'none';
+                    } else {
+                        alert('Dəyişiklik yadda saxlanılmadı.');
+                    }
+                } catch (err) {
+                    alert('Xəta: ' + (err.message || 'Bağlantı xətası'));
+                }
+            };
+
+            loadProfile();
+            loadNews();
+        })();
     </script>
     <script src="theme.js"></script>
 </body>

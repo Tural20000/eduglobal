@@ -2,12 +2,14 @@ package com.eduglobal.backend.config;
 
 import com.eduglobal.backend.entity.LessonEntity;
 import com.eduglobal.backend.entity.LevelEntity;
+import com.eduglobal.backend.entity.NewsEntity;
 import com.eduglobal.backend.entity.QuizQuestionEntity;
 import com.eduglobal.backend.entity.VocabularyEntity;
 import com.eduglobal.backend.enums.Category;
 import com.eduglobal.backend.enums.Level;
 import com.eduglobal.backend.repository.LessonRepository;
 import com.eduglobal.backend.repository.LevelRepository;
+import com.eduglobal.backend.repository.NewsRepository;
 import com.eduglobal.backend.repository.QuizQuestionRepository;
 import com.eduglobal.backend.repository.VocabularyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class ContentDataLoader implements CommandLineRunner {
 	private LessonRepository lessonRepository;
 	@Autowired
 	private QuizQuestionRepository quizQuestionRepository;
+	@Autowired
+	private NewsRepository newsRepository;
 
 	@Override
 	public void run(String... args) {
@@ -54,6 +58,13 @@ public class ContentDataLoader implements CommandLineRunner {
 			quizQuestionRepository
 					.save(QuizQuestionEntity.builder().lesson(grammarLesson).question("She ___ to school.")
 							.optionA("go").optionB("goes").optionC("going").optionD("went").correctAnswer("B").build());
+		}
+
+		if (newsRepository.count() == 0) {
+			newsRepository.save(NewsEntity.builder()
+					.title("EduGlobal-a xoş gəlmisiniz!")
+					.content("Saytımızda səviyyə testi, vocabulary, qrammatika və oxu materialları mövcuddur. Şəxsi kabinetdən nəticələrinizi və yenilikləri izləyə bilərsiniz.")
+					.build());
 		}
 	}
 }

@@ -86,6 +86,7 @@
             <p class="desc" id="levelDesc"></p>
             <p class="score-text" id="scoreText"></p>
             <a href="dashboard.html" style="display:inline-block; padding:14px 28px; background:var(--primary); color:white; border-radius:10px; text-decoration:none; font-weight:600;">Ana menyuya qayıt</a>
+            <a href="cabinet.html" style="display:inline-block; padding:14px 28px; background:#95a5a6; color:white; border-radius:10px; text-decoration:none; font-weight:600; margin-left:10px;">Şəxsi kabinet</a>
         </div>
     </div>
 
@@ -200,6 +201,15 @@
             document.getElementById('levelBadge').style.background = result.color;
             document.getElementById('levelDesc').textContent = result.desc;
             document.getElementById('scoreText').textContent = 'Düzgün cavablar: ' + correctCount + ' / ' + questions.length;
+
+            var token = localStorage.getItem('accessToken');
+            if (token) {
+                fetch(API_BASE_URL + '/api/users/me/level-test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ level: result.level, score: correctCount })
+                }).catch(function () {});
+            }
         }
 
         if (localStorage.getItem('accessToken')) {
