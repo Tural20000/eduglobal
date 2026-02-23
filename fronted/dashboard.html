@@ -415,7 +415,7 @@
                 const level = this.getAttribute('data-level');
                 closeLevelModal();
                 const base = sectionPaths[currentSection];
-                window.location.href = base + '_' + level + '.html';
+                window.location.href = base + '.html?level=' + level;
             });
         });
 
@@ -470,9 +470,7 @@
             }
         }
         showReviews();
-    </script>
-    <script src="word-of-the-day.js"></script>
-    <script>
+
         (function () {
             var funLines = [
                 'Bu sözü indi öyrən, sabah söhbətdə parla!',
@@ -481,24 +479,28 @@
                 'Günün bir sözü ilə səviyyə atlamağa hazırsan.',
                 'Bu sözü xatırla; səviyyən bir addım yuxarı.'
             ];
-            function renderWotd() {
-                if (typeof getWordOfTheDay !== 'function') return;
-                var w = getWordOfTheDay();
+            async function loadWotd() {
                 var enEl = document.getElementById('wotdEn');
                 var azEl = document.getElementById('wotdAz');
                 var funEl = document.getElementById('wotdFun');
-                if (enEl) enEl.textContent = w.en;
-                if (azEl) azEl.textContent = w.az;
-                if (funEl) {
-                    var seed = (new Date().getFullYear() * 372 + (new Date().getMonth() + 1) * 31 + new Date().getDate()) >>> 0;
-                    funEl.textContent = funLines[seed % funLines.length] + ' (Səviyyə: ' + w.level + ')';
-                }
+                try {
+                    var r = await fetch(API_BASE_URL + '/api/vocabulary/word-of-the-day');
+                    if (r.ok) {
+                        var w = await r.json();
+                        if (enEl) enEl.textContent = w.word || '—';
+                        if (azEl) azEl.textContent = w.meaning || '—';
+                        if (funEl) {
+                            var seed = (new Date().getFullYear() * 372 + (new Date().getMonth() + 1) * 31 + new Date().getDate()) >>> 0;
+                            funEl.textContent = funLines[seed % funLines.length] + (w.levelName ? ' (Səviyyə: ' + w.levelName + ')' : '');
+                        }
+                        return;
+                    }
+                } catch (e) {}
+                if (enEl) enEl.textContent = '—';
+                if (azEl) azEl.textContent = '—';
+                if (funEl) funEl.textContent = '';
             }
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', renderWotd);
-            } else {
-                renderWotd();
-            }
+            loadWotd();
         })();
     </script>
     <script src="theme.js"></script>

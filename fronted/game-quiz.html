@@ -71,12 +71,21 @@
 
         async function loadQuestions() {
             try {
-                const r = await fetch(API_BASE_URL + '/api/questions/exam');
+                var r = await fetch(API_BASE_URL + '/api/quiz-questions/exam?limit=30');
                 if (r.ok) {
-                    const data = await r.json();
-                    if (data.length > 0) questions = data;
+                    var data = await r.json();
+                    if (data.length > 0) {
+                        questions = data.map(function (q) {
+                            return { questions: q.question, optionA: q.optionA, optionB: q.optionB, optionC: q.optionC, optionD: q.optionD, correctAnswer: q.correctAnswer || 'A' };
+                        });
+                        return;
+                    }
                 }
             } catch (e) {}
+            try {
+                var r2 = await fetch(API_BASE_URL + '/api/questions/exam');
+                if (r2.ok) { var data = await r2.json(); if (data.length > 0) questions = data; }
+            } catch (e2) {}
             if (questions.length === 0) questions = fallbackQuestions;
         }
 

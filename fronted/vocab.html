@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="theme-init.js"></script>
+    <title>Vocabulary - EduGlobal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        :root { --primary: #3498db; --dark: #2c3e50; --light: #f4f7f6; --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--light); padding-top: 80px; }
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; background: var(--white);
+            padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center; z-index: 10000;
+        }
+        .back-btn { text-decoration: none; color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .logo-text { font-weight: 700; color: var(--dark); }
+        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        .page-title { text-align: center; margin-bottom: 30px; color: var(--dark); }
+        .vocab-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--primary); color: white; padding: 15px; text-align: left; position: sticky; top: 70px; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f9f9f9; }
+        .audio-btns { display: flex; gap: 10px; }
+        .speak-btn { border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; color: white; font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 0.85rem; }
+        .btn-slow { background: #e67e22; }
+        .btn-normal { background: #2ecc71; }
+        .speak-btn:hover { opacity: 0.8; }
+        .loading { text-align: center; padding: 40px; color: #7f8c8d; }
+        .error { text-align: center; padding: 40px; color: #e74c3c; }
+        .empty { text-align: center; padding: 40px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="dashboard.html" class="back-btn"><i class="fas fa-home"></i> Ana menyuya qayıt</a>
+    <div class="logo-text" id="headerLevel">Vocabulary</div>
+</header>
+<div class="container">
+    <h1 class="page-title" id="pageTitle">Yüklənir...</h1>
+    <div class="vocab-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Söz (English)</th>
+                    <th>Tərcümə (Azərbaycanca)</th>
+                    <th>Səsləndirmə</th>
+                </tr>
+            </thead>
+            <tbody id="vocab-table-body"></tbody>
+        </table>
+    </div>
+</div>
+<script>
+(function () {
+    const API = 'http://localhost:8082';
+    const params = new URLSearchParams(window.location.search);
+    const levelName = (params.get('level') || 'A1').toUpperCase();
+
+    document.getElementById('headerLevel').textContent = levelName + ' Vocabulary';
+    document.getElementById('pageTitle').textContent = levelName + ' səviyyəsi – Lüğət';
+
+    function speak(text, rate) {
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US';
+        u.rate = rate || 1;
+        window.speechSynthesis.speak(u);
+    }
+
+    async function load() {
+        var tbody = document.getElementById('vocab-table-body');
+        try {
+            var levelsRes = await fetch(API + '/api/levels');
+            if (!levelsRes.ok) throw new Error('Səviyyələr gəlmədi');
+            var levels = await levelsRes.json();
+            var level = levels.find(function (l) { return l.name === levelName; });
+            if (!level) {
+                tbody.innerHTML = '<tr><td colspan="3" class="empty">Bu səviyyə tapılmadı.</td></tr>';
+                return;
+            }
+            var vocabRes = await fetch(API + '/api/vocabulary?levelId=' + level.id);
+            if (!vocabRes.ok) throw new Error('Sözlər gəlmədi');
+            var words = await vocabRes.json();
+            if (!words.length) {
+                tbody.innerHTML = '<tr><td colspan="3" class="empty">Bu səviyyə üçün hələ söz əlavə edilməyib.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = words.map(function (item) {
+                var en = (item.word || '').replace(/'/g, "\\'");
+                return '<tr><td><strong>' + (item.word || '') + '</strong></td><td>' + (item.meaning || '') + '</td><td><div class="audio-btns"><button class="speak-btn btn-slow" onclick="window.speakWord(\'' + en + '\', 0.5)"><i class="fas fa-turtle"></i> Asta</button><button class="speak-btn btn-normal" onclick="window.speakWord(\'' + en + '\', 1)"><i class="fas fa-volume-up"></i> Normal</button></div></td></tr>';
+            }).join('');
+            window.speakWord = speak;
+        } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="3" class="error">Xəta: ' + (e.message || 'Məlumat gəlmədi') + '</td></tr>';
+        }
+    }
+    load();
+})();
+</script>
+<script src="theme.js"></script>
+</body>
+</html>

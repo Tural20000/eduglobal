@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.eduglobal.backend.entity.RoleEntity;
 import com.eduglobal.backend.entity.UserEntity;
+import com.eduglobal.backend.enums.UserRole;
 import com.eduglobal.backend.repository.UserRepository;
 
 @Service
@@ -28,10 +29,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoles()));
+				mapRolesToAuthorities(user.getRoles(), user.getUserRole()));
 	}
 
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<RoleEntity> roles) {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<RoleEntity> roles, UserRole userRole) {
+		java.util.List<GrantedAuthority> list = (roles == null ? java.util.Collections.emptySet() : roles).stream()
+				.map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+		if (userRole != null && userRole == UserRole.ADMIN) {
+			list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		} else {
+			list.add(new SimpleGrantedAuthority("ROLE_USER"));
+		}
+		return list;
 	}
 }
