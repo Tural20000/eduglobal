@@ -22,44 +22,30 @@
     <span id="headerTitle">Reading</span>
 </header>
 <div class="reading-container" id="reading-content">
-    <h2 id="story-title">Yüklənir...</h2>
-    <div class="text-box" id="story-text"></div>
+    <h2 id="story-title">Reading</h2>
+    <div id="reading-list"></div>
 </div>
 <script>
 (function () {
-    const API = 'http://localhost:8082';
-    const params = new URLSearchParams(window.location.search);
-    const levelName = (params.get('level') || 'A1').toUpperCase();
-
-    document.getElementById('headerTitle').textContent = levelName + ' Reading';
-
+    var API = 'http://localhost:8082';
+    document.getElementById('headerTitle').textContent = 'Reading';
     async function load() {
         var titleEl = document.getElementById('story-title');
-        var textEl = document.getElementById('story-text');
+        var listEl = document.getElementById('reading-list');
         try {
-            var levelsRes = await fetch(API + '/api/levels');
-            if (!levelsRes.ok) throw new Error('Səviyyələr gəlmədi');
-            var levels = await levelsRes.json();
-            var level = levels.find(function (l) { return l.name === levelName; });
-            if (!level) {
-                titleEl.textContent = 'Səviyyə tapılmadı';
-                textEl.innerHTML = '<p class="empty">Bu səviyyə tapılmadı.</p>';
-                return;
-            }
-            var lessonsRes = await fetch(API + '/api/lessons?levelId=' + level.id + '&category=READING');
+            var lessonsRes = await fetch(API + '/api/lessons?category=READING');
             if (!lessonsRes.ok) throw new Error('Dərslər gəlmədi');
             var lessons = await lessonsRes.json();
             if (!lessons.length) {
-                titleEl.textContent = levelName + ' Reading';
-                textEl.innerHTML = '<p class="empty">Bu səviyyə üçün oxu materialları hələ əlavə edilməyib.</p>';
+                listEl.innerHTML = '<p class="empty">Oxu materialları hələ əlavə edilməyib.</p>';
                 return;
             }
-            var first = lessons[0];
-            titleEl.textContent = first.title || 'Oxu';
-            textEl.textContent = first.content || '';
+            listEl.innerHTML = lessons.map(function (l) {
+                var content = (l.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                return '<div class="text-box" style="margin-bottom:20px;"><h3 style="margin-bottom:10px; color:#2c3e50;">' + (l.title || '') + '</h3><p style="line-height:1.8; color:#444;">' + content + '</p></div>';
+            }).join('');
         } catch (e) {
-            titleEl.textContent = 'Xəta';
-            textEl.innerHTML = '<p class="error">' + (e.message || 'Məlumat gəlmədi') + '</p>';
+            listEl.innerHTML = '<p class="error">' + (e.message || 'Məlumat gəlmədi') + '</p>';
         }
     }
     load();

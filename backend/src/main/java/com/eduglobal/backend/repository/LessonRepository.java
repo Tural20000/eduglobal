@@ -12,4 +12,6 @@ public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
 	List<LessonEntity> findByLevelId(Long levelId);
 
 	List<LessonEntity> findByLevelIdAndCategory(Long levelId, Category category);
+
+	List<LessonEntity> findByCategoryOrderByTitleAsc(Category category);
 }

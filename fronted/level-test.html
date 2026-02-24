@@ -95,30 +95,23 @@
         let questions = [];
         let currentIndex = 0;
         let userAnswers = {};
-        let correctCount = 0;
 
-        const levelConfig = [
-            { max: 10, level: 'A1', label: 'A1 – Başlanğıc', desc: 'Siz yenicə başlayırsınız. Davam edin, tədricən inkişaf edəcəksiniz!', color: '#3498db' },
-            { max: 14, level: 'A2', label: 'A2 – Elementar', desc: 'Gündəlik mövzuları başa düşürsünüz. Bir az daha məşq ilə A2-ni möhkəmləndirə bilərsiniz.', color: '#2ecc71' },
-            { max: 18, level: 'B1', label: 'B1 – Orta', desc: 'Sərbəst danışmağa yaxınsınız. B1 səviyyəsini möhkəmləndirmək üçün oxu və dinləməyə vaxt ayırın.', color: '#f39c12' },
-            { max: 22, level: 'B2', label: 'B2 – Orta-üst', desc: 'Əksər vəziyyətlərdə özünüzü ifadə edə bilirsiniz. Mürəkkəb mətnlərə keçid edin.', color: '#e67e22' },
-            { max: 26, level: 'C1', label: 'C1 – Qabaqcıl', desc: 'Geniş lüğət və qrammatika bilikləriniz var. Peşəkar səviyyəyə yaxınsınız.', color: '#9b59b6' },
-            { max: 30, level: 'C2', label: 'C2 – Sərbəst', desc: 'Əla nəticə! Səviyyəniz çox yüksəkdir. Davam edin və praktika edin.', color: '#1abc9c' }
-        ];
-
-        function getLevelResult(score) {
-            for (let i = levelConfig.length - 1; i >= 0; i--) {
-                if (score <= levelConfig[i].max) return levelConfig[i];
-            }
-            return levelConfig[levelConfig.length - 1];
-        }
+        // Backend-in detectedLevel nəticəsini daha vizual göstərmək üçün map
+        const levelMeta = {
+            'A1': { label: 'A1 – Başlanğıc', desc: 'Siz yenicə başlayırsınız. Davam edin, tədricən inkişaf edəcəksiniz!', color: '#3498db' },
+            'A2': { label: 'A2 – Elementar', desc: 'Gündəlik mövzuları başa düşürsünüz. Bir az daha məşq ilə A2-ni möhkəmləndirə bilərsiniz.', color: '#2ecc71' },
+            'B1': { label: 'B1 – Orta', desc: 'Sərbəst danışmağa yaxınsınız. B1 səviyyəsini möhkəmləndirmək üçün oxu və dinləməyə vaxt ayırın.', color: '#f39c12' },
+            'B2': { label: 'B2 – Orta-üst', desc: 'Əksər vəziyyətlərdə özünüzü ifadə edə bilirsiniz. Mürəkkəb mətnlərə keçid edin.', color: '#e67e22' },
+            'C1': { label: 'C1 – Qabaqcıl', desc: 'Geniş lüğət və qrammatika bilikləriniz var. Peşəkar səviyyəyə yaxınsınız.', color: '#9b59b6' },
+            'C2': { label: 'C2 – Sərbəst', desc: 'Əla nəticə! Səviyyəniz çox yüksəkdir. Davam edin və praktika edin.', color: '#1abc9c' }
+        };
 
         async function loadQuestions() {
             try {
-                const response = await fetch(API_BASE_URL + '/api/questions/exam');
+                const response = await fetch(API_BASE_URL + '/api/test/start');
                 if (!response.ok) throw new Error('Suallar gətirilə bilmədi');
                 questions = await response.json();
-                if (questions.length === 0) {
+                if (!Array.isArray(questions) || questions.length === 0) {
                     document.getElementById('loading').innerHTML = '<p>Sual tapılmadı. Verilənlər bazasına suallar əlavə edin.</p>';
                     return;
                 }
@@ -138,7 +131,8 @@
             const q = questions[currentIndex];
             if (!q) return;
             document.getElementById('progressText').textContent = 'Sual ' + (currentIndex + 1) + ' / ' + questions.length;
-            document.getElementById('questionText').textContent = (currentIndex + 1) + '. ' + q.questions;
+            // Backend QuestionDto-da sahə adı "question"-dur
+            document.getElementById('questionText').textContent = (currentIndex + 1) + '. ' + (q.question || q.questions || '');
             const opts = [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean);
             const list = document.getElementById('optionsList');
             list.innerHTML = '';
@@ -187,28 +181,52 @@
             }
         }
 
-        function finishTest() {
-            correctCount = 0;
-            questions.forEach((q, i) => {
-                const userLetter = userAnswers[i];
-                const correctLetter = q.correctAnswer;
-                if (userLetter && userLetter.toUpperCase() === (correctLetter || '').toUpperCase()) correctCount++;
-            });
-            const result = getLevelResult(correctCount);
-            document.getElementById('quizArea').style.display = 'none';
-            document.getElementById('resultArea').style.display = 'block';
-            document.getElementById('levelBadge').textContent = result.label;
-            document.getElementById('levelBadge').style.background = result.color;
-            document.getElementById('levelDesc').textContent = result.desc;
-            document.getElementById('scoreText').textContent = 'Düzgün cavablar: ' + correctCount + ' / ' + questions.length;
+        async function finishTest() {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                window.location.href = 'welcome.html';
+                return;
+            }
 
-            var token = localStorage.getItem('accessToken');
-            if (token) {
-                fetch(API_BASE_URL + '/api/users/me/level-test', {
+            const answers = questions.map((q, index) => {
+                return {
+                    questionId: q.id,
+                    selectedOption: userAnswers[index] || ''
+                };
+            });
+
+            try {
+                const response = await fetch(API_BASE_URL + '/api/test/submit', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                    body: JSON.stringify({ level: result.level, score: correctCount })
-                }).catch(function () {});
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ answers: answers })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Nəticə göndərilə bilmədi');
+                }
+
+                const result = await response.json(); // { totalCorrect, detectedLevel }
+
+                const meta = levelMeta[result.detectedLevel] || {
+                    label: result.detectedLevel,
+                    desc: 'Səviyyə testiniz tamamlandı.',
+                    color: '#3498db'
+                };
+
+                document.getElementById('quizArea').style.display = 'none';
+                document.getElementById('resultArea').style.display = 'block';
+                document.getElementById('levelBadge').textContent = meta.label;
+                document.getElementById('levelBadge').style.background = meta.color;
+                document.getElementById('levelDesc').textContent = meta.desc;
+                document.getElementById('scoreText').textContent = 'Düzgün cavablar: ' + result.totalCorrect + ' / ' + questions.length;
+            } catch (err) {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('quizArea').style.display = 'none';
+                document.getElementById('loading').innerHTML = '<p style="color:#c0392b;">Xəta: ' + err.message + '. Backend işləyir və login etmisiniz?</p>';
             }
         }
 

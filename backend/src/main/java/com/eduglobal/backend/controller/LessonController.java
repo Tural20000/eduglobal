@@ -32,6 +32,9 @@ public class LessonController {
 		if (levelId != null) {
 			return ResponseEntity.ok(lessonService.findByLevelId(levelId));
 		}
+		if (category != null) {
+			return ResponseEntity.ok(lessonService.findByCategory(category));
+		}
 		return ResponseEntity.ok(lessonService.findAll());
 	}
 

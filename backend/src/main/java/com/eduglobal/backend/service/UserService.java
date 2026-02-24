@@ -79,8 +79,6 @@ public class UserService {
 				.levelTestDate(u.getLevelTestDate())
 				.levelName(levelName)
 				.build();
-				.levelName(levelName)
-				.build();
 	}
 
 	public UserEntity registerUser(RegistrationRequest registrationRequest) {

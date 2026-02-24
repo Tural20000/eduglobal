@@ -301,20 +301,20 @@
                     <h3>Oyunlar</h3>
                     <p>3 oyunla əylənərək öyrənin</p>
                 </div>
-                <div class="menu-card" data-section="grammar">
+                <div class="menu-card" onclick="location.href='grammar.html'">
                     <div class="icon"><i class="fas fa-book"></i></div>
                     <h3>Qrammatika</h3>
-                    <p>Səviyyə seçib materiallara keçin</p>
+                    <p>Qrammatika qaydaları və dərslər</p>
                 </div>
-                <div class="menu-card" data-section="vocabulary">
+                <div class="menu-card" onclick="location.href='vocab.html'">
                     <div class="icon"><i class="fas fa-spell-check"></i></div>
                     <h3>Vocabulary</h3>
-                    <p>Səviyyə seçib lüğətə keçin</p>
+                    <p>Lüğət – sözlər və tərcümələr</p>
                 </div>
-                <div class="menu-card" data-section="reading">
+                <div class="menu-card" onclick="location.href='reading.html'">
                     <div class="icon"><i class="fas fa-book-open"></i></div>
                     <h3>Reading</h3>
-                    <p>Səviyyə seçib oxu materiallarına keçin</p>
+                    <p>Oxu materialları</p>
                 </div>
                 <div class="menu-card" onclick="location.href='testler.html'">
                     <div class="icon"><i class="fas fa-tasks"></i></div>
@@ -351,23 +351,6 @@
         </aside>
     </div>
 
-    <!-- Level selection modal -->
-    <div class="modal-overlay" id="levelModal">
-        <div class="modal-box">
-            <h2 id="modalTitle">Səviyyə seçin</h2>
-            <p id="modalDesc">Materiallara keçmək üçün səviyyə seçin.</p>
-            <div class="level-grid">
-                <button type="button" class="level-btn" data-level="A1">A1</button>
-                <button type="button" class="level-btn" data-level="A2">A2</button>
-                <button type="button" class="level-btn" data-level="B1">B1</button>
-                <button type="button" class="level-btn" data-level="B2">B2</button>
-                <button type="button" class="level-btn" data-level="C1">C1</button>
-                <button type="button" class="level-btn" data-level="C2">C2</button>
-            </div>
-            <button type="button" class="modal-close" onclick="closeLevelModal()">Bağla</button>
-        </div>
-    </div>
-
     <script>
         const API_BASE_URL = 'http://localhost:8082';
         const accessToken = localStorage.getItem('accessToken');
@@ -386,46 +369,6 @@
             localStorage.removeItem('username');
             window.location.href = 'welcome.html';
         }
-
-        // Level modal
-        let currentSection = '';
-        const sectionTitles = {
-            grammar: { title: 'Qrammatika – səviyyə seçin', desc: 'Seçdiyiniz səviyyəyə uyğun qrammatika materiallarına keçəcəksiniz.' },
-            vocabulary: { title: 'Vocabulary – səviyyə seçin', desc: 'Seçdiyiniz səviyyəyə uyğun lüğət materiallarına keçəcəksiniz.' },
-            reading: { title: 'Reading – səviyyə seçin', desc: 'Seçdiyiniz səviyyəyə uyğun oxu materiallarına keçəcəksiniz.' }
-        };
-        const sectionPaths = {
-            grammar: 'grammar',
-            vocabulary: 'vocab',
-            reading: 'reading'
-        };
-
-        document.querySelectorAll('.menu-card[data-section]').forEach(card => {
-            card.addEventListener('click', function() {
-                currentSection = this.getAttribute('data-section');
-                const t = sectionTitles[currentSection];
-                document.getElementById('modalTitle').textContent = t.title;
-                document.getElementById('modalDesc').textContent = t.desc;
-                document.getElementById('levelModal').classList.add('show');
-            });
-        });
-
-        document.querySelectorAll('.level-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const level = this.getAttribute('data-level');
-                closeLevelModal();
-                const base = sectionPaths[currentSection];
-                window.location.href = base + '.html?level=' + level;
-            });
-        });
-
-        function closeLevelModal() {
-            document.getElementById('levelModal').classList.remove('show');
-        }
-
-        document.getElementById('levelModal').addEventListener('click', function(e) {
-            if (e.target === this) closeLevelModal();
-        });
 
         // Reviews
         async function saveReview() {

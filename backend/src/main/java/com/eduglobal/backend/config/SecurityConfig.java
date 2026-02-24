@@ -43,6 +43,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/api/vocabulary/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/quiz-questions/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/news").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/words").permitAll()
 						.requestMatchers(HttpMethod.POST, "/apis/login").permitAll()
 				.requestMatchers(HttpMethod.POST, "/apis/register").permitAll()
 				.requestMatchers(HttpMethod.POST, "/apis/refresh-token").permitAll()

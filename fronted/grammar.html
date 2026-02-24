@@ -27,28 +27,20 @@
     <div style="font-weight: 700; color: #2c3e50;" id="navTitle">Qrammatika</div>
 </div>
 <div class="container">
-    <h1 id="lvl-display" style="text-align:center; color: var(--secondary);">Yüklənir...</h1>
+    <h1 id="lvl-display" style="text-align:center; color: var(--secondary);">Qrammatika</h1>
     <div id="content-area"></div>
 </div>
 <script>
 (function () {
     var API = 'http://localhost:8082';
-    var params = new URLSearchParams(window.location.search);
-    var levelName = (params.get('level') || 'A1').toUpperCase();
     var contentArea = document.getElementById('content-area');
-    document.getElementById('lvl-display').textContent = levelName + ' Qrammatika';
-    document.getElementById('navTitle').textContent = levelName + ' Qrammatika';
+    document.getElementById('navTitle').textContent = 'Qrammatika';
     async function load() {
         try {
-            var levelsRes = await fetch(API + '/api/levels');
-            if (!levelsRes.ok) throw new Error('Səviyyələr gəlmədi');
-            var levels = await levelsRes.json();
-            var level = levels.find(function (l) { return l.name === levelName; });
-            if (!level) { contentArea.innerHTML = '<p class="empty">Bu səviyyə tapılmadı.</p>'; return; }
-            var lessonsRes = await fetch(API + '/api/lessons?levelId=' + level.id + '&category=GRAMMAR');
+            var lessonsRes = await fetch(API + '/api/lessons?category=GRAMMAR');
             if (!lessonsRes.ok) throw new Error('Dərslər gəlmədi');
             var lessons = await lessonsRes.json();
-            if (!lessons.length) { contentArea.innerHTML = '<p class="empty">Bu səviyyə üçün qrammatika dərsləri hələ əlavə edilməyib.</p>'; return; }
+            if (!lessons.length) { contentArea.innerHTML = '<p class="empty">Qrammatika dərsləri hələ əlavə edilməyib.</p>'; return; }
             contentArea.innerHTML = lessons.map(function (l) {
                 var content = (l.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 return '<div class="rule-card"><h3>' + (l.title || '') + '</h3><div class="content">' + content + '</div></div>';

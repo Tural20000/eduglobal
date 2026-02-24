@@ -13,6 +13,8 @@ public interface LessonService {
 
 	List<LessonDto> findByLevelIdAndCategory(Long levelId, Category category);
 
+	List<LessonDto> findByCategory(Category category);
+
 	LessonDto findById(Long id);
 
 	LessonDto create(LessonCreateDto dto);

@@ -44,6 +44,13 @@ public class LessonServiceImpl implements LessonService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<LessonDto> findByCategory(Category category) {
+		return lessonRepository.findByCategoryOrderByTitleAsc(category).stream().map(this::toDto)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public LessonDto findById(Long id) {
 		return lessonRepository.findById(id).map(this::toDto)
 				.orElseThrow(() -> new MyNotFoundException("Dərs tapılmadı: " + id));
